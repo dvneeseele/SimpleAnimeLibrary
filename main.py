@@ -1,9 +1,9 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-# import other file.
+from sal import SAL_app
 
 application = QApplication(sys.argv)
 #application.setStyleSheet(open("qss/app.qss", "r")).read()
 #application.setStyle('fusion')
-#Editor = NotesEditing()
+SAL = SAL_app()
 sys.exit(application.exec_())
