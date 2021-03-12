@@ -3,6 +3,7 @@ import sys
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import (QMainWindow, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget)
 
 
@@ -56,4 +57,46 @@ class salUI():
 
 
 
+        self.centralWidget = QWidget(MainWindow)
+        self.centralWidget.setObjectName('central')
+
+        self.splitter = QSplitter(self.centralWidget)
+        self.splitter.setOrientation(Qt.Horizontal)
+        self.splitter.setStretchFactor(0, 25)
+        self.splitter.setStretchFactor(1, 75)
+
+        # sidebar (QListWidget)
+
+        self.sidebar = QListWidget(self.splitter)
+        self.sidebar.setObjectName('sidebar')
+        self.sidebar.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+        # stackwidget to switch contents of list catagories
+
+        self.tableStack = QStackedWidget(self.splitter)
+        self.tableStack.setObjectName('tablestack')
         
+        # add widgets to splitter
+
+        self.splitter.addWidget(self.sidebar)
+        self.splitter.addWidget(self.tableStack)
+
+        self.splitter.setSizes([50, 650])
+
+
+
+########################################################################################################
+########################################################################################################
+
+
+
+self.boxLayout = QHBoxLayout()
+self.centralWidget.setLayout(self.boxLayout)
+MainWindow.setCentralWidget(self.centralWidget)
+
+self.boxLayout.addWidget(self.splitter)
+
+MainWindow.show()
+
+
+
