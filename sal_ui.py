@@ -7,7 +7,7 @@ from PyQt5 import QtCore
 from PyQt5.QtWidgets import (QMainWindow, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget)
 
 
-class salUI():
+class salUI(object):
     def __init__(self):
         super(salUI).__init__()
 
@@ -16,7 +16,7 @@ class salUI():
 
         # setup menubar
 
-        menubar = MainWindow.menubar()
+        menubar = MainWindow.menuBar()
 
         self.mb_file = menubar.addMenu("File")
         self.mb_edit = menubar.addMenu("Edit")
@@ -69,6 +69,10 @@ class salUI():
 
         self.sidebar = QListWidget(self.splitter)
         self.sidebar.setObjectName('sidebar')
+        self.sidebar.addItem('Watchlist')
+        self.sidebar.addItem('Planned')
+        self.sidebar.addItem('Ongoing')
+        self.sidebar.addItem('Current')
         self.sidebar.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
         # stackwidget to switch contents of list catagories
@@ -90,13 +94,13 @@ class salUI():
 
 
 
-self.boxLayout = QHBoxLayout()
-self.centralWidget.setLayout(self.boxLayout)
-MainWindow.setCentralWidget(self.centralWidget)
+        self.boxLayout = QHBoxLayout()
+        self.centralWidget.setLayout(self.boxLayout)
+        MainWindow.setCentralWidget(self.centralWidget)
 
-self.boxLayout.addWidget(self.splitter)
+        self.boxLayout.addWidget(self.splitter)
 
-MainWindow.show()
+        MainWindow.show()
 
 
 
