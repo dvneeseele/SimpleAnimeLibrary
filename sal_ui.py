@@ -40,3 +40,20 @@ class salUI():
         # menubar help menu
 
         # TODO
+
+
+
+        # Toolbar
+
+        self.toolbar = QToolBar(MainWindow)
+
+        MainWindow.addToolBar(self.toolbar)
+
+        self.addnew = QAction("Create New Entry", MainWindow)
+        self.addnew.setShortcut('Ctrl+N')
+
+        # the rest is TODO
+
+
+
+        
