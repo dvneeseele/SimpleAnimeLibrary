@@ -4,7 +4,7 @@ import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QMainWindow, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget)
+from PyQt5.QtWidgets import (QMainWindow, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView)
 
 
 class salUI(object):
@@ -75,15 +75,36 @@ class salUI(object):
         self.sidebar.addItem('Current')
         self.sidebar.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
+        # MainTable
+
+
+        # [nevermind lol] pretty sure i dont need this here, it should be created in the backend and added to the stack.
+        self.watchListTable = QTableWidget()
+        self.watchListTable.setObjectName('watchListTable')
+        self.watchListTable.setRowCount(4)
+        self.watchListTable.setColumnCount(4)
+
+        self.watchListTable.setHorizontalHeaderLabels(["Fin.", "English Title", "SUB/DUB", "Completion Date", "Series Type"])
+
+
+
+
+
+
+
         # stackwidget to switch contents of list catagories
 
         self.tableStack = QStackedWidget(self.splitter)
         self.tableStack.setObjectName('tablestack')
+
+        self.tableStack.addWidget(self.watchListTable)
+
         
         # add widgets to splitter
 
         self.splitter.addWidget(self.sidebar)
         self.splitter.addWidget(self.tableStack)
+
 
         self.splitter.setSizes([50, 650])
 
@@ -98,7 +119,11 @@ class salUI(object):
         self.centralWidget.setLayout(self.boxLayout)
         MainWindow.setCentralWidget(self.centralWidget)
 
-        self.boxLayout.addWidget(self.splitter)
+
+
+        self.boxLayout.addWidget(self.splitter) 
+
+
 
         MainWindow.show()
 

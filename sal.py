@@ -51,7 +51,8 @@ class SAL_app(salUI):
 
 
 
-
+    def dbLoad(self):
+        pass
 
 
 
