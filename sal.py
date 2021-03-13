@@ -52,7 +52,11 @@ class SAL_app(salUI):
 
 
     def dbLoad(self):
-        pass
+        
+        # pandas vs just for loop over db??
+
+        try:
+
 
 
 
