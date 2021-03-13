@@ -69,7 +69,7 @@ class salUI(object):
 
         self.sidebar = QListWidget(self.splitter)
         self.sidebar.setObjectName('sidebar')
-        self.sidebar.addItem('Watchlist')
+        self.sidebar.addItem('Fin.')
         self.sidebar.addItem('Planned')
         self.sidebar.addItem('Ongoing')
         self.sidebar.addItem('Current')
@@ -84,7 +84,7 @@ class salUI(object):
         self.watchListTable.setRowCount(4)
         self.watchListTable.setColumnCount(4)
 
-        self.watchListTable.setHorizontalHeaderLabels(["Fin.", "English Title", "SUB/DUB", "Completion Date", "Series Type"])
+        self.watchListTable.setHorizontalHeaderLabels(["Title", "English Title", "SUB/DUB", "Completion Date", "Series Type"])
 
 
 
