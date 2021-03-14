@@ -52,14 +52,22 @@ class SAL_app(salUI):
 
         cursor = conn.cursor()
 
-        createTable = "CREATE TABLE IF NOT EXISTS watchlist(Title TEXT PRIMARY KEY, English_Title TEXT, Format TEXT, Completion_Date TEXT, Series_Type TEXT)"
+        createTable = "CREATE TABLE IF NOT EXISTS watchlist(Art BLOB, Title TEXT PRIMARY KEY, English_Title TEXT, Format TEXT, Completion_Date TEXT, Series_Type TEXT)"
 
         cursor.execute(createTable)
 
         # for testing
-        cursor.execute("INSERT INTO watchlist (Title, English_Title, Format, Completion_Date, Series_Type) VALUES ('ani', 'Anime', 'SUB', '12/01/2021', 'ORI')")
+        with open("naruto.jpg", 'rb') as file:
+            blob = file.read()
 
-        cursor.execute("INSERT INTO watchlist (Title, English_Title, Format, Completion_Date, Series_Type) VALUES ('qwer', 'Anime22', 'DUB', '120/90/2021', 'SQ')")
+        entry_tuple = (blob, 'ani', 'Anime', 'SUB', '12/01/2021', 'ORI')
+
+        # for testing
+        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'ani', 'Anime', 'SUB', '12/01/2021', 'ORI')".format(blob))
+
+        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'qwer', 'Anime22', 'DUB', '120/90/2021', 'SQ')".format(blob))
+
+        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", entry_tuple)
 
         conn.commit()
 
@@ -93,6 +101,8 @@ class SAL_app(salUI):
                 self.newDB()
                 conn = sqlite3.connect('saldb.sqlite')
                 cursor = conn.cursor()
+            else:
+                sys.exit()
 
 
                 # need to make new tables to put into database above
@@ -105,36 +115,59 @@ class SAL_app(salUI):
 
 
 
-        cursor.execute(sqlGetAll)
+        #cursor.execute(sqlGetAll)
 
-        rows = cursor.fetchall()
+        res = cursor.execute(sqlGetAll)
 
+        for row_num, row_data in enumerate(res):
+            self.watchListTable.insertRow(row_num)
+            for column_number, column_data in enumerate(row_data):
+                item = str(column_data)
+                if column_number == 0:
+                    self.tableLabel = QLabel()
+                    self.tableLabel.setScaledContents(True)
+                    pixmap = QPixmap()
+                    pixmap.loadFromData(column_data)
+                    self.tableLabel.setPixmap(pixmap)
 
-        for row in rows:
-            print('Rowww: ', row)
-
-        rownum = len(cursor.fetchall())
-
-        print('Number of Records :', len(rows))
-
-        
-        #self.watchListTable.setRowCount(len(result.fetchall()))
-
-
-        tablerow = 0
-
-        for row in rows:
-
-            self.watchListTable.setItem(tablerow, 0, QTableWidgetItem(row[0]))
-            self.watchListTable.setItem(tablerow, 1, QTableWidgetItem(row[1]))
-            self.watchListTable.setItem(tablerow, 2, QTableWidgetItem(row[2]))
-            self.watchListTable.setItem(tablerow, 3, QTableWidgetItem(row[3]))
-            self.watchListTable.setItem(tablerow, 4, QTableWidgetItem(row[4]))
-
-            tablerow += 1
+                    self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+                else:
+                    self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
+            self.watchListTable.verticalHeader().setDefaultSectionSize(90)
 
 
         conn.close()
+
+        #rows = cursor.fetchall()
+
+
+        #for row in rows:
+            #print('Rowww: ', row)
+
+
+        #print('Number of Records :', len(rows))
+
+        
+        #self.watchListTable.setRowCount(len(rows))
+        # self.watchListTable.setColumnCount(5)
+
+
+
+        # tablerow = 0
+
+        # for row in rows:
+
+        #     self.watchListTable.setItem(tablerow, 0, QTableWidgetItem(row[0]))
+        #     self.watchListTable.setItem(tablerow, 1, QTableWidgetItem(row[1]))
+        #     self.watchListTable.setItem(tablerow, 2, QTableWidgetItem(row[2]))
+        #     self.watchListTable.setItem(tablerow, 3, QTableWidgetItem(row[3]))
+        #     self.watchListTable.setItem(tablerow, 4, QTableWidgetItem(row[4]))
+        #     self.watchListTable.setItem(tablerow, 5, QTableWidgetItem(row[5]))
+
+        #     tablerow += 1
+
+
+
 
 
 
