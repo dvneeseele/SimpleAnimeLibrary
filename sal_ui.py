@@ -81,10 +81,10 @@ class salUI(object):
         # [nevermind lol] pretty sure i dont need this here, it should be created in the backend and added to the stack.
         self.watchListTable = QTableWidget()
         self.watchListTable.setObjectName('watchListTable')
-        self.watchListTable.setRowCount(4)
-        self.watchListTable.setColumnCount(6) # was 4 which was causing a problem with the 5 columns defined below.
+        self.watchListTable.setRowCount(1) # probably delete this, need to try it
+        self.watchListTable.setColumnCount(7) # was 4 which was causing a problem with the 5 columns defined below.
 
-        self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Completion Date", "Series Type"])
+        self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"])
 
 
 
