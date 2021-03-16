@@ -50,7 +50,7 @@ class SAL_app(salUI):
 
 
 
-    def tableContextMenu(self):
+    def tableContextMenu(self, event):
 
         self.tableMenu = QMenu()
 
@@ -59,7 +59,118 @@ class SAL_app(salUI):
         editSeries = self.tableMenu.addAction('Edit This Entry')
         deleteSeries = self.tableMenu.addAction('Delete This Entry')
 
+        # when stackwidget support is added this below would take the getCurrentStack function instead of just self.watchListTable
+        tableAction = self.tableMenu.exec_(self.watchListTable.mapToGlobal(event))
+
+        if tableAction == addSeries:
+            self.seriesDialog()
+        if tableAction == editSeries:
+            self.seriesEditDialog()
+        if tableAction == deleteSeries:
+            pass
+
+
+
+
+
+    def seriesEditDialog(self):
+
+
+        # get table row data and fill the seriesEditDialog QLineEdits with the content
+        # then find a way to lookup the corresponding row in sqlite db
+
+
+        self.series_edit_dialog.setAcceptDrops(True)
+
+        edit_dialog_layout = QGridLayout()
+
+        # Labels
+        self.artLabel = QLabel()
+        #self.artLabel.setText("Drop Image")
+        self.artLabel.setAcceptDrops(True)
+        self.artLabel.setAlignment(Qt.AlignCenter)
         
+
+        self.seriesTitleLabel = QLabel("Title :")
+        self.seriesEnglishTitleLabel = QLabel("English Title :")
+        self.seriesFormatLabel = QLabel("SUB/DUB :")
+        self.startDateLabel = QLabel("Start Date :")
+        self.completionDateLabel = QLabel("Completion Date :")
+        self.seriesTypeLabel = QLabel("Series Type :")
+
+        # LineEdits
+        self.artLabel_le = QLineEdit()
+        self.seriesTitle_le = QLineEdit()
+        self.seriesEnglishTitle_le = QLineEdit()
+        self.seriesFormat_le = QLineEdit()
+        self.startDate_le = QLineEdit()
+        self.completionDate_le = QLineEdit()
+        self.seriesType_le = QLineEdit()
+
+        # Buttons
+        self.titleArtBtn = QPushButton("Fetch Series Title Art")
+        self.titleArtBtn.clicked.connect(self.getSeriesArt)
+        self.submitEntryBtn = QPushButton("Submit")
+        self.submitEntryBtn.clicked.connect(self.entrySubmit)
+
+        # drag event sequence functions
+
+        def dragEnterEvent(self, event):
+            if event.mimeData().hasImage:
+                event.accept()
+            else:
+                event.ignore()
+                print('event ignored')
+
+        def dragMoveEvent(self, event):
+            if event.mimeData().hasImage:
+                event.accept()
+            else:
+                event.ignore()
+                print('event ignored')      
+
+        def dropEvent(self, event):
+            if event.mimeData().hasImage:
+                event.setDropAction(Qt.CopyAction)
+                img_fp = event.mimeData().urls()[0].toLocalFile()
+                print(img_fp)
+                self.artLabel.setPixmap(QPixmap(img_fp))
+                
+
+                event.accept()
+            else:
+                event.ignore()
+                print('drop event ignored')
+
+
+
+
+        
+
+        # Set Dialog Layout
+        self.series_edit_dialog.setLayout(edit_dialog_layout)
+        # column 1
+        edit_dialog_layout.addWidget(self.artLabel, 1, 1)
+        edit_dialog_layout.addWidget(self.titleArtBtn, 2, 1)
+        edit_dialog_layout.addWidget(self.submitEntryBtn, 3, 1)
+        # column 2
+        edit_dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
+        edit_dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
+        edit_dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
+        edit_dialog_layout.addWidget(self.startDateLabel, 4, 2)
+        edit_dialog_layout.addWidget(self.completionDateLabel, 5, 2)
+        edit_dialog_layout.addWidget(self.seriesTypeLabel, 6, 2)
+        # column 3
+        edit_dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
+        edit_dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
+        edit_dialog_layout.addWidget(self.seriesFormat_le, 3, 3)        
+        edit_dialog_layout.addWidget(self.startDate_le, 4, 3)
+        edit_dialog_layout.addWidget(self.completionDate_le, 5, 3)
+        edit_dialog_layout.addWidget(self.seriesType_le, 6, 3)
+
+
+        self.series_edit_dialog.show()
+
 
 
 
