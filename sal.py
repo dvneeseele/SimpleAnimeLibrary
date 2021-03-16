@@ -14,7 +14,7 @@ import pandas as pd
 from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QTextListFormat, QFont, QColor
 from PyQt5.QtCore import QEvent, Qt, QSize, QDate, QTime
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QFormLayout, QLineEdit, QTabWidget, QWidget, QPushButton, QListWidgetItem, QLabel, QVBoxLayout, QStackedWidget,
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFormLayout, QLineEdit, QTabWidget, QWidget, QPushButton, QListWidgetItem, QLabel, QVBoxLayout, QGridLayout, QStackedWidget,
                             QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem)
 
 
@@ -24,11 +24,12 @@ class SAL_app(salUI):
         super().__init__()
 
         self.mainWindow = QMainWindow()
+        self.mainWindow.setAcceptDrops(True)
         self.setupUI(self.mainWindow)
 
         # Menubar functions
 
-        # TODO
+        self.mb_newAction.triggered.connect(self.seriesDialog)
 
         # Toolbar functions
 
@@ -47,12 +48,199 @@ class SAL_app(salUI):
 
 
 
+
+    def seriesDialog(self):
+
+        self.series_dialog = QWidget()
+        self.series_dialog.setAcceptDrops(True)
+
+        dialog_layout = QGridLayout()
+
+        # Labels
+        self.artLabel = QLabel()
+        #self.artLabel.setText("Drop Image")
+        self.artLabel.setAcceptDrops(True)
+        self.artLabel.setAlignment(Qt.AlignCenter)
+        
+
+        self.seriesTitleLabel = QLabel("Title :")
+        self.seriesEnglishTitleLabel = QLabel("English Title :")
+        self.seriesFormatLabel = QLabel("SUB/DUB :")
+        self.startDateLabel = QLabel("Start Date :")
+        self.completionDateLabel = QLabel("Completion Date :")
+        self.seriesTypeLabel = QLabel("Series Type :")
+
+        # LineEdits
+        self.artLabel_le = QLineEdit()
+        self.seriesTitle_le = QLineEdit()
+        self.seriesEnglishTitle_le = QLineEdit()
+        self.seriesFormat_le = QLineEdit()
+        self.startDate_le = QLineEdit()
+        self.completionDate_le = QLineEdit()
+        self.seriesType_le = QLineEdit()
+
+        # Buttons
+        self.titleArtBtn = QPushButton("Fetch Series Title Art")
+        self.titleArtBtn.clicked.connect(self.getSeriesArt)
+        self.submitEntryBtn = QPushButton("Submit")
+        self.submitEntryBtn.clicked.connect(self.entrySubmit)
+
+        # drag event sequence functions
+
+        def dragEnterEvent(self, event):
+            if event.mimeData().hasImage:
+                event.accept()
+            else:
+                event.ignore()
+                print('event ignored')
+
+        def dragMoveEvent(self, event):
+            if event.mimeData().hasImage:
+                event.accept()
+            else:
+                event.ignore()
+                print('event ignored')      
+
+        def dropEvent(self, event):
+            if event.mimeData().hasImage:
+                event.setDropAction(Qt.CopyAction)
+                img_fp = event.mimeData().urls()[0].toLocalFile()
+                print(img_fp)
+                self.artLabel.setPixmap(QPixmap(img_fp))
+                
+
+                event.accept()
+            else:
+                event.ignore()
+                print('drop event ignored')
+
+
+
+
+        
+
+        # Set Dialog Layout
+        self.series_dialog.setLayout(dialog_layout)
+        # column 1
+        dialog_layout.addWidget(self.artLabel, 1, 1)
+        dialog_layout.addWidget(self.titleArtBtn, 2, 1)
+        dialog_layout.addWidget(self.submitEntryBtn, 3, 1)
+        # column 2
+        dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
+        dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
+        dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
+        dialog_layout.addWidget(self.startDateLabel, 4, 2)
+        dialog_layout.addWidget(self.completionDateLabel, 5, 2)
+        dialog_layout.addWidget(self.seriesTypeLabel, 6, 2)
+        # column 3
+        dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
+        dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
+        dialog_layout.addWidget(self.seriesFormat_le, 3, 3)        
+        dialog_layout.addWidget(self.startDate_le, 4, 3)
+        dialog_layout.addWidget(self.completionDate_le, 5, 3)
+        dialog_layout.addWidget(self.seriesType_le, 6, 3)
+
+
+        self.series_dialog.show()
+
+
+    # dialog button functions
+    def getSeriesArt(self):
+        pass
+
+
+    def entrySubmit(self):
+        # get lineedit texts
+        # get the art image
+        self.title = self.seriesTitle_le.text()
+        self.englishtitle = self.seriesEnglishTitle_le.text()
+        self.language = self.seriesFormat_le.text()
+        self.start = self.startDate_le.text()
+        self.fin = self.completionDate_le.text()
+        self.type = self.seriesType_le.text()
+
+        # execute sql insert
+
+        conn = sqlite3.connect('saldb.sqlite')  
+
+        cursor = conn.cursor()
+
+        # TODO implement art as well
+        # for testing
+        with open("naruto.jpg", 'rb') as file:
+            blob = file.read()
+
+        
+        info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
+
+
+        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+
+        conn.commit()
+
+        conn.close()
+
+        # add to tablewidget
+        #self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
+
+        # self.watchListTable.insertRow(self.watchListTable.rowCount())
+        # print('row count :', self.watchListTable.rowCount())
+
+        #self.watchListTable.setItem(self.watchListTable.rowCount()-1,)
+
+        # for x in range(self.watchListTable.columnCount()):
+        #     for y in range(len(info_tuple)):
+        #         if y == 0:
+        #             self.tableLabel = QLabel()
+        #             self.tableLabel.setScaledContents(True)
+        #             pixmap = QPixmap()
+        #             pixmap.loadFromData(info_tuple[y])
+        #             self.tableLabel.setPixmap(pixmap)
+        #         else:
+        #             self.watchListTable.setItem(self.watchListTable.rowCount()-1, x, QTableWidgetItem(info_tuple[y]))
+
+
+        rows = self.watchListTable.rowCount()
+        self.watchListTable.setRowCount(rows + 1)
+
+        col = 0
+
+
+        for item in range(len(info_tuple)):
+            if col == 0:
+                label = QLabel()
+                label.setScaledContents(True)
+                pixmap = QPixmap()
+                pixmap.loadFromData(info_tuple[item])
+                label.setPixmap(pixmap)
+                #cell = QTableWidgetItem(label)
+                self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
+            else:
+                self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
+            col += 1
+
+
+
+
+                    # self.tableLabel = QLabel()
+                    # self.tableLabel.setScaledContents(True)
+                    # pixmap = QPixmap()
+                    # pixmap.loadFromData(column_data)
+                    # self.tableLabel.setPixmap(pixmap)
+                    # self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+
+
+
+
+
+
+
     def newDB(self):
         conn = sqlite3.connect('saldb.sqlite')
 
         cursor = conn.cursor()
 
-        createTable = "CREATE TABLE IF NOT EXISTS watchlist(Art BLOB, Title TEXT PRIMARY KEY, English_Title TEXT, Format TEXT, Completion_Date TEXT, Series_Type TEXT)"
+        createTable = "CREATE TABLE IF NOT EXISTS watchlist(Art BLOB, Title TEXT PRIMARY KEY, English_Title TEXT, Format TEXT, Start_Date TEXT ,Completion_Date TEXT, Series_Type TEXT)"
 
         cursor.execute(createTable)
 
@@ -60,14 +248,14 @@ class SAL_app(salUI):
         with open("naruto.jpg", 'rb') as file:
             blob = file.read()
 
-        entry_tuple = (blob, 'ani', 'Anime', 'SUB', '12/01/2021', 'ORI')
+        entry_tuple = (blob, 'ani', 'Anime', 'SUB', '9/05/20', '12/01/2021', 'ORI')
 
         # for testing
         # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'ani', 'Anime', 'SUB', '12/01/2021', 'ORI')".format(blob))
 
         # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'qwer', 'Anime22', 'DUB', '120/90/2021', 'SQ')".format(blob))
 
-        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", entry_tuple)
+        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", entry_tuple)
 
         conn.commit()
 
