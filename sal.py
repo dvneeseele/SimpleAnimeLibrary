@@ -15,7 +15,7 @@ from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QTextListFormat, QFont, QColor
 from PyQt5.QtCore import QEvent, Qt, QSize, QDate, QTime
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFormLayout, QLineEdit, QTabWidget, QWidget, QPushButton, QListWidgetItem, QLabel, QVBoxLayout, QGridLayout, QStackedWidget,
-                            QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem)
+                            QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem, QMenu)
 
 
 
@@ -45,6 +45,23 @@ class SAL_app(salUI):
 
     def getCurrentStack(self):
         pass
+
+
+
+
+
+    def tableContextMenu(self):
+
+        self.tableMenu = QMenu()
+
+        # menu actions
+        addSeries = self.tableMenu.addAction('Add New Series')
+        editSeries = self.tableMenu.addAction('Edit This Entry')
+        deleteSeries = self.tableMenu.addAction('Delete This Entry')
+
+        
+
+
 
 
 
