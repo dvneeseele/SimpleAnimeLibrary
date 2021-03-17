@@ -75,26 +75,36 @@ class SAL_app(salUI):
 
     def seriesEditDialog(self):
 
-
         # get table row data and fill the seriesEditDialog QLineEdits with the content
         # then find a way to lookup the corresponding row in sqlite db
         curr_row = self.watchListTable.currentIndex().row()
         print('Current Row :', curr_row)
 
-        edit_row_data = []
+        self.edit_row_data = []
 
         for i in range(self.watchListTable.columnCount()):
             if i == 0:
-                continue
+                # get the widget QLabel with pixmap in it.
+                # set it to self.artLabel
+                self.artLabelEdit = self.watchListTable.cellWidget(curr_row, i)
+                #continue
             else:
                 cell = self.watchListTable.item(curr_row, i).text() # i think it is reading the blob data in the first cell of the row...
-                edit_row_data.append(cell)
+                self.edit_row_data.append(cell)
         
-        print('Cell Data :', edit_row_data)
+        print('Cell Data :', self.edit_row_data)
+
+
+
 
 
         # Get corresponding data from the sqlite db.
         # find by primary key which should be the series title
+
+
+
+
+
 
         self.series_edit_dialog = QWidget()
 
@@ -103,10 +113,10 @@ class SAL_app(salUI):
         edit_dialog_layout = QGridLayout()
 
         # Labels
-        self.artLabel = QLabel()
+        #self.artLabel = QLabel()
         #self.artLabel.setText("Drop Image")
-        self.artLabel.setAcceptDrops(True)
-        self.artLabel.setAlignment(Qt.AlignCenter)
+        self.artLabelEdit.setAcceptDrops(True)
+        self.artLabelEdit.setAlignment(Qt.AlignCenter)
         
 
         self.seriesTitleLabel = QLabel("Title :")
@@ -120,23 +130,23 @@ class SAL_app(salUI):
         self.artLabel_le = QLineEdit()
         #self.artLabel_le.setPixmap(QPixmap(the blob data from the db. ))
         self.seriesTitle_le = QLineEdit()
-        self.seriesTitle_le.setText(edit_row_data[0])
+        self.seriesTitle_le.setText(self.edit_row_data[0])
         self.seriesEnglishTitle_le = QLineEdit()
-        self.seriesEnglishTitle_le.setText(edit_row_data[1])
+        self.seriesEnglishTitle_le.setText(self.edit_row_data[1])
         self.seriesFormat_le = QLineEdit()
-        self.seriesFormat_le.setText(edit_row_data[2])
+        self.seriesFormat_le.setText(self.edit_row_data[2])
         self.startDate_le = QLineEdit()
-        self.startDate_le.setText(edit_row_data[3])
+        self.startDate_le.setText(self.edit_row_data[3])
         self.completionDate_le = QLineEdit()
-        self.completionDate_le.setText(edit_row_data[4])
+        self.completionDate_le.setText(self.edit_row_data[4])
         self.seriesType_le = QLineEdit()
-        self.seriesType_le.setText(edit_row_data[5])
+        self.seriesType_le.setText(self.edit_row_data[5])
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
         self.titleArtBtn.clicked.connect(self.getSeriesArt)
         self.submitEntryBtn = QPushButton("Submit")
-        self.submitEntryBtn.clicked.connect(self.entrySubmit) # need to make a new submit function specifically for this probably self.editEntrySubmit()
+        self.submitEntryBtn.clicked.connect(self.editEntrySubmit) # need to make a new submit function specifically for this probably self.editEntrySubmit()
 
         # drag event sequence functions
 
@@ -175,7 +185,7 @@ class SAL_app(salUI):
         # Set Dialog Layout
         self.series_edit_dialog.setLayout(edit_dialog_layout)
         # column 1
-        edit_dialog_layout.addWidget(self.artLabel, 1, 1)
+        edit_dialog_layout.addWidget(self.artLabelEdit, 1, 1)
         edit_dialog_layout.addWidget(self.titleArtBtn, 2, 1)
         edit_dialog_layout.addWidget(self.submitEntryBtn, 3, 1)
         # column 2
@@ -197,6 +207,39 @@ class SAL_app(salUI):
         self.series_edit_dialog.show()
 
 
+
+
+
+
+
+    def editEntrySubmit(self):
+        # if series title == None or blank '' string:
+            # qmessagebox must have a title field is required
+
+        print(self.edit_row_data)
+
+        conn = sqlite3.connect('saldb.sqlite')
+        cursor = conn.cursor()
+
+        #sql = ("UPDATE watchlist SET (?) = (?) WHERE (?) = (?)", self.edit_row_data[0], self.seriesTitle_le, 'Title', self.edit_row_data[0]) # need the old values for the WHERE statement
+
+        sql = "UPDATE watchlist SET Title = '{}' WHERE Title = '{}'".format(self.seriesTitle_le.text(), self.edit_row_data[0])
+
+        print('Formatted String :',sql)
+
+        #cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+
+        #editEntryTuple = (self.edit_row_data[0], self.seriesTitle_le, 'Title', self.edit_row_data[0])
+
+        #cursor.execute("UPDATE watchlist SET (?) = (?) WHERE (?) = (?)" editEntryTuple)
+        cursor.execute(sql)
+
+        conn.commit()
+
+        conn.close()
+
+
+        # after the database is updated with the new value/values update the QTableWidget
 
 
 
