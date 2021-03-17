@@ -78,7 +78,14 @@ class SAL_app(salUI):
 
         # get table row data and fill the seriesEditDialog QLineEdits with the content
         # then find a way to lookup the corresponding row in sqlite db
+        curr_row = self.watchListTable.currentIndex().row()
+        print('Current Row :', curr_row)
 
+        edit_row_data = []
+
+        for i in range(self.watchListTable.columnCount()):
+            cell = self.watchListTable.index(curr_row, i).text()
+            print('Cell Data :', cell)
 
         self.series_edit_dialog.setAcceptDrops(True)
 
@@ -111,7 +118,7 @@ class SAL_app(salUI):
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
         self.titleArtBtn.clicked.connect(self.getSeriesArt)
         self.submitEntryBtn = QPushButton("Submit")
-        self.submitEntryBtn.clicked.connect(self.entrySubmit)
+        self.submitEntryBtn.clicked.connect(self.entrySubmit) # need to make a new submit function specifically for this probably self.editEntrySubmit()
 
         # drag event sequence functions
 
