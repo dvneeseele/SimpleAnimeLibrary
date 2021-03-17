@@ -84,8 +84,19 @@ class SAL_app(salUI):
         edit_row_data = []
 
         for i in range(self.watchListTable.columnCount()):
-            cell = self.watchListTable.index(curr_row, i).text()
-            print('Cell Data :', cell)
+            if i == 0:
+                continue
+            else:
+                cell = self.watchListTable.item(curr_row, i).text() # i think it is reading the blob data in the first cell of the row...
+                edit_row_data.append(cell)
+        
+        print('Cell Data :', edit_row_data)
+
+
+        # Get corresponding data from the sqlite db.
+        # find by primary key which should be the series title
+
+        self.series_edit_dialog = QWidget()
 
         self.series_edit_dialog.setAcceptDrops(True)
 
@@ -107,12 +118,19 @@ class SAL_app(salUI):
 
         # LineEdits
         self.artLabel_le = QLineEdit()
+        #self.artLabel_le.setPixmap(QPixmap(the blob data from the db. ))
         self.seriesTitle_le = QLineEdit()
+        self.seriesTitle_le.setText(edit_row_data[0])
         self.seriesEnglishTitle_le = QLineEdit()
+        self.seriesEnglishTitle_le.setText(edit_row_data[1])
         self.seriesFormat_le = QLineEdit()
+        self.seriesFormat_le.setText(edit_row_data[2])
         self.startDate_le = QLineEdit()
+        self.startDate_le.setText(edit_row_data[3])
         self.completionDate_le = QLineEdit()
+        self.completionDate_le.setText(edit_row_data[4])
         self.seriesType_le = QLineEdit()
+        self.seriesType_le.setText(edit_row_data[5])
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
