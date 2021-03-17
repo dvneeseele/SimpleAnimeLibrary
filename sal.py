@@ -221,17 +221,10 @@ class SAL_app(salUI):
         conn = sqlite3.connect('saldb.sqlite')
         cursor = conn.cursor()
 
-        #sql = ("UPDATE watchlist SET (?) = (?) WHERE (?) = (?)", self.edit_row_data[0], self.seriesTitle_le, 'Title', self.edit_row_data[0]) # need the old values for the WHERE statement
-
         sql = "UPDATE watchlist SET Title = '{}' WHERE Title = '{}'".format(self.seriesTitle_le.text(), self.edit_row_data[0])
 
         print('Formatted String :',sql)
 
-        #cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
-
-        #editEntryTuple = (self.edit_row_data[0], self.seriesTitle_le, 'Title', self.edit_row_data[0])
-
-        #cursor.execute("UPDATE watchlist SET (?) = (?) WHERE (?) = (?)" editEntryTuple)
         cursor.execute(sql)
 
         conn.commit()
@@ -240,6 +233,29 @@ class SAL_app(salUI):
 
 
         # after the database is updated with the new value/values update the QTableWidget
+
+        # get new values from the fields
+
+        newValues = [self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
+
+
+        curr_row = self.watchListTable.currentIndex().row()
+
+        new_ctr = 0
+
+        for c in range(self.watchListTable.columnCount()):
+            if c == 0:
+                # self.watchListTable.item(curr_row, c).setCellWidget() to qlabel
+                continue
+            else:
+                #cell = self.watchListTable.setItem(curr_row, c, QTableWidgetItem(self.seriesTitle_le.text()))
+                cell = self.watchListTable.item(curr_row, c).setText(newValues[new_ctr])
+
+            new_ctr += 1
+
+
+
+
 
 
 
