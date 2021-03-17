@@ -4,7 +4,7 @@ import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QMainWindow, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView)
+from PyQt5.QtWidgets import (QMainWindow, QAbstractItemView, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView)
 
 
 class salUI(object):
@@ -81,6 +81,10 @@ class salUI(object):
         # [nevermind lol] pretty sure i dont need this here, it should be created in the backend and added to the stack.
         self.watchListTable = QTableWidget()
         self.watchListTable.setObjectName('watchListTable')
+        self.watchListTable.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.watchListTable.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.watchListTable.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.watchListTable.customContextMenuRequested.connect(self.tableContextMenu)
         self.watchListTable.setRowCount(1) # probably delete this, need to try it
         self.watchListTable.setColumnCount(7) # was 4 which was causing a problem with the 5 columns defined below.
 
