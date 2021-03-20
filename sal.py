@@ -238,78 +238,60 @@ class SAL_app(salUI):
 
 
 
-        #sql = "UPDATE watchlist SET Title = '{}' WHERE Title = '{}'".format(self.seriesTitle_le.text(), self.edit_row_data[0])
-
-        #cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
 
 
 
+        # sql = [('Title' ,self.editSeriesTitle_le.text(), 'Title', self.edit_row_data[0]), ('English_Title', self.editEnglishTitle_le.text(), 'English_Title', self.edit_row_data[1]),
+        #         ('Format', self.editFormat_le.text(), 'Format', self.edit_row_data[2]), ('Start_Date', self.editStartDate_le.text(), 'Start_Date', self.edit_row_data[3]), 
+        #         ('Completion_Date', self.editCompletionDate_le.text(), 'Completion_Date', self.edit_row_data[4]), ('Series_Type', self.editSeriesType_le.text(), 'Series_Type', self.edit_row_data[5])]
 
 
-        # sql = """UPDATE watchlist 
-        # SET Title = '{}' WHERE Title = '{}', 
-        #     English_Title = '{}' WHERE English_Title = '{}',
-        #     Format = '{}' WHERE Format = '{}',
-        #     Start_Date = '{}' WHERE Start_Date = '{}',
-        #     Completion_Date = '{}' WHERE Completion_Date = '{}',
-        #     Series_Type = '{}' WHERE Series_Type = '{}'""".format(self.seriesTitle_le.text(), self.edit_row_data[0],
-        #                                                             self.seriesEnglishTitle_le.text(), self.edit_row_data[1],
-        #                                                             self.seriesFormat_le.text(), self.edit_row_data[2],
-        #                                                             self.startDate_le.text(), self.edit_row_data[3],
-        #                                                             self.completionDate_le.text(), self.edit_row_data[4],
-        #                                                             self.seriesType_le.text(), self.edit_row_data[5])
-        
-        # print(sql)
+        # # sql = [['Title' ,self.editSeriesTitle_le.text()], ['Title', self.edit_row_data[0]], ['English_Title', self.editEnglishTitle_le.text()], ['English_Title', self.edit_row_data[1]],
+        # # ['Format', self.editFormat_le.text()], ['Format', self.edit_row_data[2]], ['Start_Date', self.editStartDate_le.text()], ['Start_Date', self.edit_row_data[3]], 
+        # # ['Completion_Date', self.editCompletionDate_le.text()], ['Completion_Date', self.edit_row_data[4]], ['Series_Type', self.editSeriesType_le.text()], ['Series_Type', self.edit_row_data[5]]]
+
+        # conn = sqlite3.connect('saldb.sqlite')
+        # cursor = conn.cursor()
+
+        # for u in range(len(sql)):
+        #     #print('this here', sql[u])
+        #     # unpack the tuple\
+        #     h, i, j, k = sql[u]
+        #     tuppie = tuple(sql[u])
+        #     print('tuppie :',tuppie)
+        #     #fuck = "UPDATE watchlist SET '{}' = '{}' WHERE '{}' = '{}'".format(h, i, j, k)
+        #     cursor.execute('''UPDATE watchlist SET ? = ? WHERE ? = ?''', (h, i, h, k))
+        #     #cursor.execute('''UPDATE watchlist SET ? = ?''', (h, i,))
+        #     #print(fuck)
+        #     #cursor.execute(fuck)        
+        #     conn.commit()
+
+        # conn.close()
 
 
 
 
-        sql = [('Title' ,self.editSeriesTitle_le.text(), 'Title', self.edit_row_data[0]), ('English_Title', self.editEnglishTitle_le.text(), 'English_Title', self.edit_row_data[1]),
-                ('Format', self.editFormat_le.text(), 'Format', self.edit_row_data[2]), ('Start_Date', self.editStartDate_le.text(), 'Start_Date', self.edit_row_data[3]), 
-                ('Completion_Date', self.editCompletionDate_le.text(), 'Completion_Date', self.edit_row_data[4]), ('Series_Type', self.editSeriesType_le.text(), 'Series_Type', self.edit_row_data[5])]
+#########################################################################################################################################################
+#########################################################################################################################################################
 
-
-        # sql = [['Title' ,self.editSeriesTitle_le.text()], ['Title', self.edit_row_data[0]], ['English_Title', self.editEnglishTitle_le.text()], ['English_Title', self.edit_row_data[1]],
-        # ['Format', self.editFormat_le.text()], ['Format', self.edit_row_data[2]], ['Start_Date', self.editStartDate_le.text()], ['Start_Date', self.edit_row_data[3]], 
-        # ['Completion_Date', self.editCompletionDate_le.text()], ['Completion_Date', self.edit_row_data[4]], ['Series_Type', self.editSeriesType_le.text()], ['Series_Type', self.edit_row_data[5]]]
 
         conn = sqlite3.connect('saldb.sqlite')
         cursor = conn.cursor()
 
-        for u in range(len(sql)):
-            #print('this here', sql[u])
-            # unpack the tuple\
-            h, i, j, k = sql[u]
-            fuck = "UPDATE watchlist SET '{}' = '{}' WHERE '{}' = '{}'".format(h, i, j, k)
-            #cursor.execute("UPDATE watchlist SET ? = ? WHERE ? = ?", sql[u])
-            #print(fuck)
-            cursor.execute(fuck)        
-            conn.commit()
+        newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_le.text(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
 
+        #cursor.execute("INSERT OR REPLACE INTO watchlist(Title, English_Title, Format, Start_Date, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", newValues)
+        cursor.execute("UPDATE watchlist SET Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_le.text(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.edit_row_data[0]))
+
+        conn.commit()
         conn.close()
 
-        #print(sql)
-
-
-        #newValues = [self.artLabelEdit ,self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
-
-        # if this works might be good to put it in the main class init so it can be referenced throughout
-        #columnLabels = ["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"]
-
-
-
-        # cursor.execute(sql)
-        #cursor.executemany("UPDATE watchlist SET ? = ? WHERE ? = ?;", sql)
 
 
 
 
-
-
-        # after the database is updated with the new value/values update the QTableWidget
-
-        # get new values from the fields
-
+#########################################################################################################################################################
+#########################################################################################################################################################
 
 
 
