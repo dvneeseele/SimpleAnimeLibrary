@@ -67,7 +67,34 @@ class SAL_app(salUI):
         if tableAction == editSeries:
             self.seriesEditDialog()
         if tableAction == deleteSeries:
-            pass
+            self.deleteSeries()
+            
+
+
+
+
+
+
+
+    def deleteSeries(self):
+        currentRow = self.watchListTable.currentIndex().row()
+        print('current row :',currentRow)
+
+        delSeries = self.watchListTable.item(currentRow, 1).text()
+        print('delSeries :', delSeries)
+
+        # qmessagebox "are you sure you want to delete this series? It can not be undone."
+
+        conn = sqlite3.connect('saldb.sqlite')
+        cursor = conn.cursor()
+
+        #deleteString = "DELETE FROM watchlist WHERE Title = {}"
+        cursor.execute("DELETE FROM watchlist WHERE Title = (?)", (delSeries,))
+        conn.commit()
+        conn.close()
+
+        # delete the row from the qtablewidget
+        self.watchListTable.removeRow(currentRow)
 
 
 
@@ -87,22 +114,13 @@ class SAL_app(salUI):
                 # get the widget QLabel with pixmap in it.
                 # set it to self.artLabel
                 self.artLabelEdit = self.watchListTable.cellWidget(curr_row, i)
+                # maybe add this to the self.edit_row_data list
                 #continue
             else:
                 cell = self.watchListTable.item(curr_row, i).text() # i think it is reading the blob data in the first cell of the row...
                 self.edit_row_data.append(cell)
         
         print('Cell Data :', self.edit_row_data)
-
-
-
-
-
-        # Get corresponding data from the sqlite db.
-        # find by primary key which should be the series title
-
-
-
 
 
 
@@ -129,24 +147,24 @@ class SAL_app(salUI):
         # LineEdits
         self.artLabel_le = QLineEdit()
         #self.artLabel_le.setPixmap(QPixmap(the blob data from the db. ))
-        self.seriesTitle_le = QLineEdit()
-        self.seriesTitle_le.setText(self.edit_row_data[0])
-        self.seriesEnglishTitle_le = QLineEdit()
-        self.seriesEnglishTitle_le.setText(self.edit_row_data[1])
-        self.seriesFormat_le = QLineEdit()
-        self.seriesFormat_le.setText(self.edit_row_data[2])
-        self.startDate_le = QLineEdit()
-        self.startDate_le.setText(self.edit_row_data[3])
-        self.completionDate_le = QLineEdit()
-        self.completionDate_le.setText(self.edit_row_data[4])
-        self.seriesType_le = QLineEdit()
-        self.seriesType_le.setText(self.edit_row_data[5])
+        self.editSeriesTitle_le = QLineEdit()
+        self.editSeriesTitle_le.setText(self.edit_row_data[0])
+        self.editEnglishTitle_le = QLineEdit()
+        self.editEnglishTitle_le.setText(self.edit_row_data[1])
+        self.editFormat_le = QLineEdit()
+        self.editFormat_le.setText(self.edit_row_data[2])
+        self.editStartDate_le = QLineEdit()
+        self.editStartDate_le.setText(self.edit_row_data[3])
+        self.editCompletionDate_le = QLineEdit()
+        self.editCompletionDate_le.setText(self.edit_row_data[4])
+        self.editSeriesType_le = QLineEdit()
+        self.editSeriesType_le.setText(self.edit_row_data[5])
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
         self.titleArtBtn.clicked.connect(self.getSeriesArt)
         self.submitEntryBtn = QPushButton("Submit")
-        self.submitEntryBtn.clicked.connect(self.editEntrySubmit) # need to make a new submit function specifically for this probably self.editEntrySubmit()
+        self.submitEntryBtn.clicked.connect(self.editEntrySubmit)
 
         # drag event sequence functions
 
@@ -196,12 +214,12 @@ class SAL_app(salUI):
         edit_dialog_layout.addWidget(self.completionDateLabel, 5, 2)
         edit_dialog_layout.addWidget(self.seriesTypeLabel, 6, 2)
         # column 3
-        edit_dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
-        edit_dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
-        edit_dialog_layout.addWidget(self.seriesFormat_le, 3, 3)        
-        edit_dialog_layout.addWidget(self.startDate_le, 4, 3)
-        edit_dialog_layout.addWidget(self.completionDate_le, 5, 3)
-        edit_dialog_layout.addWidget(self.seriesType_le, 6, 3)
+        edit_dialog_layout.addWidget(self.editSeriesTitle_le, 1, 3)
+        edit_dialog_layout.addWidget(self.editEnglishTitle_le, 2, 3)
+        edit_dialog_layout.addWidget(self.editFormat_le, 3, 3)        
+        edit_dialog_layout.addWidget(self.editStartDate_le, 4, 3)
+        edit_dialog_layout.addWidget(self.editCompletionDate_le, 5, 3)
+        edit_dialog_layout.addWidget(self.editSeriesType_le, 6, 3)
 
 
         self.series_edit_dialog.show()
@@ -218,26 +236,90 @@ class SAL_app(salUI):
 
         print(self.edit_row_data)
 
+
+
+        #sql = "UPDATE watchlist SET Title = '{}' WHERE Title = '{}'".format(self.seriesTitle_le.text(), self.edit_row_data[0])
+
+        #cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+
+
+
+
+
+        # sql = """UPDATE watchlist 
+        # SET Title = '{}' WHERE Title = '{}', 
+        #     English_Title = '{}' WHERE English_Title = '{}',
+        #     Format = '{}' WHERE Format = '{}',
+        #     Start_Date = '{}' WHERE Start_Date = '{}',
+        #     Completion_Date = '{}' WHERE Completion_Date = '{}',
+        #     Series_Type = '{}' WHERE Series_Type = '{}'""".format(self.seriesTitle_le.text(), self.edit_row_data[0],
+        #                                                             self.seriesEnglishTitle_le.text(), self.edit_row_data[1],
+        #                                                             self.seriesFormat_le.text(), self.edit_row_data[2],
+        #                                                             self.startDate_le.text(), self.edit_row_data[3],
+        #                                                             self.completionDate_le.text(), self.edit_row_data[4],
+        #                                                             self.seriesType_le.text(), self.edit_row_data[5])
+        
+        # print(sql)
+
+
+
+
+        sql = [('Title' ,self.editSeriesTitle_le.text(), 'Title', self.edit_row_data[0]), ('English_Title', self.editEnglishTitle_le.text(), 'English_Title', self.edit_row_data[1]),
+                ('Format', self.editFormat_le.text(), 'Format', self.edit_row_data[2]), ('Start_Date', self.editStartDate_le.text(), 'Start_Date', self.edit_row_data[3]), 
+                ('Completion_Date', self.editCompletionDate_le.text(), 'Completion_Date', self.edit_row_data[4]), ('Series_Type', self.editSeriesType_le.text(), 'Series_Type', self.edit_row_data[5])]
+
+
+        # sql = [['Title' ,self.editSeriesTitle_le.text()], ['Title', self.edit_row_data[0]], ['English_Title', self.editEnglishTitle_le.text()], ['English_Title', self.edit_row_data[1]],
+        # ['Format', self.editFormat_le.text()], ['Format', self.edit_row_data[2]], ['Start_Date', self.editStartDate_le.text()], ['Start_Date', self.edit_row_data[3]], 
+        # ['Completion_Date', self.editCompletionDate_le.text()], ['Completion_Date', self.edit_row_data[4]], ['Series_Type', self.editSeriesType_le.text()], ['Series_Type', self.edit_row_data[5]]]
+
         conn = sqlite3.connect('saldb.sqlite')
         cursor = conn.cursor()
 
-        sql = "UPDATE watchlist SET Title = '{}' WHERE Title = '{}'".format(self.seriesTitle_le.text(), self.edit_row_data[0])
-
-        print('Formatted String :',sql)
-
-        cursor.execute(sql)
-
-        conn.commit()
+        for u in range(len(sql)):
+            #print('this here', sql[u])
+            # unpack the tuple\
+            h, i, j, k = sql[u]
+            fuck = "UPDATE watchlist SET '{}' = '{}' WHERE '{}' = '{}'".format(h, i, j, k)
+            #cursor.execute("UPDATE watchlist SET ? = ? WHERE ? = ?", sql[u])
+            #print(fuck)
+            cursor.execute(fuck)        
+            conn.commit()
 
         conn.close()
+
+        #print(sql)
+
+
+        #newValues = [self.artLabelEdit ,self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
+
+        # if this works might be good to put it in the main class init so it can be referenced throughout
+        #columnLabels = ["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"]
+
+
+
+        # cursor.execute(sql)
+        #cursor.executemany("UPDATE watchlist SET ? = ? WHERE ? = ?;", sql)
+
+
+
+
 
 
         # after the database is updated with the new value/values update the QTableWidget
 
         # get new values from the fields
 
-        newValues = [self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
 
+
+
+
+        #newValues = [self.artLabelEdit ,self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
+
+
+        #newValues = [self.artLabelEdit ,self.edit_row_data[0], self.edit_row_data[1], self.edit_row_data[2], self.edit_row_data[3], self.edit_row_data[4], self.edit_row_data[5]]
+        newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_le.text(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
+        print('New VAlues :', newValues)
 
         curr_row = self.watchListTable.currentIndex().row()
 
@@ -246,7 +328,10 @@ class SAL_app(salUI):
         for c in range(self.watchListTable.columnCount()):
             if c == 0:
                 # self.watchListTable.item(curr_row, c).setCellWidget() to qlabel
-                continue
+                #self.watchListTable.item(curr_row, c).setCellWidget(newValues[c])
+
+                self.watchListTable.setCellWidget(curr_row, c, newValues[c])
+                #continue
             else:
                 #cell = self.watchListTable.setItem(curr_row, c, QTableWidgetItem(self.seriesTitle_le.text()))
                 cell = self.watchListTable.item(curr_row, c).setText(newValues[new_ctr])
