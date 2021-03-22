@@ -425,7 +425,18 @@ class SAL_app(salUI):
 
     # dialog button functions
     def getSeriesArt(self):
-        pass
+        
+        self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
+
+        self.imgPixmap = QPixmap()
+        self.imgPixmap.loadFromData(self.imgBytes)
+
+        # set the existing art qlabel in the add series dialog
+        self.artLabel.setPixmap(self.imgPixmap)
+
+
+
+
 
 
     def entrySubmit(self):
@@ -448,6 +459,9 @@ class SAL_app(salUI):
         # for testing
         with open("naruto.jpg", 'rb') as file:
             blob = file.read()
+
+        # if qlabel has a pixmap => convert to blob
+        # if not then maybe load default icon
 
         
         info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
@@ -507,6 +521,43 @@ class SAL_app(salUI):
                     # pixmap.loadFromData(column_data)
                     # self.tableLabel.setPixmap(pixmap)
                     # self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+
+
+
+
+
+
+    def fetchInfo(self, fetchtitle):
+
+        # format url api string with the title?
+        api_base = 'https://api.jikan.moe/v3'
+        url = api_base + '/search/anime?q={}&page=1'.format(fetchtitle)
+
+        # get title of series
+        # when in the addSeries Dialog => if self.seriesTitle_le == '' or None => then qmessagebox "Must have a Title"
+
+
+        req = requests.get(url)
+
+        resp = req.json()
+
+        seriesImage = resp['results'][0]['image_url']
+
+        getImage = requests.get(seriesImage).content
+
+        # should return image in bytes
+        # .content method give image in bytes so should be able to insert it directly into sqlite db
+        # imageContent = requests.get(seriesImage.content)
+
+        return getImage
+
+
+
+
+
+
+
+
 
 
 
