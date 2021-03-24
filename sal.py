@@ -15,7 +15,35 @@ from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QTextListFormat, QFont, QColor
 from PyQt5.QtCore import QEvent, Qt, QSize, QDate, QTime
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFormLayout, QLineEdit, QTabWidget, QWidget, QPushButton, QListWidgetItem, QLabel, QVBoxLayout, QGridLayout, QStackedWidget,
-                            QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem, QMenu)
+                            QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem, QMenu, QComboBox)
+
+
+
+
+
+
+class seriesArtLabel(QLabel):
+    def __init__(self):
+        super().__init__()
+
+        self.setAlignment(Qt.AlignCenter)
+        self.setText("Drop Image")
+        
+
+        def setPixmap(self, image):
+            super().setPixmap(image)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -336,10 +364,11 @@ class SAL_app(salUI):
         dialog_layout = QGridLayout()
 
         # Labels
-        self.artLabel = QLabel()
+        self.artLabel = seriesArtLabel()
+        #self.artLabel = QLabel()
         #self.artLabel.setText("Drop Image")
-        self.artLabel.setAcceptDrops(True)
-        self.artLabel.setAlignment(Qt.AlignCenter)
+        #self.artLabel.setAcceptDrops(True)
+        #self.artLabel.setAlignment(Qt.AlignCenter)
         
 
         self.seriesTitleLabel = QLabel("Title :")
@@ -353,10 +382,20 @@ class SAL_app(salUI):
         self.artLabel_le = QLineEdit()
         self.seriesTitle_le = QLineEdit()
         self.seriesEnglishTitle_le = QLineEdit()
-        self.seriesFormat_le = QLineEdit()
+
+
+
+        #self.seriesFormat_le = QLineEdit()
         self.startDate_le = QLineEdit()
         self.completionDate_le = QLineEdit()
         self.seriesType_le = QLineEdit()
+
+
+        # Combobox
+        self.seriesFormat_cb = QComboBox()
+        self.seriesFormat_cb.addItem("SUB")
+        self.seriesFormat_cb.addItem("DUB")
+
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
@@ -385,7 +424,9 @@ class SAL_app(salUI):
                 event.setDropAction(Qt.CopyAction)
                 img_fp = event.mimeData().urls()[0].toLocalFile()
                 print(img_fp)
-                self.artLabel.setPixmap(QPixmap(img_fp))
+                self.set_image(img_fp)
+                #self.artLabel.setPixmap(QPixmap(img_fp))
+                #self.artLabel.setPixmap(QPixmap(img_fp))
                 
 
                 event.accept()
@@ -393,6 +434,9 @@ class SAL_app(salUI):
                 event.ignore()
                 print('drop event ignored')
 
+
+        def setImage(self, file_path):
+            self.artLabel.setPixmap(QPixmap(file_path))
 
 
 
@@ -414,7 +458,8 @@ class SAL_app(salUI):
         # column 3
         dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
         dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
-        dialog_layout.addWidget(self.seriesFormat_le, 3, 3)        
+        #dialog_layout.addWidget(self.seriesFormat_le, 3, 3)
+        dialog_layout.addWidget(self.seriesFormat_cb, 3, 3)        
         dialog_layout.addWidget(self.startDate_le, 4, 3)
         dialog_layout.addWidget(self.completionDate_le, 5, 3)
         dialog_layout.addWidget(self.seriesType_le, 6, 3)
@@ -444,7 +489,10 @@ class SAL_app(salUI):
         # get the art image
         self.title = self.seriesTitle_le.text()
         self.englishtitle = self.seriesEnglishTitle_le.text()
-        self.language = self.seriesFormat_le.text()
+
+        #self.language = self.seriesFormat_le.text()
+        self.language = self.seriesFormat_cb.currentText()
+
         self.start = self.startDate_le.text()
         self.fin = self.completionDate_le.text()
         self.type = self.seriesType_le.text()
