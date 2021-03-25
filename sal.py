@@ -179,8 +179,13 @@ class SAL_app(salUI):
         self.editSeriesTitle_le.setText(self.edit_row_data[0])
         self.editEnglishTitle_le = QLineEdit()
         self.editEnglishTitle_le.setText(self.edit_row_data[1])
-        self.editFormat_le = QLineEdit()
-        self.editFormat_le.setText(self.edit_row_data[2])
+
+        self.editFormat_cb = QComboBox()
+        self.editFormat_cb.addItem("SUB")
+        self.editFormat_cb.addItem("DUB")
+        # self.editFormat_le = QLineEdit()
+        # self.editFormat_le.setText(self.edit_row_data[2])
+
         self.editStartDate_le = QLineEdit()
         self.editStartDate_le.setText(self.edit_row_data[3])
         self.editCompletionDate_le = QLineEdit()
@@ -244,7 +249,7 @@ class SAL_app(salUI):
         # column 3
         edit_dialog_layout.addWidget(self.editSeriesTitle_le, 1, 3)
         edit_dialog_layout.addWidget(self.editEnglishTitle_le, 2, 3)
-        edit_dialog_layout.addWidget(self.editFormat_le, 3, 3)        
+        edit_dialog_layout.addWidget(self.editFormat_cb, 3, 3)        
         edit_dialog_layout.addWidget(self.editStartDate_le, 4, 3)
         edit_dialog_layout.addWidget(self.editCompletionDate_le, 5, 3)
         edit_dialog_layout.addWidget(self.editSeriesType_le, 6, 3)
@@ -306,10 +311,10 @@ class SAL_app(salUI):
         conn = sqlite3.connect('saldb.sqlite')
         cursor = conn.cursor()
 
-        newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_le.text(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
+        newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
 
         #cursor.execute("INSERT OR REPLACE INTO watchlist(Title, English_Title, Format, Start_Date, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", newValues)
-        cursor.execute("UPDATE watchlist SET Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_le.text(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.edit_row_data[0]))
+        cursor.execute("UPDATE watchlist SET Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.edit_row_data[0]))
 
         conn.commit()
         conn.close()
@@ -328,7 +333,7 @@ class SAL_app(salUI):
 
 
         #newValues = [self.artLabelEdit ,self.edit_row_data[0], self.edit_row_data[1], self.edit_row_data[2], self.edit_row_data[3], self.edit_row_data[4], self.edit_row_data[5]]
-        newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_le.text(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
+        newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
         print('New VAlues :', newValues)
 
         curr_row = self.watchListTable.currentIndex().row()
