@@ -15,7 +15,7 @@ from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QTextListFormat, QFont, QColor
 from PyQt5.QtCore import QEvent, Qt, QSize, QDate, QTime
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFormLayout, QLineEdit, QTabWidget, QWidget, QPushButton, QListWidgetItem, QLabel, QVBoxLayout, QGridLayout, QStackedWidget,
-                            QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem, QMenu, QComboBox)
+                            QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem, QMenu, QComboBox, QGroupBox, QHBoxLayout, QFrame)
 
 
 
@@ -199,6 +199,42 @@ class SAL_app(salUI):
         self.submitEntryBtn = QPushButton("Submit")
         self.submitEntryBtn.clicked.connect(self.editEntrySubmit)
 
+
+        self.editStartDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
+        self.editStartDateBtn.clicked.connect(self.editStartDate)
+
+        self.editEndDateBtn = QPushButton("Select Date")# Will be replaced with an icon, no text, tooltip
+        self.editEndDateBtn.clicked.connect(self.selectEditEndDate)
+
+        self.editFinishCurrentDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
+        self.editFinishCurrentDateBtn.clicked.connect(self.editFinishDate)
+
+        self.editFinishSelectionDateBtn = QPushButton("Select Date")# Will be replaced with an icon, no text, tooltip
+        self.editFinishSelectionDateBtn.clicked.connect(self.editFinishSelectionDate)
+
+
+        # QFrames
+        self.editButtonsFrame = QFrame()
+        
+        frameLayout = QHBoxLayout()
+        self.editButtonsFrame.setLayout(frameLayout)
+
+        frameLayout.addWidget(self.editStartDateBtn)
+        frameLayout.addWidget(self.editEndDateBtn)
+
+
+
+
+        self.editDateFinBtnsFrame = QFrame()
+        finFrameLayout = QHBoxLayout()
+        self.editDateFinBtnsFrame.setLayout(finFrameLayout)
+
+        finFrameLayout.addWidget(self.editFinishCurrentDateBtn)
+        finFrameLayout.addWidget(self.editFinishSelectionDateBtn)
+
+
+
+
         # drag event sequence functions
 
         def dragEnterEvent(self, event):
@@ -250,12 +286,34 @@ class SAL_app(salUI):
         edit_dialog_layout.addWidget(self.editSeriesTitle_le, 1, 3)
         edit_dialog_layout.addWidget(self.editEnglishTitle_le, 2, 3)
         edit_dialog_layout.addWidget(self.editFormat_cb, 3, 3)        
-        edit_dialog_layout.addWidget(self.editStartDate_le, 4, 3)
-        edit_dialog_layout.addWidget(self.editCompletionDate_le, 5, 3)
-        edit_dialog_layout.addWidget(self.editSeriesType_le, 6, 3)
+        edit_dialog_layout.addWidget(self.editStartDate_le, 4, 3) 
+        edit_dialog_layout.addWidget(self.editButtonsFrame, 5, 3) #
+        edit_dialog_layout.addWidget(self.editCompletionDate_le, 6, 3)
+        edit_dialog_layout.addWidget(self.editDateFinBtnsFrame, 7, 3)
+        edit_dialog_layout.addWidget(self.editSeriesType_le, 8, 3) #
+
 
 
         self.series_edit_dialog.show()
+
+
+
+
+
+
+    def editStartDate(self):
+        # probably needs to clear the lineedit then set the text
+        pass
+
+
+    def editFinishDate(self):
+        pass
+
+    def selectEditEndDate(self):
+        pass
+
+    def editFinishSelectionDate(self):
+        pass
 
 
 
@@ -405,8 +463,64 @@ class SAL_app(salUI):
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
         self.titleArtBtn.clicked.connect(self.getSeriesArt)
+
         self.submitEntryBtn = QPushButton("Submit")
         self.submitEntryBtn.clicked.connect(self.entrySubmit)
+
+        self.currentStartDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
+        self.currentStartDateBtn.clicked.connect(self.insertStartCurrentDate)
+
+        self.startDateSelectionBtn = QPushButton("Select Date") # Will be replaced with an icon , no text, tooltip
+        self.startDateSelectionBtn.clicked.connect(self.insertStartDateSelection)
+
+        self.finishCurrentDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
+        self.finishCurrentDateBtn.clicked.connect(self.finishCurrentDate)
+
+        self.finishDateSelectionBtn = QPushButton("Select Date") # Will be replaced with an icon , no text, tooltip
+        self.finishDateSelectionBtn.clicked.connect(self.finishDateSelection)        
+
+
+
+        # GroupBox
+        # self.formButtonsGroupBox = QGroupBox()
+
+
+        # groupbox_layout = QHBoxLayout()
+        # self.formButtonsGroupBox.setLayout(groupbox_layout)
+
+        # groupbox_layout.addWidget(self.currentStartDateBtn)
+        # groupbox_layout.addWidget(self.startDateSelectionBtn)
+
+
+        # self.formButtonsCompletion = QGroupBox()
+        # self.formButtonsCompletion.setStyleSheet("border:none")
+
+        # completeButtons_layout = QHBoxLayout()
+        # self.formButtonsCompletion.setLayout(completeButtons_layout)
+
+        # completeButtons_layout.addWidget(self.finishCurrentDateBtn)
+        # completeButtons_layout.addWidget(self.finishDateSelectionBtn)
+
+
+        # QFrames
+        self.formButtonsFrame = QFrame()
+        
+        frameLayout = QHBoxLayout()
+        self.formButtonsFrame.setLayout(frameLayout)
+
+        frameLayout.addWidget(self.currentStartDateBtn)
+        frameLayout.addWidget(self.startDateSelectionBtn)
+
+
+
+        self.dateFinBtnsFrame = QFrame()
+        finFrameLayout = QHBoxLayout()
+        self.dateFinBtnsFrame.setLayout(finFrameLayout)
+
+        finFrameLayout.addWidget(self.finishCurrentDateBtn)
+        finFrameLayout.addWidget(self.finishDateSelectionBtn)
+
+
 
         # drag event sequence functions
 
@@ -458,19 +572,31 @@ class SAL_app(salUI):
         dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
         dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
         dialog_layout.addWidget(self.startDateLabel, 4, 2)
-        dialog_layout.addWidget(self.completionDateLabel, 5, 2)
-        dialog_layout.addWidget(self.seriesTypeLabel, 6, 2)
+        dialog_layout.addWidget(self.completionDateLabel, 6, 2)
+        dialog_layout.addWidget(self.seriesTypeLabel, 8, 2)
         # column 3
         dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
         dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
         #dialog_layout.addWidget(self.seriesFormat_le, 3, 3)
         dialog_layout.addWidget(self.seriesFormat_cb, 3, 3)        
         dialog_layout.addWidget(self.startDate_le, 4, 3)
-        dialog_layout.addWidget(self.completionDate_le, 5, 3)
-        dialog_layout.addWidget(self.seriesType_le, 6, 3)
+        dialog_layout.addWidget(self.formButtonsFrame, 5, 3) #QGroupBox
+        dialog_layout.addWidget(self.completionDate_le, 6, 3)
+        dialog_layout.addWidget(self.dateFinBtnsFrame, 7, 3) #QGroupBox
+
+        dialog_layout.addWidget(self.seriesType_le, 8, 3)
 
 
         self.series_dialog.show()
+
+
+
+
+
+
+
+
+
 
 
     # dialog button functions
@@ -487,6 +613,22 @@ class SAL_app(salUI):
 
 
 
+
+    def insertStartCurrentDate(self):
+        date = QDate.currentDate()
+        self.startDate_le.setText(date.toString(Qt.DefaultLocaleShortDate))
+
+    def insertStartDateSelection(self):
+        # QCalendarWidget for selection
+        pass
+
+    def finishCurrentDate(self):
+        date = QDate.currentDate()
+        self.completionDate_le.setText(date.toString(Qt.DefaultLocaleShortDate))
+
+    def finishDateSelection(self):
+        # QCalendarWidget for selection
+        pass
 
 
     def entrySubmit(self):
