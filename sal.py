@@ -280,8 +280,8 @@ class SAL_app(salUI):
         edit_dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
         edit_dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
         edit_dialog_layout.addWidget(self.startDateLabel, 4, 2)
-        edit_dialog_layout.addWidget(self.completionDateLabel, 5, 2)
-        edit_dialog_layout.addWidget(self.seriesTypeLabel, 6, 2)
+        edit_dialog_layout.addWidget(self.completionDateLabel, 6, 2)
+        edit_dialog_layout.addWidget(self.seriesTypeLabel, 8, 2)
         # column 3
         edit_dialog_layout.addWidget(self.editSeriesTitle_le, 1, 3)
         edit_dialog_layout.addWidget(self.editEnglishTitle_le, 2, 3)
@@ -303,11 +303,15 @@ class SAL_app(salUI):
 
     def editStartDate(self):
         # probably needs to clear the lineedit then set the text
-        pass
+        date = QDate.currentDate()
+        #self.editStartDate_le.clear()
+        self.editStartDate_le.setText(date.toString(Qt.DefaultLocaleShortDate))
 
 
     def editFinishDate(self):
-        pass
+        date = QDate.currentDate()
+        self.editCompletionDate_le.setText(date.toString(Qt.DefaultLocaleShortDate))        
+
 
     def selectEditEndDate(self):
         pass
