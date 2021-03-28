@@ -132,23 +132,92 @@ class SAL_app(salUI):
 
         # get table row data and fill the seriesEditDialog QLineEdits with the content
         # then find a way to lookup the corresponding row in sqlite db
-        curr_row = self.watchListTable.currentIndex().row()
-        print('Current Row :', curr_row)
 
-        self.edit_row_data = []
+#############################################################################################################################################################################
+#############################################################################################################################################################################
 
-        for i in range(self.watchListTable.columnCount()):
-            if i == 0:
-                # get the widget QLabel with pixmap in it.
-                # set it to self.artLabel
-                self.artLabelEdit = self.watchListTable.cellWidget(curr_row, i)
-                # maybe add this to the self.edit_row_data list
-                #continue
-            else:
-                cell = self.watchListTable.item(curr_row, i).text() # i think it is reading the blob data in the first cell of the row...
-                self.edit_row_data.append(cell)
+
+
+
+        # curr_row = self.watchListTable.currentIndex().row()
+        # print('Current Row :', curr_row)
+
+        # self.edit_row_data = []
+
         
-        print('Cell Data :', self.edit_row_data)
+
+        # for i in range(self.watchListTable.columnCount()):
+        #     if i == 0:
+        #         # get the widget QLabel with pixmap in it.
+        #         # set it to self.artLabel
+
+        #         # get primary key (Title) from the QTableWidget then use it to lookup all the data in that row including blob data
+        #         self.artLabelEdit = self.watchListTable.cellWidget(curr_row, i)
+
+
+        #         # maybe add this to the self.edit_row_data list
+        #         #continue
+        #     else:
+        #         cell = self.watchListTable.item(curr_row, i).text() # i think it is reading the blob data in the first cell of the row...
+        #         self.edit_row_data.append(cell)
+        
+        # print('Cell Data :', self.edit_row_data)
+
+
+
+
+
+#############################################################################################################################################################################
+#############################################################################################################################################################################
+
+
+
+
+        # this query is just to get the info to fill in the QDialog
+
+        curr_row = self.watchListTable.currentIndex().row()
+        # since no longer looking up the value from the QTableWidget need to decrement by 1 because sqlite starts counting at 0, QTableWidget does not.
+        #curr_row = curr_row - 1
+
+        # column 2 should have the Title of the series which is also the unique primary key for the db
+        pk_id = self.watchListTable.item(curr_row, 1).text()
+
+        print("curr_row", curr_row)
+        print('PK_ID' ,pk_id)
+
+        conn = sqlite3.connect('saldb.sqlite')
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        rowdata = cursor.execute("SELECT Art, Title, English_Title, Format, Start_Date, Completion_Date, Series_Type FROM watchlist WHERE Title = ?;", (pk_id,))
+
+        
+        for r in rowdata.fetchall():
+            #print(dict(r))
+            self.vals = dict(r)
+        
+        #print('R', self.vals)
+
+
+        #THIS WORKS
+        #print('ROWDATA', rowdata.fetchall()[0][0])
+
+        conn.commit()
+
+        conn.close()
+
+
+
+
+
+
+#############################################################################################################################################################################
+#############################################################################################################################################################################
+
+
+
+
+
 
 
 
@@ -158,8 +227,14 @@ class SAL_app(salUI):
 
         edit_dialog_layout = QGridLayout()
 
+
+
+
         # Labels
-        #self.artLabel = QLabel()
+        self.artLabelEdit = QLabel()
+        self.pix = QPixmap()
+        self.pix.loadFromData(self.vals['Art'])
+        self.artLabelEdit.setPixmap(self.pix)
         #self.artLabel.setText("Drop Image")
         self.artLabelEdit.setAcceptDrops(True)
         self.artLabelEdit.setAlignment(Qt.AlignCenter)
@@ -176,29 +251,29 @@ class SAL_app(salUI):
         self.artLabel_le = QLineEdit()
         #self.artLabel_le.setPixmap(QPixmap(the blob data from the db. ))
         self.editSeriesTitle_le = QLineEdit()
-        self.editSeriesTitle_le.setText(self.edit_row_data[0])
+        self.editSeriesTitle_le.setText(self.vals['Title'])
         self.editEnglishTitle_le = QLineEdit()
-        self.editEnglishTitle_le.setText(self.edit_row_data[1])
+        self.editEnglishTitle_le.setText(self.vals['English_Title'])
 
         self.editFormat_cb = QComboBox()
         self.editFormat_cb.addItem("SUB")
         self.editFormat_cb.addItem("DUB")
-        # self.editFormat_le = QLineEdit()
-        # self.editFormat_le.setText(self.edit_row_data[2])
+        self.editFormat_cb.setCurrentText(self.vals['Format'])
 
         self.editStartDate_le = QLineEdit()
-        self.editStartDate_le.setText(self.edit_row_data[3])
+        self.editStartDate_le.setText(self.vals['Start_Date'])
         self.editCompletionDate_le = QLineEdit()
-        self.editCompletionDate_le.setText(self.edit_row_data[4])
+        self.editCompletionDate_le.setText(self.vals['Completion_Date'])
         self.editSeriesType_le = QLineEdit()
-        self.editSeriesType_le.setText(self.edit_row_data[5])
+        self.editSeriesType_le.setText(self.vals['Series_Type'])
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
-        self.titleArtBtn.clicked.connect(self.getSeriesArt)
+        self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabelEdit, self.vals['Title']))
         self.submitEntryBtn = QPushButton("Submit")
         self.submitEntryBtn.clicked.connect(self.editEntrySubmit)
-
+        self.chooseArtFile = QPushButton("Choose File")
+        self.chooseArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabelEdit))
 
         self.editStartDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
         self.editStartDateBtn.clicked.connect(self.editStartDate)
@@ -274,7 +349,8 @@ class SAL_app(salUI):
         # column 1
         edit_dialog_layout.addWidget(self.artLabelEdit, 1, 1)
         edit_dialog_layout.addWidget(self.titleArtBtn, 2, 1)
-        edit_dialog_layout.addWidget(self.submitEntryBtn, 3, 1)
+        edit_dialog_layout.addWidget(self.chooseArtFile, 3, 1)
+        edit_dialog_layout.addWidget(self.submitEntryBtn, 4, 1)
         # column 2
         edit_dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
         edit_dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
@@ -329,7 +405,7 @@ class SAL_app(salUI):
         # if series title == None or blank '' string:
             # qmessagebox must have a title field is required
 
-        print(self.edit_row_data)
+        #print(self.edit_row_data)
 
 
 
@@ -376,7 +452,7 @@ class SAL_app(salUI):
         newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
 
         #cursor.execute("INSERT OR REPLACE INTO watchlist(Title, English_Title, Format, Start_Date, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", newValues)
-        cursor.execute("UPDATE watchlist SET Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.edit_row_data[0]))
+        cursor.execute("UPDATE watchlist SET Art = ?, Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.vals['Art'] ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.vals['Title']))
 
         conn.commit()
         conn.close()
@@ -407,6 +483,7 @@ class SAL_app(salUI):
                 # self.watchListTable.item(curr_row, c).setCellWidget() to qlabel
                 #self.watchListTable.item(curr_row, c).setCellWidget(newValues[c])
 
+                # self.watchListTable.setCellWidget(curr_row, c, newValues[c])
                 self.watchListTable.setCellWidget(curr_row, c, newValues[c])
                 #continue
             else:
@@ -600,19 +677,64 @@ class SAL_app(salUI):
 
 
 
+    def insertArtFile(self, lbl):
+        artfn = QFileDialog.getOpenFileName(self.mainWindow, 'Choose Title Art', "." , "Images (*.png *.jpg *.bmp)")
+
+        filename = str(artfn[0])
+
+        print(filename)
+
+        lbl.setPixmap(QPixmap(filename))
+
+
+
+
+
+
+
+    # either make another getArt() function
+    # or pass in the QLabel that the pixmap in the function below can be set to.
+
 
 
 
     # dialog button functions
-    def getSeriesArt(self):
+    # def getSeriesArt(self):
         
-        self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
+    #     self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
 
-        self.imgPixmap = QPixmap()
-        self.imgPixmap.loadFromData(self.imgBytes)
+    #     self.imgPixmap = QPixmap()
+    #     self.imgPixmap.loadFromData(self.imgBytes)
 
-        # set the existing art qlabel in the add series dialog
-        self.artLabel.setPixmap(self.imgPixmap)
+    #     # set the existing art qlabel in the add series dialog
+    #     self.artLabel.setPixmap(self.imgPixmap)
+
+
+
+
+
+    def getSeriesArt(self, lbl, txt):
+        #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
+        self.imgBytes = self.fetchInfo(txt)
+
+        titleart = QPixmap()
+        titleart.loadFromData(self.imgBytes)
+
+        lbl.setPixmap(QPixmap(titleart))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
