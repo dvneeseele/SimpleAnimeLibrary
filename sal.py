@@ -13,7 +13,7 @@ import pandas as pd
 
 from PyQt5 import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QTextListFormat, QFont, QColor
-from PyQt5.QtCore import QEvent, Qt, QSize, QDate, QTime
+from PyQt5.QtCore import QEvent, Qt, QSize, QDate, QTime, QByteArray, QBuffer, QIODevice
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QFormLayout, QLineEdit, QTabWidget, QWidget, QPushButton, QListWidgetItem, QLabel, QVBoxLayout, QGridLayout, QStackedWidget,
                             QColorDialog, QMessageBox, QFileDialog, QDialog, QFontDialog, QTableWidgetItem, QMenu, QComboBox, QGroupBox, QHBoxLayout, QFrame)
 
@@ -543,7 +543,7 @@ class SAL_app(salUI):
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
-        self.titleArtBtn.clicked.connect(self.getSeriesArt)
+        self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabel, self.seriesTitle_le.text()))
 
         self.submitEntryBtn = QPushButton("Submit")
         self.submitEntryBtn.clicked.connect(self.entrySubmit)
@@ -757,6 +757,27 @@ class SAL_app(salUI):
         pass
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def entrySubmit(self):
         # get lineedit texts
         # get the art image
@@ -778,12 +799,20 @@ class SAL_app(salUI):
 
         # TODO implement art as well
         # for testing
-        with open("naruto.jpg", 'rb') as file:
-            blob = file.read()
+        # with open("naruto.jpg", 'rb') as file:
+        #     blob = file.read()
 
         # if qlabel has a pixmap => convert to blob
         # if not then maybe load default icon
 
+        pix = self.artLabel.pixmap()
+        b_array = QByteArray()
+        buffer = QBuffer(b_array)
+        buffer.open(QIODevice.WriteOnly)
+        pix.save(buffer, "JPG")
+        blob = b_array.data()
+        print(blob)
+        
         
         info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
 
