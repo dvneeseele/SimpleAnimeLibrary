@@ -61,7 +61,10 @@ class SAL_app(salUI):
 
         # Toolbar functions
 
-        # TODO
+        self.addnewAction.triggered.connect(self.seriesDialog)
+        self.editAction.triggered.connect(self.seriesEditDialog)
+        self.deleteAction.triggered.connect(self.deleteSeries)
+        self.infoAction.triggered.connect(self.applicationInfo)
 
         # load function here
         self.dbLoad()
@@ -761,7 +764,8 @@ class SAL_app(salUI):
 
 
 
-
+    def applicationInfo(self):
+        pass
 
 
 
