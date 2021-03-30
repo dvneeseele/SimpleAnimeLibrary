@@ -924,9 +924,15 @@ class SAL_app(salUI):
 
         cursor.execute(createTable)
 
-        # for testing
+
+        # # for testing
         with open("naruto.jpg", 'rb') as file:
             blob = file.read()
+
+        # maybe insert a default series art/icon here as the blob data
+        
+
+
 
         entry_tuple = (blob, 'ani', 'Anime', 'SUB', '9/05/20', '12/01/2021', 'ORI')
 
@@ -994,6 +1000,7 @@ class SAL_app(salUI):
                 if column_number == 0:
                     self.tableLabel = QLabel()
                     self.tableLabel.setScaledContents(True)
+                    #self.tableLabel.resize(300, 500)
                     pixmap = QPixmap()
                     pixmap.loadFromData(column_data)
                     self.tableLabel.setPixmap(pixmap)
@@ -1001,7 +1008,8 @@ class SAL_app(salUI):
                     self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
                 else:
                     self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
-            self.watchListTable.verticalHeader().setDefaultSectionSize(90)
+            self.watchListTable.verticalHeader().setDefaultSectionSize(140)
+            self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
 
 
         conn.close()
