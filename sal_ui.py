@@ -50,10 +50,28 @@ class salUI(object):
 
         MainWindow.addToolBar(self.toolbar)
 
-        self.addnew = QAction("Create New Entry", MainWindow)
-        self.addnew.setShortcut('Ctrl+N')
+        self.addnewAction = QAction("Create New Entry", MainWindow)
+        self.addnewAction.setShortcut('Ctrl+N')
 
-        # the rest is TODO
+        self.toolbar.addAction(self.addnewAction)
+
+
+        self.editAction = QAction("Edit Entry", MainWindow)
+        self.editAction.setShortcut("Ctrl+E")
+
+        self.toolbar.addAction(self.editAction)
+
+        self.deleteAction = QAction("Delete Entry", MainWindow)
+        self.deleteAction.setShortcut("Ctrl+D")
+
+        self.toolbar.addAction(self.deleteAction)
+
+        self.infoAction = QAction("App Info")
+
+        self.toolbar.addAction(self.infoAction)
+
+
+#############################################################################################################
 
 
 
@@ -85,8 +103,7 @@ class salUI(object):
         self.watchListTable.setSelectionMode(QAbstractItemView.SingleSelection)
         self.watchListTable.setContextMenuPolicy(Qt.CustomContextMenu)
         self.watchListTable.customContextMenuRequested.connect(self.tableContextMenu)
-        self.watchListTable.setRowCount(1) # probably delete this, need to try it
-        self.watchListTable.setColumnCount(7) # was 4 which was causing a problem with the 5 columns defined below.
+        self.watchListTable.setColumnCount(7)
 
         self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"])
 
