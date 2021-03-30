@@ -93,8 +93,6 @@ class salUI(object):
         self.sidebar.addItem('Current')
         self.sidebar.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
-        # MainTable
-
 
         # [nevermind lol] pretty sure i dont need this here, it should be created in the backend and added to the stack.
         self.watchListTable = QTableWidget()
