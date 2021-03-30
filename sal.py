@@ -108,6 +108,7 @@ class SAL_app(salUI):
         currentRow = self.watchListTable.currentIndex().row()
         print('current row :',currentRow)
 
+        # TODO need some error handling here otherwise will get a None type if the row contains no text.
         delSeries = self.watchListTable.item(currentRow, 1).text()
         print('delSeries :', delSeries)
 
