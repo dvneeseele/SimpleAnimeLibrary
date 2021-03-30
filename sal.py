@@ -9,6 +9,7 @@ import sys
 import sqlite3
 import requests
 import pandas as pd
+import json
 
 
 from PyQt5 import Qt
@@ -66,8 +67,37 @@ class SAL_app(salUI):
         self.deleteAction.triggered.connect(self.deleteSeries)
         self.infoAction.triggered.connect(self.applicationInfo)
 
+        self.mainWindow.closeEvent = self.closeEvent
+
         # load function here
         self.dbLoad()
+
+
+
+
+
+
+
+
+    # close event
+    def closeEvent(self, event):
+        
+        reply = QMessageBox.question(self.mainWindow, 'Exit App', "Are you sure you want to quit?", QMessageBox.Yes | QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+
+
+            self.settings()
+
+            event.accept()
+
+
+            sys.exit()
+
+        else:
+            event.ignore()
+
+
 
 
 
@@ -905,6 +935,59 @@ class SAL_app(salUI):
         # imageContent = requests.get(seriesImage.content)
 
         return getImage
+
+
+
+
+
+
+
+    def settings(self):
+
+        if not os.path.exists("settings"):
+            os.mkdir("settings")
+
+
+
+
+        # main window
+        mwh = self.mainWindow.height()
+        mww = self.mainWindow.width()
+        mwx = self.mainWindow.x()
+        mwy = self.mainWindow.y()
+
+        # splitter size
+
+        stack_w = self.tableStack.width()
+        listw = self.sidebar.width()
+
+
+
+        # settings dict
+        sal_settings = {
+            'mainwindow_height' : mwh,
+            'mainwindow_width' : mww,
+            'mainwindow_x' : mwx,
+            'mainwindow_y' : mwy,
+            'stack_width' : stack_w,
+            'list_width' : listw
+
+        }
+
+
+        with open('settings/salsettings.json', 'w') as shit:
+            json.dump(sal_settings , shit, indent=4)
+        shit.close()
+
+
+        #cfg = json.loads("/settings/salsettings.json")
+
+
+
+
+
+
+
 
 
 
