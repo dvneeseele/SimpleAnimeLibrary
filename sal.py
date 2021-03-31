@@ -1102,6 +1102,27 @@ class SAL_app(salUI):
 
         conn.close()
 
+
+
+
+        if os.path.isfile('settings\salsettings.json'):
+
+            with open('settings\salsettings.json') as fyle:
+                data = json.load(fyle)
+            
+
+            self.mainWindow.setGeometry(data['mainwindow_x'], data['mainwindow_y'], data['mainwindow_width'], data['mainwindow_height'])
+
+            self.splitter.setSizes([data['list_width'], data['stack_width']])
+
+
+
+
+
+
+
+
+
         #rows = cursor.fetchall()
 
 
