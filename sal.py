@@ -263,6 +263,7 @@ class SAL_app(salUI):
 
         # Labels
         self.artLabelEdit = QLabel()
+        self.artLabelEdit.setScaledContents(True)
         self.pix = QPixmap()
         self.pix.loadFromData(self.vals['Art'])
         self.artLabelEdit.setPixmap(self.pix)
@@ -468,6 +469,30 @@ class SAL_app(salUI):
         #     conn.commit()
 
         # conn.close()
+
+
+
+
+        # maybe only do this for jikan function.....
+
+        if self.editSeriesTitle_le.text() == '':
+
+            title_msg = QMessageBox(self.mainWindow)
+            title_msg.setText("Title field can not be blank")
+            title_msg.setWindowTitle("Missing Entry Title")
+
+            title_msg.show()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
