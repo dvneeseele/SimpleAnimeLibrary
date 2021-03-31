@@ -139,24 +139,33 @@ class SAL_app(salUI):
 
     def deleteSeries(self):
         currentRow = self.watchListTable.currentIndex().row()
-        print('current row :',currentRow)
+        #print('current row :',currentRow)
 
         # TODO need some error handling here otherwise will get a None type if the row contains no text.
+        
         delSeries = self.watchListTable.item(currentRow, 1).text()
-        print('delSeries :', delSeries)
 
-        # qmessagebox "are you sure you want to delete this series? It can not be undone."
+        if delSeries != None:
 
-        conn = sqlite3.connect('saldb.sqlite')
-        cursor = conn.cursor()
 
-        #deleteString = "DELETE FROM watchlist WHERE Title = {}"
-        cursor.execute("DELETE FROM watchlist WHERE Title = (?)", (delSeries,))
-        conn.commit()
-        conn.close()
+            # qmessagebox "are you sure you want to delete this series? It can not be undone."
 
-        # delete the row from the qtablewidget
-        self.watchListTable.removeRow(currentRow)
+            delete_msg = QMessageBox.question(self.mainWindow, 'Delete - Are you sure?', 'Are you sure you want to delete this entry? It cannot be undone!', QMessageBox.Ok | QMessageBox.Cancel)
+
+            if delete_msg == QMessageBox.Ok:
+                conn = sqlite3.connect('saldb.sqlite')
+                cursor = conn.cursor()
+
+                #deleteString = "DELETE FROM watchlist WHERE Title = {}"
+                cursor.execute("DELETE FROM watchlist WHERE Title = (?)", (delSeries,))
+                conn.commit()
+                conn.close()
+
+                # delete the row from the qtablewidget
+                self.watchListTable.removeRow(currentRow)
+
+            # else:
+            #     delete_msg.close()
 
 
 
