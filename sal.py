@@ -139,16 +139,11 @@ class SAL_app(salUI):
 
     def deleteSeries(self):
         currentRow = self.watchListTable.currentIndex().row()
-        #print('current row :',currentRow)
-
-        # TODO need some error handling here otherwise will get a None type if the row contains no text.
         
         delSeries = self.watchListTable.item(currentRow, 1).text()
 
         if delSeries != None:
 
-
-            # qmessagebox "are you sure you want to delete this series? It can not be undone."
 
             delete_msg = QMessageBox.question(self.mainWindow, 'Delete - Are you sure?', 'Are you sure you want to delete this entry? It cannot be undone!', QMessageBox.Ok | QMessageBox.Cancel)
 
@@ -156,7 +151,7 @@ class SAL_app(salUI):
                 conn = sqlite3.connect('saldb.sqlite')
                 cursor = conn.cursor()
 
-                #deleteString = "DELETE FROM watchlist WHERE Title = {}"
+
                 cursor.execute("DELETE FROM watchlist WHERE Title = (?)", (delSeries,))
                 conn.commit()
                 conn.close()
@@ -164,8 +159,6 @@ class SAL_app(salUI):
                 # delete the row from the qtablewidget
                 self.watchListTable.removeRow(currentRow)
 
-            # else:
-            #     delete_msg.close()
 
 
 
@@ -219,14 +212,12 @@ class SAL_app(salUI):
         # this query is just to get the info to fill in the QDialog
 
         curr_row = self.watchListTable.currentIndex().row()
-        # since no longer looking up the value from the QTableWidget need to decrement by 1 because sqlite starts counting at 0, QTableWidget does not.
-        #curr_row = curr_row - 1
 
         # column 2 should have the Title of the series which is also the unique primary key for the db
         pk_id = self.watchListTable.item(curr_row, 1).text()
 
-        print("curr_row", curr_row)
-        print('PK_ID' ,pk_id)
+        # print("curr_row", curr_row)
+        # print('PK_ID' ,pk_id)
 
         conn = sqlite3.connect('saldb.sqlite')
         conn.row_factory = sqlite3.Row
@@ -236,10 +227,7 @@ class SAL_app(salUI):
 
         
         for r in rowdata.fetchall():
-            #print(dict(r))
             self.vals = dict(r)
-        
-        #print('R', self.vals)
 
 
         #THIS WORKS
@@ -421,7 +409,6 @@ class SAL_app(salUI):
 
 
     def editStartDate(self):
-        # probably needs to clear the lineedit then set the text
         date = QDate.currentDate()
         #self.editStartDate_le.clear()
         self.editStartDate_le.setText(date.toString(Qt.DefaultLocaleShortDate))
@@ -515,7 +502,7 @@ class SAL_app(salUI):
 
         #newValues = [self.artLabelEdit ,self.edit_row_data[0], self.edit_row_data[1], self.edit_row_data[2], self.edit_row_data[3], self.edit_row_data[4], self.edit_row_data[5]]
         newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
-        print('New VAlues :', newValues)
+        #print('New VAlues :', newValues)
 
         curr_row = self.watchListTable.currentIndex().row()
 
