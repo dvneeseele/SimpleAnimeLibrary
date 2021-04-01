@@ -603,6 +603,9 @@ class SAL_app(salUI):
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
         self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabel, self.seriesTitle_le.text()))
 
+        self.addArtFile = QPushButton("Choose Art File")
+        self.addArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabel))
+
         self.submitEntryBtn = QPushButton("Submit")
         self.submitEntryBtn.clicked.connect(self.entrySubmit)
 
@@ -705,7 +708,8 @@ class SAL_app(salUI):
         # column 1
         dialog_layout.addWidget(self.artLabel, 1, 1)
         dialog_layout.addWidget(self.titleArtBtn, 2, 1)
-        dialog_layout.addWidget(self.submitEntryBtn, 3, 1)
+        dialog_layout.addWidget(self.addArtFile, 3, 1)
+        dialog_layout.addWidget(self.submitEntryBtn, 4, 1)
         # column 2
         dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
         dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
@@ -880,7 +884,7 @@ class SAL_app(salUI):
             buffer.open(QIODevice.WriteOnly)
             pix.save(buffer, "JPG")
             blob = b_array.data()
-            print(blob)
+            #print(blob)
             
             
             info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
@@ -931,7 +935,7 @@ class SAL_app(salUI):
                     self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
                 col += 1
 
-            self.seriesDialog.close()
+            self.series_dialog.close()
 
 
 
