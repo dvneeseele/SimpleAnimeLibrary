@@ -29,6 +29,7 @@ class seriesArtLabel(QLabel):
 
         self.setAlignment(Qt.AlignCenter)
         self.setText("Drop Image")
+        self.setScaledContents(True)
         
 
         def setPixmap(self, image):
@@ -473,81 +474,76 @@ class SAL_app(salUI):
 
 
 
-        # maybe only do this for jikan function.....
 
-        if self.editSeriesTitle_le.text() == '':
 
+
+
+
+        if self.editSeriesTitle_le.text() != '':
+
+
+
+
+
+
+
+
+    #########################################################################################################################################################
+    #########################################################################################################################################################
+
+
+            conn = sqlite3.connect('saldb.sqlite')
+            cursor = conn.cursor()
+
+            newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
+
+            #cursor.execute("INSERT OR REPLACE INTO watchlist(Title, English_Title, Format, Start_Date, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", newValues)
+            cursor.execute("UPDATE watchlist SET Art = ?, Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.vals['Art'] ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.vals['Title']))
+
+            conn.commit()
+            conn.close()
+
+
+
+
+
+    #########################################################################################################################################################
+    #########################################################################################################################################################
+
+
+
+
+            #newValues = [self.artLabelEdit ,self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
+
+
+            #newValues = [self.artLabelEdit ,self.edit_row_data[0], self.edit_row_data[1], self.edit_row_data[2], self.edit_row_data[3], self.edit_row_data[4], self.edit_row_data[5]]
+            newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
+            #print('New VAlues :', newValues)
+
+            curr_row = self.watchListTable.currentIndex().row()
+
+            new_ctr = 0
+
+            for c in range(self.watchListTable.columnCount()):
+                if c == 0:
+                    # self.watchListTable.item(curr_row, c).setCellWidget() to qlabel
+                    #self.watchListTable.item(curr_row, c).setCellWidget(newValues[c])
+
+                    # self.watchListTable.setCellWidget(curr_row, c, newValues[c])
+                    self.watchListTable.setCellWidget(curr_row, c, newValues[c])
+                    #continue
+                else:
+                    #cell = self.watchListTable.setItem(curr_row, c, QTableWidgetItem(self.seriesTitle_le.text()))
+                    cell = self.watchListTable.item(curr_row, c).setText(newValues[new_ctr])
+
+                new_ctr += 1
+
+        else:
             title_msg = QMessageBox(self.mainWindow)
             title_msg.setText("Title field can not be blank")
             title_msg.setWindowTitle("Missing Entry Title")
 
             title_msg.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#########################################################################################################################################################
-#########################################################################################################################################################
-
-
-        conn = sqlite3.connect('saldb.sqlite')
-        cursor = conn.cursor()
-
-        newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
-
-        #cursor.execute("INSERT OR REPLACE INTO watchlist(Title, English_Title, Format, Start_Date, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", newValues)
-        cursor.execute("UPDATE watchlist SET Art = ?, Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.vals['Art'] ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.vals['Title']))
-
-        conn.commit()
-        conn.close()
-
-
-
-
-
-#########################################################################################################################################################
-#########################################################################################################################################################
-
-
-
-
-        #newValues = [self.artLabelEdit ,self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
-
-
-        #newValues = [self.artLabelEdit ,self.edit_row_data[0], self.edit_row_data[1], self.edit_row_data[2], self.edit_row_data[3], self.edit_row_data[4], self.edit_row_data[5]]
-        newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
-        #print('New VAlues :', newValues)
-
-        curr_row = self.watchListTable.currentIndex().row()
-
-        new_ctr = 0
-
-        for c in range(self.watchListTable.columnCount()):
-            if c == 0:
-                # self.watchListTable.item(curr_row, c).setCellWidget() to qlabel
-                #self.watchListTable.item(curr_row, c).setCellWidget(newValues[c])
-
-                # self.watchListTable.setCellWidget(curr_row, c, newValues[c])
-                self.watchListTable.setCellWidget(curr_row, c, newValues[c])
-                #continue
-            else:
-                #cell = self.watchListTable.setItem(curr_row, c, QTableWidgetItem(self.seriesTitle_le.text()))
-                cell = self.watchListTable.item(curr_row, c).setText(newValues[new_ctr])
-
-            new_ctr += 1
-
-
 
 
 
@@ -835,99 +831,116 @@ class SAL_app(salUI):
 
 
     def entrySubmit(self):
-        # get lineedit texts
-        # get the art image
-        self.title = self.seriesTitle_le.text()
-        self.englishtitle = self.seriesEnglishTitle_le.text()
 
-        #self.language = self.seriesFormat_le.text()
-        self.language = self.seriesFormat_cb.currentText()
+        # validate Title lineedit and Art label
 
-        self.start = self.startDate_le.text()
-        self.fin = self.completionDate_le.text()
-        self.type = self.seriesType_le.text()
+        # for artLabel -- If I implement a default icon then dont have to check if it is None. It will always be a default icon if no art is added.
 
-        # execute sql insert
-
-        conn = sqlite3.connect('saldb.sqlite')  
-
-        cursor = conn.cursor()
-
-        # TODO implement art as well
-        # for testing
-        # with open("naruto.jpg", 'rb') as file:
-        #     blob = file.read()
-
-        # if qlabel has a pixmap => convert to blob
-        # if not then maybe load default icon
-
-        pix = self.artLabel.pixmap()
-        b_array = QByteArray()
-        buffer = QBuffer(b_array)
-        buffer.open(QIODevice.WriteOnly)
-        pix.save(buffer, "JPG")
-        blob = b_array.data()
-        print(blob)
-        
-        
-        info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
-
-
-        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
-
-        conn.commit()
-
-        conn.close()
-
-        # add to tablewidget
-        #self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
-
-        # self.watchListTable.insertRow(self.watchListTable.rowCount())
-        # print('row count :', self.watchListTable.rowCount())
-
-        #self.watchListTable.setItem(self.watchListTable.rowCount()-1,)
-
-        # for x in range(self.watchListTable.columnCount()):
-        #     for y in range(len(info_tuple)):
-        #         if y == 0:
-        #             self.tableLabel = QLabel()
-        #             self.tableLabel.setScaledContents(True)
-        #             pixmap = QPixmap()
-        #             pixmap.loadFromData(info_tuple[y])
-        #             self.tableLabel.setPixmap(pixmap)
-        #         else:
-        #             self.watchListTable.setItem(self.watchListTable.rowCount()-1, x, QTableWidgetItem(info_tuple[y]))
-
-
-        rows = self.watchListTable.rowCount()
-        self.watchListTable.setRowCount(rows + 1)
-
-        col = 0
-
-
-        for item in range(len(info_tuple)):
-            if col == 0:
-                label = QLabel()
-                label.setScaledContents(True)
-                pixmap = QPixmap()
-                pixmap.loadFromData(info_tuple[item])
-                label.setPixmap(pixmap)
-                #cell = QTableWidgetItem(label)
-                self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
-            else:
-                self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
-            col += 1
+        if self.seriesTitle_le.text() != '' and self.artLabel.pixmap() != None:
+                
 
 
 
+            # get lineedit texts
+            # get the art image
+            self.title = self.seriesTitle_le.text()
+            self.englishtitle = self.seriesEnglishTitle_le.text()
 
-                    # self.tableLabel = QLabel()
-                    # self.tableLabel.setScaledContents(True)
-                    # pixmap = QPixmap()
-                    # pixmap.loadFromData(column_data)
-                    # self.tableLabel.setPixmap(pixmap)
-                    # self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+            #self.language = self.seriesFormat_le.text()
+            self.language = self.seriesFormat_cb.currentText()
 
+            self.start = self.startDate_le.text()
+            self.fin = self.completionDate_le.text()
+            self.type = self.seriesType_le.text()
+
+            # execute sql insert
+
+            conn = sqlite3.connect('saldb.sqlite')  
+
+            cursor = conn.cursor()
+
+            # TODO implement art as well
+            # for testing
+            # with open("naruto.jpg", 'rb') as file:
+            #     blob = file.read()
+
+            # if qlabel has a pixmap => convert to blob
+            # if not then maybe load default icon
+
+            pix = self.artLabel.pixmap()
+            b_array = QByteArray()
+            buffer = QBuffer(b_array)
+            buffer.open(QIODevice.WriteOnly)
+            pix.save(buffer, "JPG")
+            blob = b_array.data()
+            print(blob)
+            
+            
+            info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
+
+
+            cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+
+            conn.commit()
+
+            conn.close()
+
+            # add to tablewidget
+            #self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
+
+            # self.watchListTable.insertRow(self.watchListTable.rowCount())
+            # print('row count :', self.watchListTable.rowCount())
+
+            #self.watchListTable.setItem(self.watchListTable.rowCount()-1,)
+
+            # for x in range(self.watchListTable.columnCount()):
+            #     for y in range(len(info_tuple)):
+            #         if y == 0:
+            #             self.tableLabel = QLabel()
+            #             self.tableLabel.setScaledContents(True)
+            #             pixmap = QPixmap()
+            #             pixmap.loadFromData(info_tuple[y])
+            #             self.tableLabel.setPixmap(pixmap)
+            #         else:
+            #             self.watchListTable.setItem(self.watchListTable.rowCount()-1, x, QTableWidgetItem(info_tuple[y]))
+
+
+            rows = self.watchListTable.rowCount()
+            self.watchListTable.setRowCount(rows + 1)
+
+            col = 0
+
+
+            for item in range(len(info_tuple)):
+                if col == 0:
+                    label = QLabel()
+                    label.setScaledContents(True)
+                    pixmap = QPixmap()
+                    pixmap.loadFromData(info_tuple[item])
+                    label.setPixmap(pixmap)
+                    #cell = QTableWidgetItem(label)
+                    self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
+                else:
+                    self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
+                col += 1
+
+            self.seriesDialog.close()
+
+
+
+                        # self.tableLabel = QLabel()
+                        # self.tableLabel.setScaledContents(True)
+                        # pixmap = QPixmap()
+                        # pixmap.loadFromData(column_data)
+                        # self.tableLabel.setPixmap(pixmap)
+                        # self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+
+        else:
+            msg_nullTitle = QMessageBox(self.mainWindow)
+            msg_nullTitle.setText("Title can not be blank")
+            msg_nullTitle.setWindowTitle("Missing Entry Title")
+
+            msg_nullTitle.show()
 
 
 
