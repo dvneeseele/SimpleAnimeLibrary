@@ -139,26 +139,30 @@ class SAL_app(salUI):
 
 
     def deleteSeries(self):
+
         currentRow = self.watchListTable.currentIndex().row()
-        
-        delSeries = self.watchListTable.item(currentRow, 1).text()
-
-        if delSeries != None:
 
 
-            delete_msg = QMessageBox.question(self.mainWindow, 'Delete - Are you sure?', 'Are you sure you want to delete this entry? It cannot be undone!', QMessageBox.Ok | QMessageBox.Cancel)
+        if currentRow > 0:
 
-            if delete_msg == QMessageBox.Ok:
-                conn = sqlite3.connect('saldb.sqlite')
-                cursor = conn.cursor()
+            delSeries = self.watchListTable.item(currentRow, 1).text()            
+
+            if delSeries != None:
 
 
-                cursor.execute("DELETE FROM watchlist WHERE Title = (?)", (delSeries,))
-                conn.commit()
-                conn.close()
+                delete_msg = QMessageBox.question(self.mainWindow, 'Delete - Are you sure?', 'Are you sure you want to delete this entry? It cannot be undone!', QMessageBox.Ok | QMessageBox.Cancel)
 
-                # delete the row from the qtablewidget
-                self.watchListTable.removeRow(currentRow)
+                if delete_msg == QMessageBox.Ok:
+                    conn = sqlite3.connect('saldb.sqlite')
+                    cursor = conn.cursor()
+
+
+                    cursor.execute("DELETE FROM watchlist WHERE Title = (?)", (delSeries,))
+                    conn.commit()
+                    conn.close()
+
+                    # delete the row from the qtablewidget
+                    self.watchListTable.removeRow(currentRow)
 
 
 
