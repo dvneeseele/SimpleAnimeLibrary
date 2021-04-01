@@ -101,6 +101,7 @@ class salUI(object):
         self.watchListTable.setSelectionMode(QAbstractItemView.SingleSelection)
         self.watchListTable.setContextMenuPolicy(Qt.CustomContextMenu)
         self.watchListTable.customContextMenuRequested.connect(self.tableContextMenu)
+        self.watchListTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.watchListTable.setColumnCount(7)
 
         self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"])
