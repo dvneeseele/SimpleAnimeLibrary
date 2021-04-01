@@ -4,6 +4,7 @@ import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import (QMainWindow, QAbstractItemView, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView)
 
 
@@ -50,21 +51,22 @@ class salUI(object):
 
         MainWindow.addToolBar(self.toolbar)
 
-        self.addnewAction = QAction("Create New Entry", MainWindow)
+        self.addnewAction = QAction(QIcon("icons/add.png"),"Create New Entry", MainWindow)
         self.addnewAction.setShortcut('Ctrl+N')
 
         self.toolbar.addAction(self.addnewAction)
+        
+        self.deleteAction = QAction(QIcon("icons/delete.png") ,"Delete Entry", MainWindow)
+        self.deleteAction.setShortcut("Ctrl+D")
 
+        self.toolbar.addAction(self.deleteAction)
 
-        self.editAction = QAction("Edit Entry", MainWindow)
+        self.editAction = QAction(QIcon("icons/edit.png") ,"Edit Entry", MainWindow)
         self.editAction.setShortcut("Ctrl+E")
 
         self.toolbar.addAction(self.editAction)
 
-        self.deleteAction = QAction("Delete Entry", MainWindow)
-        self.deleteAction.setShortcut("Ctrl+D")
 
-        self.toolbar.addAction(self.deleteAction)
 
         self.infoAction = QAction("App Info")
 
@@ -102,6 +104,8 @@ class salUI(object):
         self.watchListTable.setContextMenuPolicy(Qt.CustomContextMenu)
         self.watchListTable.customContextMenuRequested.connect(self.tableContextMenu)
         self.watchListTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.watchListTable.setFont(QFont('Arial', 14))
+        #self.watchListTable.setTextAlignment(Qt.AlignCenter)
         self.watchListTable.setColumnCount(7)
 
         self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"])
