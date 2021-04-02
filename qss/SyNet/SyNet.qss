@@ -445,5 +445,13 @@ QScrollBar::sub-page:vertical
 
 QMenu{
 	background-color: lightslategray;
-	
+
+}
+
+QComboBox{
+	background-color: #c2c7d5;
+}
+
+QComboBox::item{
+	background-color: #c2c7d5;
 }
