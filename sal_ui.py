@@ -55,7 +55,7 @@ class salUI(object):
         self.addnewAction.setShortcut('Ctrl+N')
 
         self.toolbar.addAction(self.addnewAction)
-        
+
         self.deleteAction = QAction(QIcon("icons/delete.png") ,"Delete Entry", MainWindow)
         self.deleteAction.setShortcut("Ctrl+D")
 
@@ -66,6 +66,10 @@ class salUI(object):
 
         self.toolbar.addAction(self.editAction)
 
+        self.queryAction = QAction("Search", MainWindow)
+        self.queryAction.setShortcut("Ctrl+Alt+Q")
+
+        self.toolbar.addAction(self.queryAction)
 
 
         self.infoAction = QAction("App Info")
@@ -105,6 +109,7 @@ class salUI(object):
         self.watchListTable.customContextMenuRequested.connect(self.tableContextMenu)
         self.watchListTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.watchListTable.setFont(QFont('Arial', 14))
+        self.watchListTable.setWordWrap(False)
         #self.watchListTable.setTextAlignment(Qt.AlignCenter)
         self.watchListTable.setColumnCount(7)
 
