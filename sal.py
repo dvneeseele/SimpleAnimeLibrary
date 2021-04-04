@@ -30,6 +30,12 @@ class seriesArtLabel(QLabel):
         self.setAlignment(Qt.AlignCenter)
         self.setText("Drop Image")
         self.setScaledContents(True)
+
+        self.setStyleSheet('''
+            QLabel{
+            border: 4px #aaa
+            }
+        ''')
         
 
         def setPixmap(self, image):
@@ -554,6 +560,8 @@ class SAL_app(salUI):
 
 
 
+        self.series_edit_dialog.close()
+
 
 
 
@@ -843,11 +851,13 @@ class SAL_app(salUI):
 
     def entrySubmit(self):
 
-        # validate Title lineedit and Art label
+        
+        # with open('icons/sal_3.png', 'rb') as file:
+        #     blob = file.read()
 
-        # for artLabel -- If I implement a default icon then dont have to check if it is None. It will always be a default icon if no art is added.
+        #if self.seriesTitle_le.text() != '' and self.artLabel.pixmap() != None:
+        if self.seriesTitle_le.text() != '':
 
-        if self.seriesTitle_le.text() != '' and self.artLabel.pixmap() != None:
                 
 
 
@@ -878,13 +888,22 @@ class SAL_app(salUI):
             # if qlabel has a pixmap => convert to blob
             # if not then maybe load default icon
 
-            pix = self.artLabel.pixmap()
-            b_array = QByteArray()
-            buffer = QBuffer(b_array)
-            buffer.open(QIODevice.WriteOnly)
-            pix.save(buffer, "JPG")
-            blob = b_array.data()
-            #print(blob)
+            if self.artLabel.pixmap() != None:
+
+                pix = self.artLabel.pixmap()
+                b_array = QByteArray()
+                buffer = QBuffer(b_array)
+                buffer.open(QIODevice.WriteOnly)
+                pix.save(buffer, "JPG")
+                blob = b_array.data()
+                #print(blob)
+
+            else:
+
+                with open('icons/sal_red_resized.png', 'rb') as file:
+                    blob = file.read()
+                file.close()
+
             
             
             info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
@@ -928,6 +947,7 @@ class SAL_app(salUI):
                     label.setScaledContents(True)
                     pixmap = QPixmap()
                     pixmap.loadFromData(info_tuple[item])
+                    #pixmap.scaled(120, 140, Qt.KeepAspectRatio, Qt.FastTransformation)
                     label.setPixmap(pixmap)
                     #cell = QTableWidgetItem(label)
                     self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
