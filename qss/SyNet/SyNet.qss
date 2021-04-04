@@ -262,12 +262,12 @@ QTableView
 
 }
 
-/* QTableView::item
+QTableView::item
 {
-	font-style: italic;
-	font-size: 400;
-	color: yellow;
-} */
+	font-style: bold;
+	/*font-size: 530px;*/
+	color: whitesmoke;
+}
 
 QTableView::disabled
 {
@@ -454,4 +454,10 @@ QComboBox{
 
 QComboBox::item{
 	background-color: #c2c7d5;
+}
+
+
+QToolBar::separator{
+	color: lightslategray
+	
 }
