@@ -461,3 +461,8 @@ QToolBar::separator{
 	color: lightslategray
 	
 }
+
+
+QMenuBar{
+	color: whitesmoke;
+}

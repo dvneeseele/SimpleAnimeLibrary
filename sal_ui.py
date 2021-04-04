@@ -82,7 +82,7 @@ class salUI(object):
 
         self.toolbar.addAction(self.findAction)
 
-        self.queryAction = QAction("Filter/Sort", MainWindow)
+        self.queryAction = QAction(QIcon("icons/filter.png") ,"Filter/Sort", MainWindow)
         self.queryAction.setShortcut("Ctrl+Alt+Q")
 
         self.toolbar.addAction(self.queryAction)
@@ -98,7 +98,7 @@ class salUI(object):
 
         self.toolbar.addAction(self.settingsAction)
 
-        self.infoAction = QAction("App Info")
+        self.infoAction = QAction(QIcon("icons/info.png") ,"App Info", MainWindow)
 
         self.toolbar.addAction(self.infoAction)
 
