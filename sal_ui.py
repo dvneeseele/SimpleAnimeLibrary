@@ -2,7 +2,7 @@ import os
 import sys
 
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5 import QtCore
 from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import (QMainWindow, QAbstractItemView, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView)
@@ -14,6 +14,9 @@ class salUI(object):
 
 
     def setupUI(self, MainWindow):
+
+        MainWindow.setWindowIcon(QIcon("icons/sal_green"))
+        MainWindow.setWindowTitle("Simple Anime Library   |   ヽ( ´ー`)ノ")
 
         # setup menubar
 
@@ -48,15 +51,16 @@ class salUI(object):
         # Toolbar
 
         self.toolbar = QToolBar(MainWindow)
+        self.toolbar.setIconSize(QSize(40, 40))
 
         MainWindow.addToolBar(self.toolbar)
 
-        self.addnewAction = QAction(QIcon("icons/add.png"),"Create New Entry", MainWindow)
+        self.addnewAction = QAction(QIcon("icons/add_1.png"),"Create New Entry", MainWindow)
         self.addnewAction.setShortcut('Ctrl+N')
 
         self.toolbar.addAction(self.addnewAction)
 
-        self.deleteAction = QAction(QIcon("icons/delete.png") ,"Delete Entry", MainWindow)
+        self.deleteAction = QAction(QIcon("icons/delete_1.png") ,"Delete Entry", MainWindow)
         self.deleteAction.setShortcut("Ctrl+D")
 
         self.toolbar.addAction(self.deleteAction)
@@ -66,11 +70,33 @@ class salUI(object):
 
         self.toolbar.addAction(self.editAction)
 
-        self.queryAction = QAction("Search", MainWindow)
+
+
+        self.toolbar.addSeparator()
+
+
+
+
+        self.findAction = QAction(QIcon("icons/find.png") ,"Search", MainWindow)
+        self.findAction.setShortcut("Ctrl+F")
+
+        self.toolbar.addAction(self.findAction)
+
+        self.queryAction = QAction("Filter/Sort", MainWindow)
         self.queryAction.setShortcut("Ctrl+Alt+Q")
 
         self.toolbar.addAction(self.queryAction)
 
+
+
+        self.toolbar.addSeparator()
+
+
+
+        self.settingsAction = QAction(QIcon("icons/settings.png") ,"App Settings", MainWindow)
+        self.settingsAction.setShortcut("Ctrl+Shift+S")
+
+        self.toolbar.addAction(self.settingsAction)
 
         self.infoAction = QAction("App Info")
 
