@@ -149,7 +149,7 @@ class SAL_app(salUI):
         currentRow = self.watchListTable.currentIndex().row()
 
 
-        if currentRow > 0:
+        if currentRow >= 0:
 
             delSeries = self.watchListTable.item(currentRow, 1).text()            
 
@@ -900,7 +900,7 @@ class SAL_app(salUI):
 
             else:
 
-                with open('icons/sal_red_resized.png', 'rb') as file:
+                with open('icons/saldb_darkred.png', 'rb') as file:
                     blob = file.read()
                 file.close()
 
@@ -947,7 +947,7 @@ class SAL_app(salUI):
                     label.setScaledContents(True)
                     pixmap = QPixmap()
                     pixmap.loadFromData(info_tuple[item])
-                    #pixmap.scaled(120, 140, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    pixmap.scaled(120, 140, Qt.KeepAspectRatio, Qt.FastTransformation)
                     label.setPixmap(pixmap)
                     #cell = QTableWidgetItem(label)
                     self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
@@ -1079,31 +1079,38 @@ class SAL_app(salUI):
 
 
         # # for testing
-        with open("naruto.jpg", 'rb') as file:
-            blob = file.read()
+        # with open("naruto.jpg", 'rb') as file:
+        #     blob = file.read()
 
         # maybe insert a default series art/icon here as the blob data
         
 
 
 
-        entry_tuple = (blob, 'ani', 'Anime', 'SUB', '9/05/20', '12/01/2021', 'ORI')
+        # entry_tuple = (blob, 'ani', 'Anime', 'SUB', '9/05/20', '12/01/2021', 'ORI')
+
+        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", entry_tuple)
+
+        # conn.commit()
+
+        # conn.close()
+
+
+
 
         # for testing
         # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'ani', 'Anime', 'SUB', '12/01/2021', 'ORI')".format(blob))
 
         # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'qwer', 'Anime22', 'DUB', '120/90/2021', 'SQ')".format(blob))
 
-        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", entry_tuple)
 
-        conn.commit()
 
         # this = cursor.execute("SELECT * FROM watchlist")
 
         # for row in this:
         #     print('Row :', row)
 
-        conn.close()
+
 
 
 
