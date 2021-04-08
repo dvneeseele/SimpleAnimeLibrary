@@ -15,7 +15,7 @@ class salUI(object):
 
     def setupUI(self, MainWindow):
 
-        MainWindow.setWindowIcon(QIcon("icons/sal_green"))
+        MainWindow.setWindowIcon(QIcon("icons/saldb_red"))
         MainWindow.setWindowTitle("Simple Anime Library   |   ヽ( ´ー`)ノ")
 
         # setup menubar
