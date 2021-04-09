@@ -1,5 +1,5 @@
 #############################################################################
-# me
+# dvneeseele
 #############################################################################
 
 
@@ -177,39 +177,6 @@ class SAL_app(salUI):
 
     def seriesEditDialog(self):
 
-        # get table row data and fill the seriesEditDialog QLineEdits with the content
-        # then find a way to lookup the corresponding row in sqlite db
-
-#############################################################################################################################################################################
-#############################################################################################################################################################################
-
-
-
-
-        # curr_row = self.watchListTable.currentIndex().row()
-        # print('Current Row :', curr_row)
-
-        # self.edit_row_data = []
-
-        
-
-        # for i in range(self.watchListTable.columnCount()):
-        #     if i == 0:
-        #         # get the widget QLabel with pixmap in it.
-        #         # set it to self.artLabel
-
-        #         # get primary key (Title) from the QTableWidget then use it to lookup all the data in that row including blob data
-        #         self.artLabelEdit = self.watchListTable.cellWidget(curr_row, i)
-
-
-        #         # maybe add this to the self.edit_row_data list
-        #         #continue
-        #     else:
-        #         cell = self.watchListTable.item(curr_row, i).text() # i think it is reading the blob data in the first cell of the row...
-        #         self.edit_row_data.append(cell)
-        
-        # print('Cell Data :', self.edit_row_data)
-
         curr_row = self.watchListTable.currentIndex().row()
 
         if curr_row >0:
@@ -230,8 +197,6 @@ class SAL_app(salUI):
             # column 2 should have the Title of the series which is also the unique primary key for the db
             pk_id = self.watchListTable.item(curr_row, 1).text()
 
-            # print("curr_row", curr_row)
-            # print('PK_ID' ,pk_id)
 
             conn = sqlite3.connect('saldb.sqlite')
             conn.row_factory = sqlite3.Row
@@ -425,7 +390,6 @@ class SAL_app(salUI):
 
     def editStartDate(self):
         date = QDate.currentDate()
-        #self.editStartDate_le.clear()
         self.editStartDate_le.setText(date.toString(Qt.DefaultLocaleShortDate))
 
 
@@ -447,58 +411,10 @@ class SAL_app(salUI):
 
 
     def editEntrySubmit(self):
-        # if series title == None or blank '' string:
-            # qmessagebox must have a title field is required
-
-        #print(self.edit_row_data)
-
-
-
-
-
-
-        # sql = [('Title' ,self.editSeriesTitle_le.text(), 'Title', self.edit_row_data[0]), ('English_Title', self.editEnglishTitle_le.text(), 'English_Title', self.edit_row_data[1]),
-        #         ('Format', self.editFormat_le.text(), 'Format', self.edit_row_data[2]), ('Start_Date', self.editStartDate_le.text(), 'Start_Date', self.edit_row_data[3]), 
-        #         ('Completion_Date', self.editCompletionDate_le.text(), 'Completion_Date', self.edit_row_data[4]), ('Series_Type', self.editSeriesType_le.text(), 'Series_Type', self.edit_row_data[5])]
-
-
-        # # sql = [['Title' ,self.editSeriesTitle_le.text()], ['Title', self.edit_row_data[0]], ['English_Title', self.editEnglishTitle_le.text()], ['English_Title', self.edit_row_data[1]],
-        # # ['Format', self.editFormat_le.text()], ['Format', self.edit_row_data[2]], ['Start_Date', self.editStartDate_le.text()], ['Start_Date', self.edit_row_data[3]], 
-        # # ['Completion_Date', self.editCompletionDate_le.text()], ['Completion_Date', self.edit_row_data[4]], ['Series_Type', self.editSeriesType_le.text()], ['Series_Type', self.edit_row_data[5]]]
-
-        # conn = sqlite3.connect('saldb.sqlite')
-        # cursor = conn.cursor()
-
-        # for u in range(len(sql)):
-        #     #print('this here', sql[u])
-        #     # unpack the tuple\
-        #     h, i, j, k = sql[u]
-        #     tuppie = tuple(sql[u])
-        #     print('tuppie :',tuppie)
-        #     #fuck = "UPDATE watchlist SET '{}' = '{}' WHERE '{}' = '{}'".format(h, i, j, k)
-        #     cursor.execute('''UPDATE watchlist SET ? = ? WHERE ? = ?''', (h, i, h, k))
-        #     #cursor.execute('''UPDATE watchlist SET ? = ?''', (h, i,))
-        #     #print(fuck)
-        #     #cursor.execute(fuck)        
-        #     conn.commit()
-
-        # conn.close()
-
-
-
-
-
-
 
 
 
         if self.editSeriesTitle_le.text() != '':
-
-
-
-
-
-
 
 
     #########################################################################################################################################################
@@ -525,13 +441,7 @@ class SAL_app(salUI):
 
 
 
-
-            #newValues = [self.artLabelEdit ,self.seriesTitle_le.text(), self.seriesEnglishTitle_le.text(), self.seriesFormat_le.text(), self.startDate_le.text(), self.completionDate_le.text(), self.seriesType_le.text()]
-
-
-            #newValues = [self.artLabelEdit ,self.edit_row_data[0], self.edit_row_data[1], self.edit_row_data[2], self.edit_row_data[3], self.edit_row_data[4], self.edit_row_data[5]]
             newValues = [self.artLabelEdit ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text()]
-            #print('New VAlues :', newValues)
 
             curr_row = self.watchListTable.currentIndex().row()
 
@@ -539,14 +449,11 @@ class SAL_app(salUI):
 
             for c in range(self.watchListTable.columnCount()):
                 if c == 0:
-                    # self.watchListTable.item(curr_row, c).setCellWidget() to qlabel
-                    #self.watchListTable.item(curr_row, c).setCellWidget(newValues[c])
 
-                    # self.watchListTable.setCellWidget(curr_row, c, newValues[c])
                     self.watchListTable.setCellWidget(curr_row, c, newValues[c])
-                    #continue
+
                 else:
-                    #cell = self.watchListTable.setItem(curr_row, c, QTableWidgetItem(self.seriesTitle_le.text()))
+
                     cell = self.watchListTable.item(curr_row, c).setText(newValues[new_ctr])
 
                 new_ctr += 1
@@ -595,7 +502,6 @@ class SAL_app(salUI):
 
 
 
-        #self.seriesFormat_le = QLineEdit()
         self.startDate_le = QLineEdit()
         self.completionDate_le = QLineEdit()
         self.seriesType_le = QLineEdit()
@@ -630,26 +536,6 @@ class SAL_app(salUI):
         self.finishDateSelectionBtn.clicked.connect(self.finishDateSelection)        
 
 
-
-        # GroupBox
-        # self.formButtonsGroupBox = QGroupBox()
-
-
-        # groupbox_layout = QHBoxLayout()
-        # self.formButtonsGroupBox.setLayout(groupbox_layout)
-
-        # groupbox_layout.addWidget(self.currentStartDateBtn)
-        # groupbox_layout.addWidget(self.startDateSelectionBtn)
-
-
-        # self.formButtonsCompletion = QGroupBox()
-        # self.formButtonsCompletion.setStyleSheet("border:none")
-
-        # completeButtons_layout = QHBoxLayout()
-        # self.formButtonsCompletion.setLayout(completeButtons_layout)
-
-        # completeButtons_layout.addWidget(self.finishCurrentDateBtn)
-        # completeButtons_layout.addWidget(self.finishDateSelectionBtn)
 
 
         # QFrames
@@ -694,8 +580,6 @@ class SAL_app(salUI):
                 img_fp = event.mimeData().urls()[0].toLocalFile()
                 print(img_fp)
                 self.set_image(img_fp)
-                #self.artLabel.setPixmap(QPixmap(img_fp))
-                #self.artLabel.setPixmap(QPixmap(img_fp))
                 
 
                 event.accept()
@@ -762,27 +646,6 @@ class SAL_app(salUI):
 
 
 
-    # either make another getArt() function
-    # or pass in the QLabel that the pixmap in the function below can be set to.
-
-
-
-
-    # dialog button functions
-    # def getSeriesArt(self):
-        
-    #     self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
-
-    #     self.imgPixmap = QPixmap()
-    #     self.imgPixmap.loadFromData(self.imgBytes)
-
-    #     # set the existing art qlabel in the add series dialog
-    #     self.artLabel.setPixmap(self.imgPixmap)
-
-
-
-
-
     def getSeriesArt(self, lbl, txt):
         #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
         self.imgBytes = self.fetchInfo(txt)
@@ -791,15 +654,6 @@ class SAL_app(salUI):
         titleart.loadFromData(self.imgBytes)
 
         lbl.setPixmap(QPixmap(titleart))
-
-
-
-
-
-
-
-
-
 
 
 
@@ -851,11 +705,6 @@ class SAL_app(salUI):
 
     def entrySubmit(self):
 
-        
-        # with open('icons/sal_3.png', 'rb') as file:
-        #     blob = file.read()
-
-        #if self.seriesTitle_le.text() != '' and self.artLabel.pixmap() != None:
         if self.seriesTitle_le.text() != '':
 
                 
@@ -867,7 +716,7 @@ class SAL_app(salUI):
             self.title = self.seriesTitle_le.text()
             self.englishtitle = self.seriesEnglishTitle_le.text()
 
-            #self.language = self.seriesFormat_le.text()
+
             self.language = self.seriesFormat_cb.currentText()
 
             self.start = self.startDate_le.text()
@@ -880,13 +729,7 @@ class SAL_app(salUI):
 
             cursor = conn.cursor()
 
-            # TODO implement art as well
-            # for testing
-            # with open("naruto.jpg", 'rb') as file:
-            #     blob = file.read()
 
-            # if qlabel has a pixmap => convert to blob
-            # if not then maybe load default icon
 
             if self.artLabel.pixmap() != None:
 
@@ -896,7 +739,7 @@ class SAL_app(salUI):
                 buffer.open(QIODevice.WriteOnly)
                 pix.save(buffer, "JPG")
                 blob = b_array.data()
-                #print(blob)
+
 
             else:
 
@@ -915,24 +758,6 @@ class SAL_app(salUI):
 
             conn.close()
 
-            # add to tablewidget
-            #self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
-
-            # self.watchListTable.insertRow(self.watchListTable.rowCount())
-            # print('row count :', self.watchListTable.rowCount())
-
-            #self.watchListTable.setItem(self.watchListTable.rowCount()-1,)
-
-            # for x in range(self.watchListTable.columnCount()):
-            #     for y in range(len(info_tuple)):
-            #         if y == 0:
-            #             self.tableLabel = QLabel()
-            #             self.tableLabel.setScaledContents(True)
-            #             pixmap = QPixmap()
-            #             pixmap.loadFromData(info_tuple[y])
-            #             self.tableLabel.setPixmap(pixmap)
-            #         else:
-            #             self.watchListTable.setItem(self.watchListTable.rowCount()-1, x, QTableWidgetItem(info_tuple[y]))
 
 
             rows = self.watchListTable.rowCount()
@@ -949,7 +774,6 @@ class SAL_app(salUI):
                     pixmap.loadFromData(info_tuple[item])
                     pixmap.scaled(120, 140, Qt.KeepAspectRatio, Qt.FastTransformation)
                     label.setPixmap(pixmap)
-                    #cell = QTableWidgetItem(label)
                     self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
                 else:
                     self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
@@ -957,14 +781,6 @@ class SAL_app(salUI):
 
             self.series_dialog.close()
 
-
-
-                        # self.tableLabel = QLabel()
-                        # self.tableLabel.setScaledContents(True)
-                        # pixmap = QPixmap()
-                        # pixmap.loadFromData(column_data)
-                        # self.tableLabel.setPixmap(pixmap)
-                        # self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
 
         else:
             msg_nullTitle = QMessageBox(self.mainWindow)
@@ -983,9 +799,6 @@ class SAL_app(salUI):
         api_base = 'https://api.jikan.moe/v3'
         url = api_base + '/search/anime?q={}&page=1'.format(fetchtitle)
 
-        # get title of series
-        # when in the addSeries Dialog => if self.seriesTitle_le == '' or None => then qmessagebox "Must have a Title"
-
 
         req = requests.get(url)
 
@@ -997,7 +810,6 @@ class SAL_app(salUI):
 
         # should return image in bytes
         # .content method give image in bytes so should be able to insert it directly into sqlite db
-        # imageContent = requests.get(seriesImage.content)
 
         return getImage
 
@@ -1045,20 +857,6 @@ class SAL_app(salUI):
         shit.close()
 
 
-        #cfg = json.loads("/settings/salsettings.json")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1078,39 +876,6 @@ class SAL_app(salUI):
         cursor.execute(createTable)
 
 
-        # # for testing
-        # with open("naruto.jpg", 'rb') as file:
-        #     blob = file.read()
-
-        # maybe insert a default series art/icon here as the blob data
-        
-
-
-
-        # entry_tuple = (blob, 'ani', 'Anime', 'SUB', '9/05/20', '12/01/2021', 'ORI')
-
-        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", entry_tuple)
-
-        # conn.commit()
-
-        # conn.close()
-
-
-
-
-        # for testing
-        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'ani', 'Anime', 'SUB', '12/01/2021', 'ORI')".format(blob))
-
-        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Completion_Date, Series_Type) VALUES ({}, 'qwer', 'Anime22', 'DUB', '120/90/2021', 'SQ')".format(blob))
-
-
-
-        # this = cursor.execute("SELECT * FROM watchlist")
-
-        # for row in this:
-        #     print('Row :', row)
-
-
 
 
 
@@ -1122,8 +887,6 @@ class SAL_app(salUI):
         # pandas vs just for loop over db??
 
         if os.path.exists('saldb.sqlite'):
-            # if os.path.exists method because the below creats the file if it doesn't exist
-            #conn = sqlite3.connect('saldb.sqlite')
             conn = sqlite3.connect('saldb.sqlite')
             cursor = conn.cursor()            
 
@@ -1139,17 +902,10 @@ class SAL_app(salUI):
                 sys.exit()
 
 
-                # need to make new tables to put into database above
-                # make seperate function
-
-        #conn = sqlite3.connect('saldb.sqlite')
-        #cursor = conn.cursor()
-
         sqlGetAll = 'SELECT * FROM watchlist'
 
 
 
-        #cursor.execute(sqlGetAll)
 
         res = cursor.execute(sqlGetAll)
 
@@ -1160,7 +916,6 @@ class SAL_app(salUI):
                 if column_number == 0:
                     self.tableLabel = QLabel()
                     self.tableLabel.setScaledContents(True)
-                    #self.tableLabel.resize(300, 500)
                     pixmap = QPixmap()
                     pixmap.loadFromData(column_data)
                     self.tableLabel.setPixmap(pixmap)
@@ -1186,51 +941,4 @@ class SAL_app(salUI):
             self.mainWindow.setGeometry(data['mainwindow_x'], data['mainwindow_y'], data['mainwindow_width'], data['mainwindow_height'])
 
             self.splitter.setSizes([data['list_width'], data['stack_width']])
-
-
-
-
-
-
-
-
-
-        #rows = cursor.fetchall()
-
-
-        #for row in rows:
-            #print('Rowww: ', row)
-
-
-        #print('Number of Records :', len(rows))
-
-        
-        #self.watchListTable.setRowCount(len(rows))
-        # self.watchListTable.setColumnCount(5)
-
-
-
-        # tablerow = 0
-
-        # for row in rows:
-
-        #     self.watchListTable.setItem(tablerow, 0, QTableWidgetItem(row[0]))
-        #     self.watchListTable.setItem(tablerow, 1, QTableWidgetItem(row[1]))
-        #     self.watchListTable.setItem(tablerow, 2, QTableWidgetItem(row[2]))
-        #     self.watchListTable.setItem(tablerow, 3, QTableWidgetItem(row[3]))
-        #     self.watchListTable.setItem(tablerow, 4, QTableWidgetItem(row[4]))
-        #     self.watchListTable.setItem(tablerow, 5, QTableWidgetItem(row[5]))
-
-        #     tablerow += 1
-
-
-
-
-
-
-
-
-
-
-
 
