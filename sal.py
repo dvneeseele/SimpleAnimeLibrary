@@ -179,7 +179,7 @@ class SAL_app(salUI):
 
         curr_row = self.watchListTable.currentIndex().row()
 
-        if curr_row >0:
+        if curr_row >= 0:
 
 
 
