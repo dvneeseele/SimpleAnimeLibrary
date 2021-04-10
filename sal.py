@@ -772,8 +772,8 @@ class SAL_app(salUI):
                     label.setScaledContents(True)
                     pixmap = QPixmap()
                     pixmap.loadFromData(info_tuple[item])
-                    pixmap.scaled(120, 140, Qt.KeepAspectRatio, Qt.FastTransformation)
                     label.setPixmap(pixmap)
+                    pixmap.scaled(120, 140, Qt.KeepAspectRatio, Qt.FastTransformation)                    
                     self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
                 else:
                     self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
