@@ -424,10 +424,20 @@ class SAL_app(salUI):
             conn = sqlite3.connect('saldb.sqlite')
             cursor = conn.cursor()
 
+
+            newart = self.artLabelEdit.pixmap()
+            b_array = QByteArray()
+            buffer = QBuffer(b_array)
+            buffer.open(QIODevice.WriteOnly)
+            newart.save(buffer, "JPG")
+            blob = b_array.data()
+
             newValues = (self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text())
 
             #cursor.execute("INSERT OR REPLACE INTO watchlist(Title, English_Title, Format, Start_Date, Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?)", newValues)
-            cursor.execute("UPDATE watchlist SET Art = ?, Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.vals['Art'] ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.vals['Title']))
+            # cursor.execute("UPDATE watchlist SET Art = ?, Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (self.vals['Art'] ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.vals['Title']))
+            cursor.execute("UPDATE watchlist SET Art = ?, Title = ?, English_Title = ?, Format = ?, Start_Date = ?, Completion_Date = ?, Series_Type = ? WHERE Title = ?", (blob ,self.editSeriesTitle_le.text(), self.editEnglishTitle_le.text(), self.editFormat_cb.currentText(), self.editStartDate_le.text(), self.editCompletionDate_le.text(), self.editSeriesType_le.text(), self.vals['Title']))
+
 
             conn.commit()
             conn.close()
@@ -638,7 +648,9 @@ class SAL_app(salUI):
 
         print(filename)
 
-        lbl.setPixmap(QPixmap(filename))
+        chosenart = lbl.setPixmap(QPixmap(filename))
+
+        return chosenart
 
 
 
