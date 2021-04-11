@@ -646,8 +646,6 @@ class SAL_app(salUI):
 
         filename = str(artfn[0])
 
-        print(filename)
-
         chosenart = lbl.setPixmap(QPixmap(filename))
 
         return chosenart
