@@ -97,4 +97,4 @@ class jikanData(QWidget):
         self.artLabel.setPixmap(self.entry2)
 
     def select3(self):
-        self.artLabel.setPixmap(self.entry3)    
+        self.artLabel.setPixmap(self.entry3)

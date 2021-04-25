@@ -4,6 +4,7 @@
 
 
 from sal_ui import salUI
+from jikan_dialog import jikanData
 import os
 import sys
 import sqlite3
