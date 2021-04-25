@@ -474,7 +474,7 @@ class SAL_app(salUI):
             title_msg.setText("Title field can not be blank")
             title_msg.setWindowTitle("Missing Entry Title")
 
-            title_msg.show()
+            title_msg.show()d
 
 
 
