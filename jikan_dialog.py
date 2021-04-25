@@ -22,6 +22,11 @@ class jikanData(QWidget):
         self.title = QLabel("Results For {}".format(self.seriesTitle))
 
 
+        self.btn1 = QPushButton("Select")
+        self.btn2 = QPushButton("Select")
+        self.btn3 = QPushButton("Select")
+
+
         self.entry1 = QLabel()
         self.entry2 = QLabel()
         self.entry3 = QLabel()
@@ -60,3 +65,36 @@ class jikanData(QWidget):
 
     self.entry3.setPixmap(pix.loadFromData(self.result3_img))
     self.entryTitle3.setText(self.result3_title)
+
+
+    self.setLayout(layout)
+
+
+    layout.addWidget(self.title, 1, 1)
+
+    layout.addWidget(self.result1_img, 2, 1)
+    layout.addWidget(self.result2_img, 2, 2)
+    layout.addWidget(self.result3_img, 2, 3)
+
+    layout.addWidget(self.result1_title, 3, 1)
+    layout.addWidget(self.result2_title, 3, 2)
+    layout.addWidget(self.result3_title, 3, 3)
+
+    layout.addWidget(self.btn1, 4, 1)
+    layout.addWidget(self.btn2, 4, 2)
+    layout.addWidget(self.btn3, 4, 3)
+
+
+
+    self.show()
+
+
+
+    def select1(self):
+        self.artLabel.setPixmap(self.entry1)
+
+    def select2(self):
+        self.artLabel.setPixmap(self.entry2)
+
+    def select3(self):
+        self.artLabel.setPixmap(self.entry3)    
