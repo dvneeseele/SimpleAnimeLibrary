@@ -668,12 +668,12 @@ class SAL_app(salUI):
 
     def getSeriesArt(self, lbl, txt):
         #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
-        self.imgBytes = self.fetchInfo(txt)
-
-        titleart = QPixmap()
-        titleart.loadFromData(self.imgBytes)
-
-        lbl.setPixmap(QPixmap(titleart))
+        #self.imgBytes = self.fetchInfo(txt)
+        self.imgBytes = jikanData(txt)
+        #titleart = QPixmap()
+        #titleart.loadFromData(self.imgBytes)
+        lbl.setPixmap(self.imgBytes.select1())
+        #lbl.setPixmap(QPixmap(titleart))
 
 
 
@@ -839,9 +839,10 @@ class SAL_app(salUI):
 
         self.jd = jikanData(fetchtitle)
         self.jd.show()
+
         #jikanData.search(fetchtitle)
 
-        #return getImage
+        return self.jd
 
 
 

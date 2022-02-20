@@ -23,6 +23,7 @@ class jikanData(QWidget):
 
 
         self.btn1 = QPushButton("Select")
+        self.btn1.clicked.connect(self.select1)
         self.btn2 = QPushButton("Select")
         self.btn3 = QPushButton("Select")
 
@@ -107,7 +108,9 @@ class jikanData(QWidget):
 
 
     def select1(self):
-        self.artLabel.setPixmap(self.entry1)
+        #self.artLabel.setPixmap(self.entry1)
+        return self.entry1.pixmap()
+        self.close()
 
     def select2(self):
         self.artLabel.setPixmap(self.entry2)
