@@ -474,7 +474,7 @@ class SAL_app(salUI):
             title_msg.setText("Title field can not be blank")
             title_msg.setWindowTitle("Missing Entry Title")
 
-            title_msg.show()d
+            title_msg.show()
 
 
 
@@ -657,6 +657,15 @@ class SAL_app(salUI):
 
 
 
+    # def getSeriesArt(self, lbl, txt):
+    #     #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
+    #     self.imgBytes = self.fetchInfo(txt)
+
+    #     titleart = QPixmap()
+    #     titleart.loadFromData(self.imgBytes)
+
+    #     lbl.setPixmap(QPixmap(titleart))
+
     def getSeriesArt(self, lbl, txt):
         #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
         self.imgBytes = self.fetchInfo(txt)
@@ -665,8 +674,6 @@ class SAL_app(salUI):
         titleart.loadFromData(self.imgBytes)
 
         lbl.setPixmap(QPixmap(titleart))
-
-
 
 
 
@@ -804,25 +811,37 @@ class SAL_app(salUI):
 
 
 
+    # def fetchInfo(self, fetchtitle):
+
+    #     # format url api string with the title?
+    #     api_base = 'https://api.jikan.moe/v3'
+    #     url = api_base + '/search/anime?q={}&page=1'.format(fetchtitle)
+
+
+    #     req = requests.get(url)
+
+    #     resp = req.json()
+
+    #     seriesImage = resp['results'][0]['image_url']
+
+    #     getImage = requests.get(seriesImage).content
+
+    #     # should return image in bytes
+    #     # .content method give image in bytes so should be able to insert it directly into sqlite db
+
+    #     return getImage
+
+
+
+
+
     def fetchInfo(self, fetchtitle):
 
-        # format url api string with the title?
-        api_base = 'https://api.jikan.moe/v3'
-        url = api_base + '/search/anime?q={}&page=1'.format(fetchtitle)
+        self.jd = jikanData(fetchtitle)
+        self.jd.show()
+        #jikanData.search(fetchtitle)
 
-
-        req = requests.get(url)
-
-        resp = req.json()
-
-        seriesImage = resp['results'][0]['image_url']
-
-        getImage = requests.get(seriesImage).content
-
-        # should return image in bytes
-        # .content method give image in bytes so should be able to insert it directly into sqlite db
-
-        return getImage
+        #return getImage
 
 
 

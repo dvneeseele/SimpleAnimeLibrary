@@ -9,15 +9,15 @@ from PyQt5.QtWidgets import QWidget, QFormLayout, QLineEdit, QLabel, QPushButton
 
 class jikanData(QWidget):
     def __init__(self, titletxt):
-        super().__init__()
+        super(jikanData, self).__init__()
 
         self.seriesTitle = titletxt
 
-        pix = QPixmap()
 
-        self.jikanData.setAcceptDrops(True)
 
-        layout = QGridLayout()
+        #self.jikanData.setAcceptDrops(True)
+
+
 
         self.title = QLabel("Results For {}".format(self.seriesTitle))
 
@@ -37,56 +37,72 @@ class jikanData(QWidget):
         self.entryTitle3 = QLabel()
 
 
+        self.layout = QGridLayout()
 
 
-    api_base = 'https://api.jikan.moe/v3'
+        self.layout.addWidget(self.title, 1, 1)
 
-    url = api_base + '/search/anime?q={}&page=1'.format(self.seriesTitle)
+        self.layout.addWidget(self.entry1, 2, 1)
+        self.layout.addWidget(self.entry2, 2, 2)
+        self.layout.addWidget(self.entry3, 2, 3)
 
-    req = requests.get(url)
-    resp = req.json()
+        self.layout.addWidget(self.entryTitle1, 3, 1)
+        self.layout.addWidget(self.entryTitle2, 3, 2)
+        self.layout.addWidget(self.entryTitle3, 3, 3)
 
-    # .content returns image data in bytes
-
-    self.result1_img = resp['results'][0]['image_url'].content
-    self.result2_img = resp['results'][1]['image_url'].content
-    self.result3_img = resp['results'][2]['image_url'].content
-
-    self.result1_title = resp['results'][0]['title']
-    self.result2_title = resp['results'][1]['title']
-    self.result3_title = resp['results'][2]['title']
+        self.layout.addWidget(self.btn1, 4, 1)
+        self.layout.addWidget(self.btn2, 4, 2)
+        self.layout.addWidget(self.btn3, 4, 3)
 
 
-    self.entry1.setPixmap(pix.loadFromData(self.result1_img))
-    self.entryTitle1.setText(self.result1_title)
-
-    self.entry2.setPixmap(pix.loadFromData(self.result2_img))
-    self.entryTitle2.setText(self.result2_title)
-
-    self.entry3.setPixmap(pix.loadFromData(self.result3_img))
-    self.entryTitle3.setText(self.result3_title)
-
-
-    self.setLayout(layout)
-
-
-    layout.addWidget(self.title, 1, 1)
-
-    layout.addWidget(self.result1_img, 2, 1)
-    layout.addWidget(self.result2_img, 2, 2)
-    layout.addWidget(self.result3_img, 2, 3)
-
-    layout.addWidget(self.result1_title, 3, 1)
-    layout.addWidget(self.result2_title, 3, 2)
-    layout.addWidget(self.result3_title, 3, 3)
-
-    layout.addWidget(self.btn1, 4, 1)
-    layout.addWidget(self.btn2, 4, 2)
-    layout.addWidget(self.btn3, 4, 3)
+        self.setLayout(self.layout)
+        
+        self.search()
 
 
 
-    self.show()
+    def search(self):
+
+        api_base = 'https://api.jikan.moe/v3'
+
+        url = api_base + '/search/anime?q={}&page=1'.format(self.seriesTitle)
+
+        req = requests.get(url)
+        resp = req.json()
+
+
+        # .content returns image data in bytes
+
+        self.result1_img = resp['results'][0]['image_url']
+        self.result1_getData = requests.get(self.result1_img).content
+
+        self.result2_img = resp['results'][1]['image_url']
+        self.result2_getData = requests.get(self.result2_img).content
+
+        self.result3_img = resp['results'][2]['image_url']
+        self.result3_getData = requests.get(self.result3_img).content
+
+        self.result1_title = resp['results'][0]['title']
+        self.result2_title = resp['results'][1]['title']
+        self.result3_title = resp['results'][2]['title']
+
+
+
+        self.pix = QPixmap()
+
+        self.pix.loadFromData(self.result1_getData)
+
+        self.entry1.setPixmap(self.pix)
+        self.entryTitle1.setText(self.result1_title)
+
+        self.pix.loadFromData(self.result2_getData)
+        self.entry2.setPixmap(self.pix)
+        self.entryTitle2.setText(self.result2_title)
+
+        self.pix.loadFromData(self.result3_getData)
+        self.entry3.setPixmap(self.pix)
+        self.entryTitle3.setText(self.result3_title)
+
 
 
 
@@ -98,3 +114,6 @@ class jikanData(QWidget):
 
     def select3(self):
         self.artLabel.setPixmap(self.entry3)
+
+
+        
