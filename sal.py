@@ -657,27 +657,10 @@ class SAL_app(salUI):
 
 
 
-    # def getSeriesArt(self, lbl, txt):
-    #     #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
-    #     self.imgBytes = self.fetchInfo(txt)
-
-    #     titleart = QPixmap()
-    #     titleart.loadFromData(self.imgBytes)
-
-    #     lbl.setPixmap(QPixmap(titleart))
-
     def getSeriesArt(self, lbl, txt):
-        #self.imgBytes = self.fetchInfo(self.seriesTitle_le.text())
-        #self.imgBytes = self.fetchInfo(txt)
-        self.imgBytes = jikanData(txt)
-        #titleart = QPixmap()
-        #titleart.loadFromData(self.imgBytes)
-        lbl.setPixmap(self.imgBytes.select1())
-        #lbl.setPixmap(QPixmap(titleart))
 
-
-
-
+        self.imgBytes = jikanData(txt, lbl)
+        self.imgBytes.show()
 
 
 
@@ -811,29 +794,10 @@ class SAL_app(salUI):
 
 
 
-    # def fetchInfo(self, fetchtitle):
 
-    #     # format url api string with the title?
-    #     api_base = 'https://api.jikan.moe/v3'
-    #     url = api_base + '/search/anime?q={}&page=1'.format(fetchtitle)
-
-
-    #     req = requests.get(url)
-
-    #     resp = req.json()
-
-    #     seriesImage = resp['results'][0]['image_url']
-
-    #     getImage = requests.get(seriesImage).content
-
-    #     # should return image in bytes
-    #     # .content method give image in bytes so should be able to insert it directly into sqlite db
-
-    #     return getImage
-
-
-
-
+    # TODO : Need to use this function below to use the jikan_dialog.py and its class to go fetch other info to fill in. 
+    # such as genere, air dates, characters, etc.
+    # at some point i will probably add the option to have a full page info view panel for each entry, setup kind of like mal or anidb.
 
     def fetchInfo(self, fetchtitle):
 
@@ -842,7 +806,7 @@ class SAL_app(salUI):
 
         #jikanData.search(fetchtitle)
 
-        return self.jd
+        #return self.jd
 
 
 

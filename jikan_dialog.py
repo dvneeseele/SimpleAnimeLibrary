@@ -8,16 +8,15 @@ from PyQt5.QtWidgets import QWidget, QFormLayout, QLineEdit, QLabel, QPushButton
 
 
 class jikanData(QWidget):
-    def __init__(self, titletxt):
+    def __init__(self, titletxt, label):
         super(jikanData, self).__init__()
 
         self.seriesTitle = titletxt
-
+        self.titleart_lbl = label
 
 
         #self.jikanData.setAcceptDrops(True)
-
-
+        self.selection = ""
 
         self.title = QLabel("Results For {}".format(self.seriesTitle))
 
@@ -25,7 +24,9 @@ class jikanData(QWidget):
         self.btn1 = QPushButton("Select")
         self.btn1.clicked.connect(self.select1)
         self.btn2 = QPushButton("Select")
+        self.btn2.clicked.connect(self.select2)
         self.btn3 = QPushButton("Select")
+        self.btn3.clicked.connect(self.select3)
 
 
         self.entry1 = QLabel()
@@ -108,15 +109,14 @@ class jikanData(QWidget):
 
 
     def select1(self):
-        #self.artLabel.setPixmap(self.entry1)
-        return self.entry1.pixmap()
+        self.titleart_lbl.setPixmap(self.entry1.pixmap())
         self.close()
 
     def select2(self):
-        self.artLabel.setPixmap(self.entry2)
+        self.titleart_lbl.setPixmap(self.entry2.pixmap())
+        self.close()
 
     def select3(self):
-        self.artLabel.setPixmap(self.entry3)
+        self.titleart_lbl.setPixmap(self.entry2.pixmap())
+        self.close()
 
-
-        
