@@ -9,7 +9,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt, QSize
 from PyQt5 import QtCore
 from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtWidgets import (QMainWindow, QAbstractItemView, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView)
+from PyQt5.QtWidgets import (QMainWindow, QAbstractItemView, QToolBar, QSplitter, QHBoxLayout, QWidget, QAction, QStackedWidget, QListWidget, QTableWidget, QTableWidgetItem, QTableView, QHeaderView)
 
 
 class salUI(object):
@@ -144,8 +144,10 @@ class salUI(object):
         self.watchListTable.setColumnCount(7)
 
         self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"])
-        self.watchListTable.verticalHeader().setDefaultSectionSize(140)
-        self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
+        #self.watchListTable.verticalHeader().setDefaultSectionSize(140)
+        self.watchListTable.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        #self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
+        self.watchListTable.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
 
 
 

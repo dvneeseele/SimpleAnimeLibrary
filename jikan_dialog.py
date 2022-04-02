@@ -65,29 +65,43 @@ class jikanData(QWidget):
 
     def search(self):
 
-        api_base = 'https://api.jikan.moe/v3'
 
-        url = api_base + '/search/anime?q={}&page=1'.format(self.seriesTitle)
+
+        #api_base = 'https://api.jikan.moe/v3'
+
+        #url = api_base + '/search/anime?q={}&page=1'.format(self.seriesTitle)
+
+
+        # jikan api v4
+        # example search (https://api.jikan.moe/v4/anime?q=Naruto&sfw)
+        api_base = 'https://api.jikan.moe/v4'
+
+        url = api_base + '/anime?q={}&sfw'.format(self.seriesTitle)
+
 
         req = requests.get(url)
         resp = req.json()
 
 
+        # TODO : So for some searches like Death Note, there are only 2 matches for that search string, so the third option below doesn't work.
+        # Need error handling for this. 
+        # Need to find a more dynamic way of handling the response. Just list all results or something...
+
+
         # .content returns image data in bytes
 
-        self.result1_img = resp['results'][0]['image_url']
+        self.result1_img = resp['data'][0]['images']['jpg']['large_image_url']
         self.result1_getData = requests.get(self.result1_img).content
 
-        self.result2_img = resp['results'][1]['image_url']
+        self.result2_img = resp['data'][1]['images']['jpg']['large_image_url']
         self.result2_getData = requests.get(self.result2_img).content
 
-        self.result3_img = resp['results'][2]['image_url']
+        self.result3_img = resp['data'][2]['images']['jpg']['large_image_url']
         self.result3_getData = requests.get(self.result3_img).content
 
-        self.result1_title = resp['results'][0]['title']
-        self.result2_title = resp['results'][1]['title']
-        self.result3_title = resp['results'][2]['title']
-
+        self.result1_title = resp['data'][0]['title']
+        self.result2_title = resp['data'][1]['title']
+        self.result3_title = resp['data'][2]['title']
 
 
         self.pix = QPixmap()
@@ -117,6 +131,6 @@ class jikanData(QWidget):
         self.close()
 
     def select3(self):
-        self.titleart_lbl.setPixmap(self.entry2.pixmap())
+        self.titleart_lbl.setPixmap(self.entry3.pixmap())
         self.close()
 
