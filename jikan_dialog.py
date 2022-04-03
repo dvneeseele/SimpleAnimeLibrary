@@ -38,6 +38,11 @@ class jikanData(QWidget):
         self.entryTitle2 = QLabel()
         self.entryTitle3 = QLabel()
 
+        self.entryType1 = QLabel()
+        self.entryType2 = QLabel()
+        self.entryType3 = QLabel()
+
+
 
         self.layout = QGridLayout()
 
@@ -52,9 +57,14 @@ class jikanData(QWidget):
         self.layout.addWidget(self.entryTitle2, 3, 2)
         self.layout.addWidget(self.entryTitle3, 3, 3)
 
-        self.layout.addWidget(self.btn1, 4, 1)
-        self.layout.addWidget(self.btn2, 4, 2)
-        self.layout.addWidget(self.btn3, 4, 3)
+        self.layout.addWidget(self.entryType1, 4, 1)
+        self.layout.addWidget(self.entryType2, 4, 2)
+        self.layout.addWidget(self.entryType3, 4, 3)
+
+
+        self.layout.addWidget(self.btn1, 5, 1)
+        self.layout.addWidget(self.btn2, 5, 2)
+        self.layout.addWidget(self.btn3, 5, 3)
 
 
         self.setLayout(self.layout)
@@ -103,8 +113,13 @@ class jikanData(QWidget):
         self.result2_title = resp['data'][1]['title']
         self.result3_title = resp['data'][2]['title']
 
+        self.result1_type = resp['data'][0]['type']
+        self.result2_type = resp['data'][1]['type']
+        self.result3_type = resp['data'][2]['type']
 
-        
+        self.entryType1.setText("Series Type : {}".format(self.result1_type))
+        self.entryType2.setText("Series Type : {}".format(self.result2_type))
+        self.entryType3.setText("Series Type : {}".format(self.result3_type))
 
 
         self.pix = QPixmap()
@@ -112,15 +127,15 @@ class jikanData(QWidget):
         self.pix.loadFromData(self.result1_getData)
 
         self.entry1.setPixmap(self.pix)
-        self.entryTitle1.setText(self.result1_title)
+        self.entryTitle1.setText("Series Title : {}".format(self.result1_title))
 
         self.pix.loadFromData(self.result2_getData)
         self.entry2.setPixmap(self.pix)
-        self.entryTitle2.setText(self.result2_title)
+        self.entryTitle2.setText("Series Title : {}".format(self.result2_title))
 
         self.pix.loadFromData(self.result3_getData)
         self.entry3.setPixmap(self.pix)
-        self.entryTitle3.setText(self.result3_title)
+        self.entryTitle3.setText("Series Title : {}".format(self.result3_title))
 
 
 
