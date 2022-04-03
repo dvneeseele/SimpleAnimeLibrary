@@ -534,6 +534,9 @@ class SAL_app(salUI):
         self.submitEntryBtn = QPushButton("Submit")
         self.submitEntryBtn.clicked.connect(self.entrySubmit)
 
+        self.fetchAllInfoBtn = QPushButton("Fetch all Series Info")
+        self.fetchAllInfoBtn.clicked.connect(self.seriesFetchAll)
+
         self.currentStartDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
         self.currentStartDateBtn.clicked.connect(self.insertStartCurrentDate)
 
@@ -611,8 +614,9 @@ class SAL_app(salUI):
         # column 1
         dialog_layout.addWidget(self.artLabel, 1, 1)
         dialog_layout.addWidget(self.titleArtBtn, 2, 1)
-        dialog_layout.addWidget(self.addArtFile, 3, 1)
-        dialog_layout.addWidget(self.submitEntryBtn, 4, 1)
+        dialog_layout.addWidget(self.fetchAllInfoBtn, 3, 1)
+        dialog_layout.addWidget(self.addArtFile, 4, 1)
+        dialog_layout.addWidget(self.submitEntryBtn, 5, 1)
         # column 2
         dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
         dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
@@ -691,7 +695,8 @@ class SAL_app(salUI):
 
 
 
-
+    def seriesFetchAll(self):
+        pass
 
 
 
@@ -913,7 +918,7 @@ class SAL_app(salUI):
                     self.tableLabel.setScaledContents(True)
                     pixmap = QPixmap()
                     pixmap.loadFromData(column_data)
-                    self.tableLabel.setPixmap(pixmap.scaled(75, 100, Qt.IgnoreAspectRatio, Qt.FastTransformation))
+                    self.tableLabel.setPixmap(pixmap.scaled(85, 110, Qt.IgnoreAspectRatio, Qt.FastTransformation))
 
                     self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
                 else:

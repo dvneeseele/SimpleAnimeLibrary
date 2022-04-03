@@ -74,6 +74,15 @@ class salUI(object):
 
         self.toolbar.addAction(self.editAction)
 
+        self.toolbar.addSeparator()
+
+        self.tableViewAction = QAction(QIcon("icons/saldbicon.png") ,"Table View", MainWindow)
+        self.tableViewAction.setShortcut("ctrl+t")
+        self.toolbar.addAction(self.tableViewAction)
+
+        self.cardViewAction = QAction(QIcon("icons/saldb_cyan.png") ,"Card View", MainWindow)
+        self.cardViewAction.setShortcut("ctrl+alt+c")
+        self.toolbar.addAction(self.cardViewAction)
 
 
         self.toolbar.addSeparator()
@@ -91,6 +100,11 @@ class salUI(object):
 
         self.toolbar.addAction(self.queryAction)
 
+        self.toolbar.addSeparator()
+
+        self.jikanAction = QAction(QIcon("icons/find.png") , "Search Anime Series", MainWindow)
+        self.jikanAction.setShortcut("ctrl+shift+s")
+        self.toolbar.addAction(self.jikanAction)
 
 
         self.toolbar.addSeparator()

@@ -104,6 +104,9 @@ class jikanData(QWidget):
         self.result3_title = resp['data'][2]['title']
 
 
+        
+
+
         self.pix = QPixmap()
 
         self.pix.loadFromData(self.result1_getData)
