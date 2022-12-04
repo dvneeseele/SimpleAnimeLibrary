@@ -42,7 +42,9 @@ class jikanData(QWidget):
         self.entryType2 = QLabel()
         self.entryType3 = QLabel()
 
-
+        self.entryStatus1 = QLabel()
+        self.entryStatus2 = QLabel()
+        self.entryStatus3 = QLabel()
 
         self.layout = QGridLayout()
 
@@ -61,10 +63,13 @@ class jikanData(QWidget):
         self.layout.addWidget(self.entryType2, 4, 2)
         self.layout.addWidget(self.entryType3, 4, 3)
 
+        self.layout.addWidget(self.entryStatus1, 5, 1)
+        self.layout.addWidget(self.entryStatus2, 5, 2)
+        self.layout.addWidget(self.entryStatus3, 5, 3)
 
-        self.layout.addWidget(self.btn1, 5, 1)
-        self.layout.addWidget(self.btn2, 5, 2)
-        self.layout.addWidget(self.btn3, 5, 3)
+        self.layout.addWidget(self.btn1, 6, 1)
+        self.layout.addWidget(self.btn2, 6, 2)
+        self.layout.addWidget(self.btn3, 6, 3)
 
 
         self.setLayout(self.layout)
@@ -117,9 +122,17 @@ class jikanData(QWidget):
         self.result2_type = resp['data'][1]['type']
         self.result3_type = resp['data'][2]['type']
 
+        self.result1_status = resp['data'][0]['status']
+        self.result2_status = resp['data'][1]['status']
+        self.result3_status = resp['data'][2]['status']
+
         self.entryType1.setText("Series Type : {}".format(self.result1_type))
         self.entryType2.setText("Series Type : {}".format(self.result2_type))
         self.entryType3.setText("Series Type : {}".format(self.result3_type))
+
+        self.entryStatus1.setText("Series Status : {}".format(self.result1_status))
+        self.entryStatus2.setText("Series Status : {}".format(self.result2_status))
+        self.entryStatus3.setText("Series Status : {}".format(self.result3_status))
 
 
         self.pix = QPixmap()
