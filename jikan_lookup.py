@@ -11,6 +11,9 @@
 from PyQt5.QtCore import *  # type: ignore
 from PyQt5.QtGui import *  # type: ignore
 from PyQt5.QtWidgets import *  # type: ignore
+import requests
+from requests.exceptions import HTTPError
+#import json
 
 
 class Ui_dialog_lookup(object):
@@ -28,6 +31,7 @@ class Ui_dialog_lookup(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lineEdit = QLineEdit(self.frame_search)
         self.lineEdit.setObjectName(u"lineEdit")
+        self.lineEdit.textChanged.connect(self.seriesLookup)
 
         self.horizontalLayout.addWidget(self.lineEdit)
 
@@ -80,6 +84,19 @@ class Ui_dialog_lookup(object):
         self.dialog_lookup_buttonBox.rejected.connect(dialog_lookup.reject)
 
         QMetaObject.connectSlotsByName(dialog_lookup)
+
+
+        self.seriesArt = []
+        self.title = []
+        self.englishTitle = []
+        self.seriesType = []
+        self.seriesEpisodes = []
+        self.seriesStatus = []
+        self.seriesDuration = []
+        self.seriesGenres = []
+        self.seriesThemes = []
+
+
     # setupUi
 
     def retranslateUi(self, dialog_lookup):
@@ -87,4 +104,68 @@ class Ui_dialog_lookup(object):
         self.label_seriesImagePreview.setText("")
         self.label_seriesTextInfo.setText(QCoreApplication.translate("dialog_lookup", u"TextLabel", None))
     # retranslateUi
+
+    def seriesLookup(self):
+        # jikan api v4
+        # example search (https://api.jikan.moe/v4/anime?q=Naruto&sfw)
+        api_base = 'https://api.jikan.moe/v4'
+
+        url = api_base + '/anime?q={}&sfw'.format(self.seriesTitle)
+
+        try:
+            req = requests.get(url)
+            resp = req.json()
+        except HTTPError as http_err:
+            print('HTTP error code : {http_err}')
+            # TODO implement qmessagebox for displaying the error and exiting.
+        except Exception as err:
+            print('Error Occured : {err}')
+            # TODO implement qmessagebox for displaying the error and exiting.
+
+        titles_count = resp['pagination']['items']['count']
+
+        for i in range(titles_count):
+            try:
+                self.seriesArt.append(resp['data'][i]['images']['jpg']['large_image_url'])
+                self.title.append(resp['data'][i]['title'])
+                self.englishTitle.append(resp['data'][i]['title_english'])
+                self.seriesType.append(resp['data'][i]['type'])
+                self.seriesEpisodes.append(resp['data'][i]['episodes'])
+                self.seriesStatus.append(resp['data'][i]['status'])
+                self.seriesDuration.append(resp['data'][i]['duration'])
+                self.seriesGenres.append(resp['data'][i]['genres'][0]['name'])
+                self.seriesThemes.append(resp['data'][i]['themes'][0]['name'])
+                # self.seriesArt = resp['data'][i]['images']['jpg']['large_image_url']
+                # self.title = resp['data'][i]['title']
+                # self.englishTitle = resp['data'][i]['title_english']
+                # self.seriesType = resp['data'][i]['type']
+                # self.seriesEpisodes = resp['data'][i]['episodes']
+                # self.seriesStatus = resp['data'][i]['status']
+                # self.seriesDuration = resp['data'][i]['duration']
+                # self.seriesGenres = resp['data'][i]['genres'][0]['name']
+                # self.seriesThemes = resp['data'][i]['themes'][0]['name']
+            except IndexError:
+                print("Index Error Occured. Value is null")
+                # TODO Probably need to find the array that errored and insert a "null" value to that array, so everything lines up.
+
+
+
+
+
+            # print(resp['data'][i]['images']['jpg']['large_image_url'])
+            # print(resp['data'][i]['title'])
+            # print(resp['data'][i]['title_english'])
+            # print(resp['data'][i]['type'])
+            # print(resp['data'][i]['episodes'])
+            # print(resp['data'][i]['status'])
+            # print(resp['data'][i]['duration'])
+            # print(resp['data'][i]['genres'][0]['name'])
+            # print(resp['data'][i]['themes'][0]['name'])
+
+
+
+
+
+
+
 
