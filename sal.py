@@ -5,6 +5,7 @@
 
 from sal_ui import salUI
 from jikan_dialog import jikanData
+from jikan_lookup import Ui_dialog_lookup
 import os
 import sys
 import sqlite3
@@ -526,7 +527,8 @@ class SAL_app(salUI):
 
         # Buttons
         self.titleArtBtn = QPushButton("Fetch Series Title Art")
-        self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabel, self.seriesTitle_le.text()))
+        #self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabel, self.seriesTitle_le.text()))
+        self.titleArtBtn.clicked.connect(lambda: self.seriesFetchAll)
 
         self.addArtFile = QPushButton("Choose Art File")
         self.addArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabel))
@@ -696,7 +698,11 @@ class SAL_app(salUI):
 
 
     def seriesFetchAll(self):
-        pass
+        print('called')
+        self.seriesLookup = Ui_dialog_lookup()
+        self.lookupDialog = QDialog()
+        self.seriesLookup.setupUi(self.lookupDialog)
+        self.lookupDialog.show()
 
 
 
