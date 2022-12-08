@@ -9,8 +9,8 @@
 ################################################################################
 
 from PyQt5.QtCore import *  # type: ignore
-from PyQt5.QtGui import *  # type: ignore
-from PyQt5.QtWidgets import *  # type: ignore
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QListView, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton
 import requests
 from requests.exceptions import HTTPError
 #import json
@@ -31,7 +31,7 @@ class Ui_dialog_lookup(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lineEdit = QLineEdit(self.frame_search)
         self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.textChanged.connect(self.seriesLookup)
+        #self.lineEdit.textChanged.connect(self.seriesLookup)
 
         self.horizontalLayout.addWidget(self.lineEdit)
 
@@ -46,6 +46,9 @@ class Ui_dialog_lookup(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.listView_searchresults = QListView(self.frame_searchresults)
         self.listView_searchresults.setObjectName(u"listView_searchresults")
+
+        self.model = QStandardItemModel()
+        self.listView_searchresults.setModel(self.model)
 
         self.verticalLayout_2.addWidget(self.listView_searchresults)
 
@@ -76,7 +79,13 @@ class Ui_dialog_lookup(object):
         self.dialog_lookup_buttonBox.setOrientation(Qt.Horizontal)
         self.dialog_lookup_buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.dialog_lookup_buttonBox)
+        # Separate submit button for api search.
+        self.submitSearch = QPushButton('Submit Search')
+        self.submitSearch.clicked.connect(self.seriesLookup)
+
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.submitSearch)
+        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.dialog_lookup_buttonBox)
+
 
 
         self.retranslateUi(dialog_lookup)
@@ -84,17 +93,6 @@ class Ui_dialog_lookup(object):
         self.dialog_lookup_buttonBox.rejected.connect(dialog_lookup.reject)
 
         QMetaObject.connectSlotsByName(dialog_lookup)
-
-
-        self.seriesArt = []
-        self.title = []
-        self.englishTitle = []
-        self.seriesType = []
-        self.seriesEpisodes = []
-        self.seriesStatus = []
-        self.seriesDuration = []
-        self.seriesGenres = []
-        self.seriesThemes = []
 
 
     # setupUi
@@ -110,7 +108,7 @@ class Ui_dialog_lookup(object):
         # example search (https://api.jikan.moe/v4/anime?q=Naruto&sfw)
         api_base = 'https://api.jikan.moe/v4'
 
-        url = api_base + '/anime?q={}&sfw'.format(self.seriesTitle)
+        url = api_base + '/anime?q={}&sfw'.format(self.lineEdit.text())
 
         try:
             req = requests.get(url)
@@ -126,44 +124,11 @@ class Ui_dialog_lookup(object):
 
         for i in range(titles_count):
             try:
-                self.seriesArt.append(resp['data'][i]['images']['jpg']['large_image_url'])
-                self.title.append(resp['data'][i]['title'])
-                self.englishTitle.append(resp['data'][i]['title_english'])
-                self.seriesType.append(resp['data'][i]['type'])
-                self.seriesEpisodes.append(resp['data'][i]['episodes'])
-                self.seriesStatus.append(resp['data'][i]['status'])
-                self.seriesDuration.append(resp['data'][i]['duration'])
-                self.seriesGenres.append(resp['data'][i]['genres'][0]['name'])
-                self.seriesThemes.append(resp['data'][i]['themes'][0]['name'])
-                # self.seriesArt = resp['data'][i]['images']['jpg']['large_image_url']
-                # self.title = resp['data'][i]['title']
-                # self.englishTitle = resp['data'][i]['title_english']
-                # self.seriesType = resp['data'][i]['type']
-                # self.seriesEpisodes = resp['data'][i]['episodes']
-                # self.seriesStatus = resp['data'][i]['status']
-                # self.seriesDuration = resp['data'][i]['duration']
-                # self.seriesGenres = resp['data'][i]['genres'][0]['name']
-                # self.seriesThemes = resp['data'][i]['themes'][0]['name']
+                item = QStandardItem(resp['data'][i]['title'])
+                self.model.appendRow(item)
             except IndexError:
                 print("Index Error Occured. Value is null")
                 # TODO Probably need to find the array that errored and insert a "null" value to that array, so everything lines up.
-
-
-
-
-
-            # print(resp['data'][i]['images']['jpg']['large_image_url'])
-            # print(resp['data'][i]['title'])
-            # print(resp['data'][i]['title_english'])
-            # print(resp['data'][i]['type'])
-            # print(resp['data'][i]['episodes'])
-            # print(resp['data'][i]['status'])
-            # print(resp['data'][i]['duration'])
-            # print(resp['data'][i]['genres'][0]['name'])
-            # print(resp['data'][i]['themes'][0]['name'])
-
-
-
 
 
 
