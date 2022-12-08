@@ -126,9 +126,9 @@ class Ui_dialog_lookup(object):
             try:
                 item = QStandardItem(resp['data'][i]['title'])
                 self.model.appendRow(item)
-            except IndexError:
-                print("Index Error Occured. Value is null")
-                # TODO Probably need to find the array that errored and insert a "null" value to that array, so everything lines up.
+            except Exception as err:
+                print('Error Occured :, {err}')
+                continue
 
 
 
