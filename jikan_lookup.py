@@ -9,6 +9,7 @@
 ################################################################################
 
 from PyQt5.QtCore import *  # type: ignore
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton, QListWidget
 import requests
 from requests.exceptions import HTTPError
@@ -68,6 +69,22 @@ class Ui_dialog_lookup(object):
 
         self.verticalLayout.addWidget(self.label_seriesTextInfo)
 
+        self.label_seriesEnglishTitle = QLabel()
+        self.label_seriesType = QLabel()
+        self.label_seriesEpisodes = QLabel()
+        self.label_seriesStatus = QLabel()
+        self.label_seriesDuration = QLabel()
+        self.label_seriesGenres = QLabel()
+        self.label_seriesThemes = QLabel()
+
+        self.verticalLayout.addWidget(self.label_seriesEnglishTitle)
+        self.verticalLayout.addWidget(self.label_seriesType)
+        self.verticalLayout.addWidget(self.label_seriesEpisodes)
+        self.verticalLayout.addWidget(self.label_seriesStatus)
+        self.verticalLayout.addWidget(self.label_seriesDuration)
+        self.verticalLayout.addWidget(self.label_seriesGenres)
+        self.verticalLayout.addWidget(self.label_seriesThemes)
+
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.frame_seriesInfoLabels)
 
@@ -109,7 +126,7 @@ class Ui_dialog_lookup(object):
 
         try:
             req = requests.get(url)
-            resp = req.json()
+            self.resp = req.json()
         except HTTPError as http_err:
             print('HTTP error code : {http_err}')
             # TODO implement qmessagebox for displaying the error and exiting.
@@ -117,11 +134,11 @@ class Ui_dialog_lookup(object):
             print('Error Occured : {err}')
             # TODO implement qmessagebox for displaying the error and exiting.
 
-        titles_count = resp['pagination']['items']['count']
+        titles_count = self.resp['pagination']['items']['count']
 
         for i in range(titles_count):
             try:
-                self.listView_searchresults.addItem(resp['data'][i]['title'])
+                self.listView_searchresults.addItem(self.resp['data'][i]['title'])
                 # item = QStandardItem(resp['data'][i]['title'])
                 # self.model.appendRow(item)
             except Exception as err:
@@ -133,20 +150,37 @@ class Ui_dialog_lookup(object):
         self.idx = self.listView_searchresults.currentRow()
         print(self.idx)
 
-        # get art for label
+        try:
 
-        # get english title
+            # get art for label
+            self.displayArt = requests.get(self.resp['data'][self.idx]['images']['jpg']['large_image_url']).content
+            # get english title
+            self.displayEnglishTitle = self.resp['data'][self.idx]['title_english']
+            # get type
+            self.displayType = self.resp['data'][self.idx]['type']
+            # get episodes
+            self.displayEpisodes = self.resp['data'][self.idx]['episodes']
+            # get status
+            self.displayStatus = self.resp['data'][self.idx]['status']
+            # get duration
+            self.displayDuration = self.resp['data'][self.idx]['duration']
+            # get genres
+            self.displayGenres = self.resp['data'][self.idx]['genres'][0]['name']
+            # get themes
+            self.displayThemes = self.resp['data'][self.idx]['themes'][0]['name']
+        except Exception as err:
+            print('Error Occured : {err}')
 
-        # get type
-
-        # get episodes
-
-        # get status
-
-        # get duration
-
-        # get genres
-
-        # get themes
+        # set content to labels
+        pix = QPixmap()
+        pix.loadFromData(self.displayArt)
+        self.label_seriesImagePreview.setPixmap(pix)
+        self.label_seriesEnglishTitle.setText(self.displayEnglishTitle)
+        self.label_seriesType.setText(self.displayType)
+        self.label_seriesEpisodes.setText(str(self.displayEpisodes))
+        self.label_seriesStatus.setText(self.displayStatus)
+        self.label_seriesDuration.setText(self.displayDuration)
+        self.label_seriesGenres.setText(self.displayGenres)
+        self.label_seriesThemes.setText(self.displayThemes)
 
 
