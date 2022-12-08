@@ -9,8 +9,7 @@
 ################################################################################
 
 from PyQt5.QtCore import *  # type: ignore
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QListView, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton
+from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton, QListWidget
 import requests
 from requests.exceptions import HTTPError
 #import json
@@ -44,11 +43,9 @@ class Ui_dialog_lookup(object):
         self.frame_searchresults.setFrameShadow(QFrame.Raised)
         self.verticalLayout_2 = QVBoxLayout(self.frame_searchresults)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.listView_searchresults = QListView(self.frame_searchresults)
+        self.listView_searchresults = QListWidget(self.frame_searchresults)
         self.listView_searchresults.setObjectName(u"listView_searchresults")
-
-        self.model = QStandardItemModel()
-        self.listView_searchresults.setModel(self.model)
+        self.listView_searchresults.clicked.connect(self.itemChanged)
 
         self.verticalLayout_2.addWidget(self.listView_searchresults)
 
@@ -124,13 +121,32 @@ class Ui_dialog_lookup(object):
 
         for i in range(titles_count):
             try:
-                item = QStandardItem(resp['data'][i]['title'])
-                self.model.appendRow(item)
+                self.listView_searchresults.addItem(resp['data'][i]['title'])
+                # item = QStandardItem(resp['data'][i]['title'])
+                # self.model.appendRow(item)
             except Exception as err:
                 print('Error Occured :, {err}')
                 continue
 
 
+    def itemChanged(self):
+        self.idx = self.listView_searchresults.currentRow()
+        print(self.idx)
 
+        # get art for label
+
+        # get english title
+
+        # get type
+
+        # get episodes
+
+        # get status
+
+        # get duration
+
+        # get genres
+
+        # get themes
 
 
