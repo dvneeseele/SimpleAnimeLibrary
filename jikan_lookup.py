@@ -138,6 +138,8 @@ class Ui_dialog_lookup(object):
 
         titles_count = self.resp['pagination']['items']['count']
 
+        self.listView_searchresults.clear()
+
         for i in range(titles_count):
             try:
                 self.listView_searchresults.addItem(self.resp['data'][i]['title'])
