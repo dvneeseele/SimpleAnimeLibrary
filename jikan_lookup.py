@@ -9,8 +9,8 @@
 ################################################################################
 
 from PyQt5.QtCore import *  # type: ignore
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton, QListWidget
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton, QListWidget, QListWidgetItem
 import requests
 from requests.exceptions import HTTPError
 #import json
@@ -69,22 +69,24 @@ class Ui_dialog_lookup(object):
 
         self.verticalLayout.addWidget(self.label_seriesTextInfo)
 
-        self.label_seriesEnglishTitle = QLabel()
-        self.label_seriesType = QLabel()
-        self.label_seriesEpisodes = QLabel()
-        self.label_seriesStatus = QLabel()
-        self.label_seriesDuration = QLabel()
-        self.label_seriesGenres = QLabel()
-        self.label_seriesThemes = QLabel()
+        # self.label_seriesEnglishTitle = QLabel()
+        # self.label_seriesType = QLabel()
+        # self.label_seriesEpisodes = QLabel()
+        # self.label_seriesStatus = QLabel()
+        # self.label_seriesDuration = QLabel()
+        # self.label_seriesGenres = QLabel()
+        # self.label_seriesThemes = QLabel()
 
-        self.verticalLayout.addWidget(self.label_seriesEnglishTitle)
-        self.verticalLayout.addWidget(self.label_seriesType)
-        self.verticalLayout.addWidget(self.label_seriesEpisodes)
-        self.verticalLayout.addWidget(self.label_seriesStatus)
-        self.verticalLayout.addWidget(self.label_seriesDuration)
-        self.verticalLayout.addWidget(self.label_seriesGenres)
-        self.verticalLayout.addWidget(self.label_seriesThemes)
+        # self.verticalLayout.addWidget(self.label_seriesEnglishTitle)
+        # self.verticalLayout.addWidget(self.label_seriesType)
+        # self.verticalLayout.addWidget(self.label_seriesEpisodes)
+        # self.verticalLayout.addWidget(self.label_seriesStatus)
+        # self.verticalLayout.addWidget(self.label_seriesDuration)
+        # self.verticalLayout.addWidget(self.label_seriesGenres)
+        # self.verticalLayout.addWidget(self.label_seriesThemes)
 
+        self.testlist = QListWidget()
+        self.verticalLayout.addWidget(self.testlist)
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.frame_seriesInfoLabels)
 
@@ -113,8 +115,8 @@ class Ui_dialog_lookup(object):
 
     def retranslateUi(self, dialog_lookup):
         dialog_lookup.setWindowTitle(QCoreApplication.translate("dialog_lookup", u"Dialog", None))
-        self.label_seriesImagePreview.setText("")
-        self.label_seriesTextInfo.setText(QCoreApplication.translate("dialog_lookup", u"TextLabel", None))
+        self.label_seriesImagePreview.setText("hereitis")
+        self.label_seriesTextInfo.setText(QCoreApplication.translate("dialog_lookup", u"", None))
     # retranslateUi
 
     def seriesLookup(self):
@@ -150,37 +152,78 @@ class Ui_dialog_lookup(object):
         self.idx = self.listView_searchresults.currentRow()
         print(self.idx)
 
-        try:
+        self.testlist.clear()
 
-            # get art for label
-            self.displayArt = requests.get(self.resp['data'][self.idx]['images']['jpg']['large_image_url']).content
-            # get english title
-            self.displayEnglishTitle = self.resp['data'][self.idx]['title_english']
-            # get type
-            self.displayType = self.resp['data'][self.idx]['type']
-            # get episodes
-            self.displayEpisodes = self.resp['data'][self.idx]['episodes']
-            # get status
-            self.displayStatus = self.resp['data'][self.idx]['status']
-            # get duration
-            self.displayDuration = self.resp['data'][self.idx]['duration']
-            # get genres
-            self.displayGenres = self.resp['data'][self.idx]['genres'][0]['name']
-            # get themes
-            self.displayThemes = self.resp['data'][self.idx]['themes'][0]['name']
-        except Exception as err:
-            print('Error Occured : {err}')
+        testarr = [
+            'large_image_url',
+            'title_english',
+            'type',
+            'episodes',
+            'status',
+            'duration',
+            'genres',
+            'themes'
+        ]
 
-        # set content to labels
-        pix = QPixmap()
-        pix.loadFromData(self.displayArt)
-        self.label_seriesImagePreview.setPixmap(pix)
-        self.label_seriesEnglishTitle.setText(self.displayEnglishTitle)
-        self.label_seriesType.setText(self.displayType)
-        self.label_seriesEpisodes.setText(str(self.displayEpisodes))
-        self.label_seriesStatus.setText(self.displayStatus)
-        self.label_seriesDuration.setText(self.displayDuration)
-        self.label_seriesGenres.setText(self.displayGenres)
-        self.label_seriesThemes.setText(self.displayThemes)
+        for d in testarr:
+            try:
+                if d == 'large_image_url':
+                    print('hey look its a image')
+                    art = requests.get(self.resp['data'][self.idx]['images']['jpg']['large_image_url']).content
+                    #lbl = QLabel()
+                    pix = QPixmap()
+                    pix.loadFromData(art)
+                    self.label_seriesImagePreview.setPixmap(pix)
+                    #lbl.setPixmap(pix)
+                    #itm = QListWidgetItem(d, self.testlist)
+                    #self.testlist.setItemWidget(itm, lbl)
+                elif d == 'genres':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d][0]['name']
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'themes':
+                    itmtxt = self.resp['data'][self.idx][d][0]['name']
+                    itm = QListWidgetItem(itmtxt, self.testlist)                    
+                else:
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+            except:
+                itm = QListWidgetItem("null", self.testlist)
+
+
+        # try:
+
+        #     # get art for label
+        #     self.displayArt = requests.get(self.resp['data'][self.idx]['images']['jpg']['large_image_url']).content
+        #     # get english title
+        #     self.displayEnglishTitle = self.resp['data'][self.idx]['title_english']
+        #     # get type
+        #     self.displayType = self.resp['data'][self.idx]['type']
+        #     # get episodes
+        #     self.displayEpisodes = self.resp['data'][self.idx]['episodes']
+        #     # get status
+        #     self.displayStatus = self.resp['data'][self.idx]['status']
+        #     # get duration
+        #     self.displayDuration = self.resp['data'][self.idx]['duration']
+        #     # get genres
+        #     self.displayGenres = self.resp['data'][self.idx]['genres'][0]['name']
+        #     # get themes
+        #     self.displayThemes = self.resp['data'][self.idx]['themes'][0]['name']
+        # except Exception as err:
+        #     print('null value : {err}')
+
+        # # TODO : Consider replacing the labels with a list widget.
+
+        # # set content to labels
+        # pix = QPixmap()
+        # pix.loadFromData(self.displayArt)
+        # self.label_seriesImagePreview.setPixmap(pix)
+        # self.label_seriesEnglishTitle.setText(self.displayEnglishTitle)
+        # self.label_seriesType.setText(self.displayType)
+        # self.label_seriesEpisodes.setText(str(self.displayEpisodes))
+        # self.label_seriesStatus.setText(self.displayStatus)
+        # self.label_seriesDuration.setText(self.displayDuration)
+        # self.label_seriesGenres.setText(self.displayGenres)
+        # self.label_seriesThemes.setText(self.displayThemes)
 
 
