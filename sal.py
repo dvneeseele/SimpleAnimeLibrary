@@ -6,6 +6,7 @@
 from sal_ui import salUI
 from jikan_dialog import jikanData
 from jikan_lookup import Ui_dialog_lookup
+from seriesDialog import seriesDlg
 import os
 import sys
 import sqlite3
@@ -133,7 +134,15 @@ class SAL_app(salUI):
         tableAction = self.tableMenu.exec_(self.watchListTable.mapToGlobal(event))
 
         if tableAction == addSeries:
-            self.seriesDialog()
+        # self.seriesLookup = Ui_dialog_lookup()
+        # self.lookupDialog = QDialog()
+        # self.seriesLookup.setupUi(self.lookupDialog)
+        # self.lookupDialog.show()
+            self.seriesInfo = seriesDlg()
+            self.dlg = QDialog()
+            self.seriesInfo.setupUi(self.dlg)
+            self.dlg.show()
+            #self.seriesDialog()
         if tableAction == editSeries:
             self.seriesEditDialog()
         if tableAction == deleteSeries:
