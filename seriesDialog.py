@@ -11,6 +11,7 @@
 from PyQt5.QtCore import *  # type: ignore
 from PyQt5.QtGui import *  # type: ignore
 from PyQt5.QtWidgets import *  # type: ignore
+from jikan_lookup import Ui_dialog_lookup
 
 class seriesDlg(object):
     def setupUi(self, Dialog):
@@ -32,6 +33,7 @@ class seriesDlg(object):
 
         self.seriesLookupBtn = QPushButton(self.leftFrame)
         self.seriesLookupBtn.setObjectName(u"seriesLookupBtn")
+        self.seriesLookupBtn.clicked.connect(self.fetchInfo)
 
         self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.seriesLookupBtn)
 
@@ -160,4 +162,13 @@ class seriesDlg(object):
         self.seriesLangCbox.setItemText(1, QCoreApplication.translate("Dialog", u"DUB", None))
 
     # retranslateUi
+
+
+    def fetchInfo(self):
+        print('called')
+        self.seriesLookup = Ui_dialog_lookup()
+        self.lookupDialog = QDialog()
+        self.seriesLookup.setupUi(self.lookupDialog)
+        self.lookupDialog.show()
+
 
