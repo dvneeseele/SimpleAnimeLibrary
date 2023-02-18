@@ -21,6 +21,7 @@ class Ui_dialog_lookup(object):
         if not dialog_lookup.objectName():
             dialog_lookup.setObjectName(u"dialog_lookup")
         dialog_lookup.resize(1053, 694)
+        self.dialog = dialog_lookup
         self.formLayout = QFormLayout(dialog_lookup)
         self.formLayout.setObjectName(u"formLayout")
         self.frame_search = QFrame(dialog_lookup)
@@ -105,8 +106,10 @@ class Ui_dialog_lookup(object):
 
 
         self.retranslateUi(dialog_lookup)
-        self.dialog_lookup_buttonBox.accepted.connect(dialog_lookup.accept)
+        self.dialog_lookup_buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.testfn)
+        #self.dialog_lookup_buttonBox.accepted.connect(dialog_lookup.accept)
         self.dialog_lookup_buttonBox.rejected.connect(dialog_lookup.reject)
+
 
         QMetaObject.connectSlotsByName(dialog_lookup)
 
@@ -118,6 +121,10 @@ class Ui_dialog_lookup(object):
         self.label_seriesImagePreview.setText("hereitis")
         self.label_seriesTextInfo.setText(QCoreApplication.translate("dialog_lookup", u"", None))
     # retranslateUi
+
+    def testfn(self):
+        print('testfn')
+        self.dialog.accept()
 
     def seriesLookup(self):
         # jikan api v4

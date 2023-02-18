@@ -143,6 +143,8 @@ class seriesDlg(object):
         self.buttonBox.accepted.connect(Dialog.accept)
         self.buttonBox.rejected.connect(Dialog.reject)
 
+        self.buttonBox.accepted.connect(self.finish)
+
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
 
@@ -172,3 +174,5 @@ class seriesDlg(object):
         self.lookupDialog.show()
 
 
+    def finish(self):
+        pass
