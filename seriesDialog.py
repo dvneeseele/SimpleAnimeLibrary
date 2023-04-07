@@ -18,6 +18,7 @@ class seriesDlg(object):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(1026, 712)
+        self.seriesLookup = Ui_dialog_lookup()
         self.gridLayout_2 = QGridLayout(Dialog)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.leftFrame = QFrame(Dialog)
@@ -168,10 +169,39 @@ class seriesDlg(object):
 
     def fetchInfo(self):
         print('called')
-        self.seriesLookup = Ui_dialog_lookup()
+        # self.seriesLookup = Ui_dialog_lookup()
         self.lookupDialog = QDialog()
         self.seriesLookup.setupUi(self.lookupDialog)
-        self.lookupDialog.show()
+        # self.lookupDialog.show()
+
+        
+        # https://stackoverflow.com/questions/19462112/pyqt-wait-until-widget-closes
+        # https://doc.qt.io/qt-5/qdialog.html#exec
+        self.lookupDialog.exec()
+        self.seriesLookup.getSeriesInfo()
+        self.autofillJikanData()
+        # if self.seriesLookup == QDialog.accepted:
+        #     self.seriesArtLabel.setPixmap(self.seriesLookup.getArt())
+        # else:
+        #     print("Not Accepted")
+
+    
+    def autofillJikanData(self):
+        d = self.seriesLookup.getSeriesInfo()
+        a = self.seriesLookup.getArt()
+        print(a)
+        print(d)
+
+        self.seriesArtLabel.setPixmap(a)
+        self.seriesTitleLe.setText(d[0])
+        self.seriesTypeLe.setText(d[1])
+        self.seriesGenresLe.setText(d[2])
+
+        
+
+
+    def getUserSubmission(self):
+        self.seriesLookup.getSeriesInfo()
 
 
     def finish(self):

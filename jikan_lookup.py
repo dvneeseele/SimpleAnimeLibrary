@@ -13,7 +13,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QVBoxLayout, QLabel, QDialogButtonBox, QPushButton, QListWidget, QListWidgetItem
 import requests
 from requests.exceptions import HTTPError
-#import json
+import json
 
 
 class Ui_dialog_lookup(object):
@@ -35,7 +35,6 @@ class Ui_dialog_lookup(object):
         #self.lineEdit.textChanged.connect(self.seriesLookup)
 
         self.horizontalLayout.addWidget(self.lineEdit)
-
 
         self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.frame_search)
 
@@ -70,21 +69,6 @@ class Ui_dialog_lookup(object):
 
         self.verticalLayout.addWidget(self.label_seriesTextInfo)
 
-        # self.label_seriesEnglishTitle = QLabel()
-        # self.label_seriesType = QLabel()
-        # self.label_seriesEpisodes = QLabel()
-        # self.label_seriesStatus = QLabel()
-        # self.label_seriesDuration = QLabel()
-        # self.label_seriesGenres = QLabel()
-        # self.label_seriesThemes = QLabel()
-
-        # self.verticalLayout.addWidget(self.label_seriesEnglishTitle)
-        # self.verticalLayout.addWidget(self.label_seriesType)
-        # self.verticalLayout.addWidget(self.label_seriesEpisodes)
-        # self.verticalLayout.addWidget(self.label_seriesStatus)
-        # self.verticalLayout.addWidget(self.label_seriesDuration)
-        # self.verticalLayout.addWidget(self.label_seriesGenres)
-        # self.verticalLayout.addWidget(self.label_seriesThemes)
 
         self.testlist = QListWidget()
         self.verticalLayout.addWidget(self.testlist)
@@ -106,13 +90,27 @@ class Ui_dialog_lookup(object):
 
 
         self.retranslateUi(dialog_lookup)
-        self.dialog_lookup_buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.testfn)
-        #self.dialog_lookup_buttonBox.accepted.connect(dialog_lookup.accept)
+        # self.dialog_lookup_buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.testSubmit)
+        self.dialog_lookup_buttonBox.accepted.connect(dialog_lookup.accept)
+        #self.dialog_lookup_buttonBox.accepted.connect(self.commit)
         self.dialog_lookup_buttonBox.rejected.connect(dialog_lookup.reject)
 
 
         QMetaObject.connectSlotsByName(dialog_lookup)
 
+        # self.selectedResults = {
+        #     'large_image_url' : None,
+        #     'title_english' : None,
+        #     'type' : None,
+        #     'episodes' : None,
+        #     'status' : None,
+        #     'duration' : None,
+        #     'genres' : None,
+        #     'themes' : None
+        # }
+
+
+        #self.dialog.exec()
 
     # setupUi
 
@@ -122,8 +120,111 @@ class Ui_dialog_lookup(object):
         self.label_seriesTextInfo.setText(QCoreApplication.translate("dialog_lookup", u"", None))
     # retranslateUi
 
-    def testfn(self):
+
+
+    def getArt(self):
+        print("getting art")
+        return self.label_seriesImagePreview.pixmap()
+
+
+    def getListResultItems(self):
+        self.allItems = []
+
+        for x in range(self.testlist.count()):
+            self.allItems.append(self.testlist.item(x).text())
+        
+        print("List Items", self.allItems)
+        return self.allItems
+
+
+    def testSubmit(self):
+        print("This shit was called")
+        #print(self.listView_searchresults.items())
+        # print(self.label_seriesImagePreview.pixmap())
+        # for i in range(self.listView_searchresults.count()):
+        #     print(self.listView_searchresults.item(i).text())
+        #     self.selectedResults.append(self.listView_searchresults.item(i).text())
+
+        # t = range(len(self.selectedResults.keys()))
+        # print(t)
+        # p = range(self.testlist.count())
+        # print(p)
+
+        results = self.getListResultItems()
+
+
+
+        # for t in range(len(self.selectedResults.keys())):
+        #     print(t)
+        #     print(self.listView_searchresults.item(t))
+
+        # for i in range(len(self.selectedResults.keys())):
+        #     k = list(self.selectedResults.keys())[i]
+        #     print(k)
+        #     print(i-1)
+        #     print(self.testlist.item(i-1))
+            # self.selectedResults[k] = self.listView_searchresults.item(i).text()
+
+
+
+
+
+
+
+        # print("Selected Results Keys : ", self.selectedResults.keys())
+        # print("Length : ", len(self.selectedResults.keys()))
+        # print(results)
+        # print(len(results))
+
+        # i = 0
+        # while i < len(self.selectedResults.keys()):
+        #     print("Loop Iteration :", i)
+        #     k = list(self.selectedResults.keys())[i]
+        #     if i == 0:
+        #         print("art here")
+
+        #         #print(self.testlist.itemAt(i))
+        #         self.selectedResults[k] = self.label_seriesImagePreview.pixmap()
+        #         i = i + 1
+        #     else:
+        #         #print(self.testlist.item(i))
+        #         #print(self.allItems[i])
+        #         #self.selectedResults[k] = self.testlist.item(i).text()
+        #         self.selectedResults[k] = results[i-1]
+        #         print(self.selectedResults.values())
+        #         i = i + 1
+
+        # print(self.selectedResults)
+
+        
+
+
+
+        print("Range :", range(len(list(self.selectedResults.keys()))))
+        
+        for i in range(len(self.selectedResults.keys())):
+            print(i)
+            k = list(self.selectedResults.keys())[i]
+            print("Key for Index :", k)
+            self.selectedResults[k] = results[i]
+            print("Final :", json.dumps(self.selectedResults, indent=4))
+
+        return self.selectedResults
+
+
+
+        # print(self.selectedResults)
+        #return self.selectedResults
+
+
+
+    def getSeriesInfo(self):
         print('testfn')
+        # array
+        # list item text to array items
+        # return array
+
+        return self.getListResultItems()
         self.dialog.accept()
 
     def seriesLookup(self):
