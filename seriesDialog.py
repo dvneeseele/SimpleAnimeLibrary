@@ -168,29 +168,19 @@ class seriesDlg(object):
 
 
     def fetchInfo(self):
-        print('called')
-        # self.seriesLookup = Ui_dialog_lookup()
         self.lookupDialog = QDialog()
         self.seriesLookup.setupUi(self.lookupDialog)
         # self.lookupDialog.show()
-
         
         # https://stackoverflow.com/questions/19462112/pyqt-wait-until-widget-closes
         # https://doc.qt.io/qt-5/qdialog.html#exec
         self.lookupDialog.exec()
-        self.seriesLookup.getSeriesInfo()
         self.autofillJikanData()
-        # if self.seriesLookup == QDialog.accepted:
-        #     self.seriesArtLabel.setPixmap(self.seriesLookup.getArt())
-        # else:
-        #     print("Not Accepted")
 
     
     def autofillJikanData(self):
         d = self.seriesLookup.getSeriesInfo()
         a = self.seriesLookup.getArt()
-        print(a)
-        print(d)
 
         self.seriesArtLabel.setPixmap(a)
         self.seriesTitleLe.setText(d[0])

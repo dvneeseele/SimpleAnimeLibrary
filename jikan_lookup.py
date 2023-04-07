@@ -133,99 +133,27 @@ class Ui_dialog_lookup(object):
         for x in range(self.testlist.count()):
             self.allItems.append(self.testlist.item(x).text())
         
-        print("List Items", self.allItems)
         return self.allItems
 
 
     def testSubmit(self):
-        print("This shit was called")
-        #print(self.listView_searchresults.items())
-        # print(self.label_seriesImagePreview.pixmap())
-        # for i in range(self.listView_searchresults.count()):
-        #     print(self.listView_searchresults.item(i).text())
-        #     self.selectedResults.append(self.listView_searchresults.item(i).text())
-
-        # t = range(len(self.selectedResults.keys()))
-        # print(t)
-        # p = range(self.testlist.count())
-        # print(p)
 
         results = self.getListResultItems()
 
-
-
-        # for t in range(len(self.selectedResults.keys())):
-        #     print(t)
-        #     print(self.listView_searchresults.item(t))
-
-        # for i in range(len(self.selectedResults.keys())):
-        #     k = list(self.selectedResults.keys())[i]
-        #     print(k)
-        #     print(i-1)
-        #     print(self.testlist.item(i-1))
-            # self.selectedResults[k] = self.listView_searchresults.item(i).text()
-
-
-
-
-
-
-
-        # print("Selected Results Keys : ", self.selectedResults.keys())
-        # print("Length : ", len(self.selectedResults.keys()))
-        # print(results)
-        # print(len(results))
-
-        # i = 0
-        # while i < len(self.selectedResults.keys()):
-        #     print("Loop Iteration :", i)
-        #     k = list(self.selectedResults.keys())[i]
-        #     if i == 0:
-        #         print("art here")
-
-        #         #print(self.testlist.itemAt(i))
-        #         self.selectedResults[k] = self.label_seriesImagePreview.pixmap()
-        #         i = i + 1
-        #     else:
-        #         #print(self.testlist.item(i))
-        #         #print(self.allItems[i])
-        #         #self.selectedResults[k] = self.testlist.item(i).text()
-        #         self.selectedResults[k] = results[i-1]
-        #         print(self.selectedResults.values())
-        #         i = i + 1
-
-        # print(self.selectedResults)
-
-        
-
-
-
-        print("Range :", range(len(list(self.selectedResults.keys()))))
         
         for i in range(len(self.selectedResults.keys())):
-            print(i)
             k = list(self.selectedResults.keys())[i]
-            print("Key for Index :", k)
             self.selectedResults[k] = results[i]
-            print("Final :", json.dumps(self.selectedResults, indent=4))
+            # print("Final :", json.dumps(self.selectedResults, indent=4))
 
         return self.selectedResults
 
 
 
-        # print(self.selectedResults)
-        #return self.selectedResults
-
-
-
     def getSeriesInfo(self):
-        print('testfn')
-        # array
-        # list item text to array items
-        # return array
-
         return self.getListResultItems()
         self.dialog.accept()
+
 
     def seriesLookup(self):
         # jikan api v4
@@ -260,7 +188,6 @@ class Ui_dialog_lookup(object):
 
     def itemChanged(self):
         self.idx = self.listView_searchresults.currentRow()
-        print(self.idx)
 
         self.testlist.clear()
 
@@ -299,41 +226,5 @@ class Ui_dialog_lookup(object):
                     itm = QListWidgetItem(itmtxt, self.testlist)
             except:
                 itm = QListWidgetItem("null", self.testlist)
-
-
-        # try:
-
-        #     # get art for label
-        #     self.displayArt = requests.get(self.resp['data'][self.idx]['images']['jpg']['large_image_url']).content
-        #     # get english title
-        #     self.displayEnglishTitle = self.resp['data'][self.idx]['title_english']
-        #     # get type
-        #     self.displayType = self.resp['data'][self.idx]['type']
-        #     # get episodes
-        #     self.displayEpisodes = self.resp['data'][self.idx]['episodes']
-        #     # get status
-        #     self.displayStatus = self.resp['data'][self.idx]['status']
-        #     # get duration
-        #     self.displayDuration = self.resp['data'][self.idx]['duration']
-        #     # get genres
-        #     self.displayGenres = self.resp['data'][self.idx]['genres'][0]['name']
-        #     # get themes
-        #     self.displayThemes = self.resp['data'][self.idx]['themes'][0]['name']
-        # except Exception as err:
-        #     print('null value : {err}')
-
-        # # TODO : Consider replacing the labels with a list widget.
-
-        # # set content to labels
-        # pix = QPixmap()
-        # pix.loadFromData(self.displayArt)
-        # self.label_seriesImagePreview.setPixmap(pix)
-        # self.label_seriesEnglishTitle.setText(self.displayEnglishTitle)
-        # self.label_seriesType.setText(self.displayType)
-        # self.label_seriesEpisodes.setText(str(self.displayEpisodes))
-        # self.label_seriesStatus.setText(self.displayStatus)
-        # self.label_seriesDuration.setText(self.displayDuration)
-        # self.label_seriesGenres.setText(self.displayGenres)
-        # self.label_seriesThemes.setText(self.displayThemes)
 
 
