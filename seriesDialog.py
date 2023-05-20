@@ -12,12 +12,15 @@ from PyQt5.QtCore import *  # type: ignore
 from PyQt5.QtGui import *  # type: ignore
 from PyQt5.QtWidgets import *  # type: ignore
 from jikan_lookup import Ui_dialog_lookup
+from dbHandler import dbInfo
+import sqlite3
 
 class seriesDlg(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(1026, 712)
+        self.dialog = Dialog
         self.seriesLookup = Ui_dialog_lookup()
         self.gridLayout_2 = QGridLayout(Dialog)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -141,10 +144,11 @@ class seriesDlg(object):
 
 
         self.retranslateUi(Dialog)
-        self.buttonBox.accepted.connect(Dialog.accept)
+        # self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.entrySubmit)
+        # self.buttonBox.accepted.connect(Dialog.accept)
+        self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.getFinalResults)
         self.buttonBox.rejected.connect(Dialog.reject)
 
-        self.buttonBox.accepted.connect(self.finish)
 
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
@@ -187,12 +191,146 @@ class seriesDlg(object):
         self.seriesTypeLe.setText(d[1])
         self.seriesGenresLe.setText(d[2])
 
-        
+
 
 
     def getUserSubmission(self):
         self.seriesLookup.getSeriesInfo()
 
 
-    def finish(self):
-        pass
+    def getFinalResults(self):
+        final_results = []
+        
+        try:
+            final_results.append(self.seriesArtLabel.pixmap())
+            final_results.append(self.seriesTitleLe.text())
+            final_results.append(self.seriesEnglishTitleLe.text())
+            final_results.append(self.seriesLangCbox.currentText())
+            final_results.append(self.seriesStartDateLe.text())
+            final_results.append(self.seriesFinishDateLe.text())
+            final_results.append(self.seriesTypeLe.text())
+            final_results.append(self.seriesGenresLe.text())
+            final_results.append(self.seriesThemesLe.text())
+            final_results.append(self.seriesThemesLe.text())
+        except:
+            final_results.append('')
+
+
+
+        print(final_results)
+
+        dbInfo().entrySubmit(final_results)
+        self.dialog.accept()
+        #return final_results
+        
+
+    # def entrySubmit(self, seriesdata):
+
+    #         if seriesdata:
+
+    #             # art
+    #             # title
+    #             # english title
+    #             # sub/dub - manually entered.
+    #             # start date - manually entered.
+    #             # end date - manually entered.
+    #             # type
+    #             # genres
+    #             # themes
+
+    #             seriesArt = seriesdata[0]
+    #             seriesTitle = seriesdata[1]
+    #             seriesEnglishTitle = seriesdata[2]
+    #             seriesFormat = seriesdata[3]
+    #             seriesStartDate = seriesdata[4]
+    #             seriesFinishDate = seriesdata[5]
+    #             seriesType = seriesdata[6]
+    #             seriesGeneres = seriesdata[7]
+    #             seriesThemes = seriesdata[8]
+
+
+
+    #             # get lineedit texts
+    #             # get the art image
+    #             # self.title = self.seriesTitle_le.text()
+    #             # self.englishtitle = self.seriesEnglishTitle_le.text()
+
+
+    #             # self.language = self.seriesFormat_cb.currentText()
+
+    #             # self.start = self.startDate_le.text()
+    #             # self.fin = self.completionDate_le.text()
+    #             # self.type = self.seriesType_le.text()
+
+    #             # execute sql insert
+
+    #             conn = sqlite3.connect('saldb.sqlite')  
+
+    #             cursor = conn.cursor()
+
+
+
+    #             if seriesArt.pixmap() != None:
+
+    #                 pix = self.artLabel.pixmap()
+    #                 b_array = QByteArray()
+    #                 buffer = QBuffer(b_array)
+    #                 buffer.open(QIODevice.WriteOnly)
+    #                 pix.save(buffer, "JPG")
+    #                 blob = b_array.data()
+
+
+    #             else:
+
+    #                 with open('icons/saldb_darkred.png', 'rb') as file:
+    #                     blob = file.read()
+    #                 file.close()
+
+                
+                
+    #             # info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
+    #             info_tuple = (blob, seriesTitle, seriesEnglishTitle, seriesFormat, seriesStartDate, seriesFinishDate, seriesType, seriesGeneres, seriesThemes)
+
+    #             # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+    #             cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type, Series_Genres, Series_Themes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", info_tuple)
+
+
+    #             conn.commit()
+
+    #             conn.close()
+
+
+
+    #             rows = self.watchListTable.rowCount()
+    #             self.watchListTable.setRowCount(rows + 1)
+
+    #             col = 0
+
+
+    #             for item in range(len(info_tuple)):
+    #                 if col == 0:
+    #                     label = QLabel()
+    #                     label.setScaledContents(True)
+    #                     pixmap = QPixmap()
+    #                     pixmap.loadFromData(info_tuple[item])
+    #                     #pixmap.scaled(50, 3000, Qt.IgnoreAspectRatio, Qt.FastTransformation)
+    #                     label.setPixmap(pixmap.scaled(75, 100, Qt.KeepAspectRatio, Qt.FastTransformation))
+    #                     self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
+    #                 else:
+    #                     self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
+    #                 col += 1
+
+    #             self.series_dialog.close()
+
+
+    #         else:
+    #             print("Missing Title Entry")
+    #             # msg_nullTitle = QMessageBox(self.mainWindow)
+    #             # msg_nullTitle.setText("Title can not be blank")
+    #             # msg_nullTitle.setWindowTitle("Missing Entry Title")
+
+    #             # msg_nullTitle.show()
+
+    #         self.dialog.accept()
+        
+        

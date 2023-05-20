@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QFrame, QFormLayout, QHBoxLayout, QLineEdit, QVBoxLa
 import requests
 from requests.exceptions import HTTPError
 import json
-
+from dbHandler import dbInfo
 
 class Ui_dialog_lookup(object):
     def setupUi(self, dialog_lookup):
@@ -71,6 +71,7 @@ class Ui_dialog_lookup(object):
 
 
         self.testlist = QListWidget()
+        self.testlist.setUniformItemSizes(False)
         self.verticalLayout.addWidget(self.testlist)
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.frame_seriesInfoLabels)
@@ -151,6 +152,7 @@ class Ui_dialog_lookup(object):
 
 
     def getSeriesInfo(self):
+        # dbInfo().entrySubmit(self.getListResultItems())
         return self.getListResultItems()
         self.dialog.accept()
 
@@ -191,9 +193,28 @@ class Ui_dialog_lookup(object):
 
         self.testlist.clear()
 
-        testarr = [
+        # testarr = [
+        #     'large_image_url',
+        #     'title_english',
+        #     'type',
+        #     'episodes',
+        #     'status',
+        #     'duration',
+        #     'genres',
+        #     'themes'
+        # ]
+
+        jikanSeriesKeys = [
             'large_image_url',
             'title_english',
+            'title_japanese',
+            'aired',
+            'synopsis',
+            'background',
+            'year',
+            'producers',
+            'licensors',
+            'studios',
             'type',
             'episodes',
             'status',
@@ -202,7 +223,8 @@ class Ui_dialog_lookup(object):
             'themes'
         ]
 
-        for d in testarr:
+# maybe append each item to a dictionary? that way I don't have to rely on grabbing text directly from qlistwidgetitem, which might have other separation chars like colons or commas.
+        for d in jikanSeriesKeys:
             try:
                 if d == 'large_image_url':
                     print('hey look its a image')
@@ -214,9 +236,69 @@ class Ui_dialog_lookup(object):
                     #lbl.setPixmap(pix)
                     #itm = QListWidgetItem(d, self.testlist)
                     #self.testlist.setItemWidget(itm, lbl)
+                elif d == 'title_english':
+                    itmtxt = self.resp['data'][self.idx][d]
+                    print("English Title :", itmtxt)
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'title_japanese':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'aired':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]['string']
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'synopsis':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'background':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'year':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'producers':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'licensors':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'studios':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
                 elif d == 'genres':
                     print("its a", d)
-                    itmtxt = self.resp['data'][self.idx][d][0]['name']
+                    l = self.resp['data'][self.idx][d]
+                    print("l :", l)
+                    total = len(l)
+                    genresResults = ''
+                    for i in range(total):
+                        itmtxt = self.resp['data'][self.idx][d][i]['name']
+                        genresResults = genresResults + str(itmtxt) + ', '
+                        print("genres :", itmtxt)
+                    print("genresResults : ", genresResults)
+                    itm = QListWidgetItem(genresResults, self.testlist)
+                elif d == 'type':
+                    itmtxt = self.resp['data'][self.idx][d]
+                    print("Series Type :", itmtxt)
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'episodes':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'status':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
+                    itm = QListWidgetItem(itmtxt, self.testlist)
+                elif d == 'duration':
+                    print("its a", d)
+                    itmtxt = self.resp['data'][self.idx][d]
                     itm = QListWidgetItem(itmtxt, self.testlist)
                 elif d == 'themes':
                     itmtxt = self.resp['data'][self.idx][d][0]['name']
@@ -225,6 +307,6 @@ class Ui_dialog_lookup(object):
                     itmtxt = self.resp['data'][self.idx][d]
                     itm = QListWidgetItem(itmtxt, self.testlist)
             except:
-                itm = QListWidgetItem("null", self.testlist)
+                itm = QListWidgetItem("Not Found", self.testlist)
 
 

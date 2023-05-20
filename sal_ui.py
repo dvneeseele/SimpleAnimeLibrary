@@ -155,10 +155,10 @@ class salUI(object):
         self.watchListTable.setFont(QFont('Arial', 14))
         self.watchListTable.setWordWrap(False)
         #self.watchListTable.setTextAlignment(Qt.AlignCenter)
-        self.watchListTable.setColumnCount(7)
+        self.watchListTable.setColumnCount(9)
         self.watchListTable.setShowGrid(False)
 
-        self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type"])
+        self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type", "Series Genres", "Series Themes"])
         #self.watchListTable.verticalHeader().setDefaultSectionSize(140)
         self.watchListTable.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         #self.watchListTable.horizontalHeader().setDefaultSectionSize(120)

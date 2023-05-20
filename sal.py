@@ -65,14 +65,15 @@ class SAL_app(salUI):
         self.mainWindow = QMainWindow()
         self.mainWindow.setAcceptDrops(True)
         self.setupUI(self.mainWindow)
+        self.seriesLookup = seriesDlg()
 
         # Menubar functions
 
-        self.mb_newAction.triggered.connect(self.seriesDialog)
+        # self.mb_newAction.triggered.connect(self.seriesDialog)
 
         # Toolbar functions
 
-        self.addnewAction.triggered.connect(self.seriesDialog)
+        #self.addnewAction.triggered.connect(self.seriesDialog)
         self.editAction.triggered.connect(self.seriesEditDialog)
         self.deleteAction.triggered.connect(self.deleteSeries)
         self.infoAction.triggered.connect(self.applicationInfo)
@@ -138,11 +139,15 @@ class SAL_app(salUI):
         # self.lookupDialog = QDialog()
         # self.seriesLookup.setupUi(self.lookupDialog)
         # self.lookupDialog.show()
-            self.seriesInfo = seriesDlg()
-            self.dlg = QDialog()
-            self.seriesInfo.setupUi(self.dlg)
-            self.dlg.show()
-            #self.seriesDialog()
+
+            # # self.seriesInfo = seriesDlg()
+            # #self.addseries = self.seriesLookup()
+            # self.dlg = QDialog()
+            # self.seriesLookup.setupUi(self.dlg)
+            # # self.seriesInfo.setupUi(self.dlg)
+            # self.dlg.show()
+            # #self.seriesDialog()
+            self.seriesFetchAll()
         if tableAction == editSeries:
             self.seriesEditDialog()
         if tableAction == deleteSeries:
@@ -494,161 +499,161 @@ class SAL_app(salUI):
 
 
 
-    def seriesDialog(self):
+    # def seriesDialog(self):
 
-        self.series_dialog = QWidget()
-        self.series_dialog.setAcceptDrops(True)
+    #     self.series_dialog = QWidget()
+    #     self.series_dialog.setAcceptDrops(True)
 
-        dialog_layout = QGridLayout()
+    #     dialog_layout = QGridLayout()
 
-        # Labels
-        self.artLabel = seriesArtLabel()
-        #self.artLabel = QLabel()
-        #self.artLabel.setText("Drop Image")
-        #self.artLabel.setAcceptDrops(True)
-        #self.artLabel.setAlignment(Qt.AlignCenter)
+    #     # Labels
+    #     self.artLabel = seriesArtLabel()
+    #     #self.artLabel = QLabel()
+    #     #self.artLabel.setText("Drop Image")
+    #     #self.artLabel.setAcceptDrops(True)
+    #     #self.artLabel.setAlignment(Qt.AlignCenter)
         
 
-        self.seriesTitleLabel = QLabel("Title :")
-        self.seriesEnglishTitleLabel = QLabel("English Title :")
-        self.seriesFormatLabel = QLabel("SUB/DUB :")
-        self.startDateLabel = QLabel("Start Date :")
-        self.completionDateLabel = QLabel("Completion Date :")
-        self.seriesTypeLabel = QLabel("Series Type :")
+    #     self.seriesTitleLabel = QLabel("Title :")
+    #     self.seriesEnglishTitleLabel = QLabel("English Title :")
+    #     self.seriesFormatLabel = QLabel("SUB/DUB :")
+    #     self.startDateLabel = QLabel("Start Date :")
+    #     self.completionDateLabel = QLabel("Completion Date :")
+    #     self.seriesTypeLabel = QLabel("Series Type :")
 
-        # LineEdits
-        self.artLabel_le = QLineEdit()
-        self.seriesTitle_le = QLineEdit()
-        self.seriesEnglishTitle_le = QLineEdit()
-
-
-
-        self.startDate_le = QLineEdit()
-        self.completionDate_le = QLineEdit()
-        self.seriesType_le = QLineEdit()
-
-
-        # Combobox
-        self.seriesFormat_cb = QComboBox()
-        self.seriesFormat_cb.addItem("SUB")
-        self.seriesFormat_cb.addItem("DUB")
-
-
-        # Buttons
-        self.titleArtBtn = QPushButton("Fetch Series Title Art")
-        #self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabel, self.seriesTitle_le.text()))
-        self.titleArtBtn.clicked.connect(lambda: self.seriesFetchAll)
-
-        self.addArtFile = QPushButton("Choose Art File")
-        self.addArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabel))
-
-        self.submitEntryBtn = QPushButton("Submit")
-        self.submitEntryBtn.clicked.connect(self.entrySubmit)
-
-        self.fetchAllInfoBtn = QPushButton("Fetch all Series Info")
-        self.fetchAllInfoBtn.clicked.connect(self.seriesFetchAll)
-
-        self.currentStartDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
-        self.currentStartDateBtn.clicked.connect(self.insertStartCurrentDate)
-
-        self.startDateSelectionBtn = QPushButton("Select Date") # Will be replaced with an icon , no text, tooltip
-        self.startDateSelectionBtn.clicked.connect(self.insertStartDateSelection)
-
-        self.finishCurrentDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
-        self.finishCurrentDateBtn.clicked.connect(self.finishCurrentDate)
-
-        self.finishDateSelectionBtn = QPushButton("Select Date") # Will be replaced with an icon , no text, tooltip
-        self.finishDateSelectionBtn.clicked.connect(self.finishDateSelection)        
+    #     # LineEdits
+    #     self.artLabel_le = QLineEdit()
+    #     self.seriesTitle_le = QLineEdit()
+    #     self.seriesEnglishTitle_le = QLineEdit()
 
 
 
+    #     self.startDate_le = QLineEdit()
+    #     self.completionDate_le = QLineEdit()
+    #     self.seriesType_le = QLineEdit()
 
-        # QFrames
-        self.formButtonsFrame = QFrame()
+
+    #     # Combobox
+    #     self.seriesFormat_cb = QComboBox()
+    #     self.seriesFormat_cb.addItem("SUB")
+    #     self.seriesFormat_cb.addItem("DUB")
+
+
+    #     # Buttons
+    #     self.titleArtBtn = QPushButton("Fetch Series Title Art")
+    #     #self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabel, self.seriesTitle_le.text()))
+    #     self.titleArtBtn.clicked.connect(lambda: self.seriesFetchAll)
+
+    #     self.addArtFile = QPushButton("Choose Art File")
+    #     self.addArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabel))
+
+    #     self.submitEntryBtn = QPushButton("Submit")
+    #     self.submitEntryBtn.clicked.connect(self.entrySubmit)
+
+    #     self.fetchAllInfoBtn = QPushButton("Fetch all Series Info")
+    #     self.fetchAllInfoBtn.clicked.connect(self.seriesFetchAll)
+
+    #     self.currentStartDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
+    #     self.currentStartDateBtn.clicked.connect(self.insertStartCurrentDate)
+
+    #     self.startDateSelectionBtn = QPushButton("Select Date") # Will be replaced with an icon , no text, tooltip
+    #     self.startDateSelectionBtn.clicked.connect(self.insertStartDateSelection)
+
+    #     self.finishCurrentDateBtn = QPushButton("Insert Current Date") # Will be replaced with an icon, no text, tooltip
+    #     self.finishCurrentDateBtn.clicked.connect(self.finishCurrentDate)
+
+    #     self.finishDateSelectionBtn = QPushButton("Select Date") # Will be replaced with an icon , no text, tooltip
+    #     self.finishDateSelectionBtn.clicked.connect(self.finishDateSelection)        
+
+
+
+
+    #     # QFrames
+    #     self.formButtonsFrame = QFrame()
         
-        frameLayout = QHBoxLayout()
-        self.formButtonsFrame.setLayout(frameLayout)
+    #     frameLayout = QHBoxLayout()
+    #     self.formButtonsFrame.setLayout(frameLayout)
 
-        frameLayout.addWidget(self.currentStartDateBtn)
-        frameLayout.addWidget(self.startDateSelectionBtn)
-
-
-
-        self.dateFinBtnsFrame = QFrame()
-        finFrameLayout = QHBoxLayout()
-        self.dateFinBtnsFrame.setLayout(finFrameLayout)
-
-        finFrameLayout.addWidget(self.finishCurrentDateBtn)
-        finFrameLayout.addWidget(self.finishDateSelectionBtn)
+    #     frameLayout.addWidget(self.currentStartDateBtn)
+    #     frameLayout.addWidget(self.startDateSelectionBtn)
 
 
 
-        # drag event sequence functions
+    #     self.dateFinBtnsFrame = QFrame()
+    #     finFrameLayout = QHBoxLayout()
+    #     self.dateFinBtnsFrame.setLayout(finFrameLayout)
 
-        def dragEnterEvent(self, event):
-            if event.mimeData().hasImage:
-                event.accept()
-            else:
-                event.ignore()
-                print('event ignored')
+    #     finFrameLayout.addWidget(self.finishCurrentDateBtn)
+    #     finFrameLayout.addWidget(self.finishDateSelectionBtn)
 
-        def dragMoveEvent(self, event):
-            if event.mimeData().hasImage:
-                event.accept()
-            else:
-                event.ignore()
-                print('event ignored')      
 
-        def dropEvent(self, event):
-            if event.mimeData().hasImage:
-                event.setDropAction(Qt.CopyAction)
-                img_fp = event.mimeData().urls()[0].toLocalFile()
-                print(img_fp)
-                self.set_image(img_fp)
+
+    #     # drag event sequence functions
+
+    #     def dragEnterEvent(self, event):
+    #         if event.mimeData().hasImage:
+    #             event.accept()
+    #         else:
+    #             event.ignore()
+    #             print('event ignored')
+
+    #     def dragMoveEvent(self, event):
+    #         if event.mimeData().hasImage:
+    #             event.accept()
+    #         else:
+    #             event.ignore()
+    #             print('event ignored')      
+
+    #     def dropEvent(self, event):
+    #         if event.mimeData().hasImage:
+    #             event.setDropAction(Qt.CopyAction)
+    #             img_fp = event.mimeData().urls()[0].toLocalFile()
+    #             print(img_fp)
+    #             self.set_image(img_fp)
                 
 
-                event.accept()
-            else:
-                event.ignore()
-                print('drop event ignored')
+    #             event.accept()
+    #         else:
+    #             event.ignore()
+    #             print('drop event ignored')
 
 
-        def setImage(self, file_path):
-            self.artLabel.setPixmap(QPixmap(file_path))
+    #     def setImage(self, file_path):
+    #         self.artLabel.setPixmap(QPixmap(file_path))
 
 
 
         
 
-        # Set Dialog Layout
-        self.series_dialog.setLayout(dialog_layout)
-        # column 1
-        dialog_layout.addWidget(self.artLabel, 1, 1)
-        dialog_layout.addWidget(self.titleArtBtn, 2, 1)
-        dialog_layout.addWidget(self.fetchAllInfoBtn, 3, 1)
-        dialog_layout.addWidget(self.addArtFile, 4, 1)
-        dialog_layout.addWidget(self.submitEntryBtn, 5, 1)
-        # column 2
-        dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
-        dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
-        dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
-        dialog_layout.addWidget(self.startDateLabel, 4, 2)
-        dialog_layout.addWidget(self.completionDateLabel, 6, 2)
-        dialog_layout.addWidget(self.seriesTypeLabel, 8, 2)
-        # column 3
-        dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
-        dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
-        #dialog_layout.addWidget(self.seriesFormat_le, 3, 3)
-        dialog_layout.addWidget(self.seriesFormat_cb, 3, 3)        
-        dialog_layout.addWidget(self.startDate_le, 4, 3)
-        dialog_layout.addWidget(self.formButtonsFrame, 5, 3) #QGroupBox
-        dialog_layout.addWidget(self.completionDate_le, 6, 3)
-        dialog_layout.addWidget(self.dateFinBtnsFrame, 7, 3) #QGroupBox
+    #     # Set Dialog Layout
+    #     self.series_dialog.setLayout(dialog_layout)
+    #     # column 1
+    #     dialog_layout.addWidget(self.artLabel, 1, 1)
+    #     dialog_layout.addWidget(self.titleArtBtn, 2, 1)
+    #     dialog_layout.addWidget(self.fetchAllInfoBtn, 3, 1)
+    #     dialog_layout.addWidget(self.addArtFile, 4, 1)
+    #     dialog_layout.addWidget(self.submitEntryBtn, 5, 1)
+    #     # column 2
+    #     dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
+    #     dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
+    #     dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
+    #     dialog_layout.addWidget(self.startDateLabel, 4, 2)
+    #     dialog_layout.addWidget(self.completionDateLabel, 6, 2)
+    #     dialog_layout.addWidget(self.seriesTypeLabel, 8, 2)
+    #     # column 3
+    #     dialog_layout.addWidget(self.seriesTitle_le, 1, 3)
+    #     dialog_layout.addWidget(self.seriesEnglishTitle_le, 2, 3)
+    #     #dialog_layout.addWidget(self.seriesFormat_le, 3, 3)
+    #     dialog_layout.addWidget(self.seriesFormat_cb, 3, 3)        
+    #     dialog_layout.addWidget(self.startDate_le, 4, 3)
+    #     dialog_layout.addWidget(self.formButtonsFrame, 5, 3) #QGroupBox
+    #     dialog_layout.addWidget(self.completionDate_le, 6, 3)
+    #     dialog_layout.addWidget(self.dateFinBtnsFrame, 7, 3) #QGroupBox
 
-        dialog_layout.addWidget(self.seriesType_le, 8, 3)
+    #     dialog_layout.addWidget(self.seriesType_le, 8, 3)
 
 
-        self.series_dialog.show()
+    #     self.series_dialog.show()
 
 
 
@@ -708,10 +713,18 @@ class SAL_app(salUI):
 
     def seriesFetchAll(self):
         print('called')
-        self.seriesLookup = Ui_dialog_lookup()
+
         self.lookupDialog = QDialog()
         self.seriesLookup.setupUi(self.lookupDialog)
-        self.lookupDialog.show()
+        self.lookupDialog.exec()
+        yep = self.seriesLookup.getFinalResults()
+        print("Final Results", yep)
+
+
+
+
+    def testing(self):
+        yo = self.lookupDialog.getFinalResults()
 
 
 
@@ -721,94 +734,111 @@ class SAL_app(salUI):
 
 
 
+    # def entrySubmit(self, seriesdata):
+
+    #     if seriesdata:
+
+    #         # art
+    #         # title
+    #         # english title
+    #         # sub/dub - manually entered.
+    #         # start date - manually entered.
+    #         # end date - manually entered.
+    #         # type
+    #         # genres
+    #         # themes
+
+    #         seriesArt = seriesdata[0]
+    #         seriesTitle = seriesdata[1]
+    #         seriesEnglishTitle = seriesdata[2]
+    #         seriesFormat = seriesdata[3]
+    #         seriesStartDate = seriesdata[4]
+    #         seriesFinishDate = seriesdata[5]
+    #         seriesType = seriesdata[6]
+    #         seriesGeneres = seriesdata[7]
+    #         seriesThemes = seriesdata[8]
 
 
 
-    def entrySubmit(self):
-
-        if self.seriesTitle_le.text() != '':
-
-                
-
+    #         # get lineedit texts
+    #         # get the art image
+    #         # self.title = self.seriesTitle_le.text()
+    #         # self.englishtitle = self.seriesEnglishTitle_le.text()
 
 
-            # get lineedit texts
-            # get the art image
-            self.title = self.seriesTitle_le.text()
-            self.englishtitle = self.seriesEnglishTitle_le.text()
+    #         # self.language = self.seriesFormat_cb.currentText()
 
+    #         # self.start = self.startDate_le.text()
+    #         # self.fin = self.completionDate_le.text()
+    #         # self.type = self.seriesType_le.text()
 
-            self.language = self.seriesFormat_cb.currentText()
+    #         # execute sql insert
 
-            self.start = self.startDate_le.text()
-            self.fin = self.completionDate_le.text()
-            self.type = self.seriesType_le.text()
+    #         conn = sqlite3.connect('saldb.sqlite')  
 
-            # execute sql insert
-
-            conn = sqlite3.connect('saldb.sqlite')  
-
-            cursor = conn.cursor()
+    #         cursor = conn.cursor()
 
 
 
-            if self.artLabel.pixmap() != None:
+    #         if seriesArt.pixmap() != None:
 
-                pix = self.artLabel.pixmap()
-                b_array = QByteArray()
-                buffer = QBuffer(b_array)
-                buffer.open(QIODevice.WriteOnly)
-                pix.save(buffer, "JPG")
-                blob = b_array.data()
+    #             pix = self.artLabel.pixmap()
+    #             b_array = QByteArray()
+    #             buffer = QBuffer(b_array)
+    #             buffer.open(QIODevice.WriteOnly)
+    #             pix.save(buffer, "JPG")
+    #             blob = b_array.data()
 
 
-            else:
+    #         else:
 
-                with open('icons/saldb_darkred.png', 'rb') as file:
-                    blob = file.read()
-                file.close()
+    #             with open('icons/saldb_darkred.png', 'rb') as file:
+    #                 blob = file.read()
+    #             file.close()
 
             
             
-            info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
+    #         # info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
+    #         info_tuple = (blob, seriesTitle, seriesEnglishTitle, seriesFormat, seriesStartDate, seriesFinishDate, seriesType, seriesGeneres, seriesThemes)
+
+    #         # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+    #         cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type, Series_Genres, Series_Themes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", info_tuple)
 
 
-            cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
+    #         conn.commit()
 
-            conn.commit()
-
-            conn.close()
+    #         conn.close()
 
 
 
-            rows = self.watchListTable.rowCount()
-            self.watchListTable.setRowCount(rows + 1)
+    #         rows = self.watchListTable.rowCount()
+    #         self.watchListTable.setRowCount(rows + 1)
 
-            col = 0
-
-
-            for item in range(len(info_tuple)):
-                if col == 0:
-                    label = QLabel()
-                    label.setScaledContents(True)
-                    pixmap = QPixmap()
-                    pixmap.loadFromData(info_tuple[item])
-                    #pixmap.scaled(50, 3000, Qt.IgnoreAspectRatio, Qt.FastTransformation)
-                    label.setPixmap(pixmap.scaled(75, 100, Qt.KeepAspectRatio, Qt.FastTransformation))
-                    self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
-                else:
-                    self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
-                col += 1
-
-            self.series_dialog.close()
+    #         col = 0
 
 
-        else:
-            msg_nullTitle = QMessageBox(self.mainWindow)
-            msg_nullTitle.setText("Title can not be blank")
-            msg_nullTitle.setWindowTitle("Missing Entry Title")
+    #         for item in range(len(info_tuple)):
+    #             if col == 0:
+    #                 label = QLabel()
+    #                 label.setScaledContents(True)
+    #                 pixmap = QPixmap()
+    #                 pixmap.loadFromData(info_tuple[item])
+    #                 #pixmap.scaled(50, 3000, Qt.IgnoreAspectRatio, Qt.FastTransformation)
+    #                 label.setPixmap(pixmap.scaled(75, 100, Qt.KeepAspectRatio, Qt.FastTransformation))
+    #                 self.watchListTable.setCellWidget(self.watchListTable.rowCount()-1, col, label)
+    #             else:
+    #                 self.watchListTable.setItem(self.watchListTable.rowCount()-1, col, QTableWidgetItem(info_tuple[item]))
+    #             col += 1
 
-            msg_nullTitle.show()
+    #         self.series_dialog.close()
+
+
+    #     else:
+    #         msg_nullTitle = QMessageBox(self.mainWindow)
+    #         msg_nullTitle.setText("Title can not be blank")
+    #         msg_nullTitle.setWindowTitle("Missing Entry Title")
+
+    #         msg_nullTitle.show()
 
 
 
