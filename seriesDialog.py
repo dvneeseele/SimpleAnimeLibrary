@@ -19,8 +19,7 @@ class seriesDlg(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(1026, 712)
-        self.dialog = Dialog
+        Dialog.resize(1582, 899)
         self.seriesLookup = Ui_dialog_lookup()
         self.gridLayout_2 = QGridLayout(Dialog)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -41,6 +40,11 @@ class seriesDlg(object):
 
         self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.seriesLookupBtn)
 
+        self.chooseArtBtn = QPushButton(self.leftFrame)
+        self.chooseArtBtn.setObjectName(u"chooseArtBtn")
+
+        self.formLayout_2.setWidget(2, QFormLayout.LabelRole, self.chooseArtBtn)
+
 
         self.gridLayout_2.addWidget(self.leftFrame, 0, 0, 1, 1)
 
@@ -50,80 +54,110 @@ class seriesDlg(object):
         self.rightFrame.setFrameShadow(QFrame.Raised)
         self.gridLayout = QGridLayout(self.rightFrame)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.seriesLanguageFormat = QLabel(self.rightFrame)
-        self.seriesLanguageFormat.setObjectName(u"seriesLanguageFormat")
+        self.seriesLicensorsLabel = QLabel(self.rightFrame)
+        self.seriesLicensorsLabel.setObjectName(u"seriesLicensorsLabel")
 
-        self.gridLayout.addWidget(self.seriesLanguageFormat, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.seriesLicensorsLabel, 10, 0, 1, 1)
 
-        self.englishTitleLabel = QLabel(self.rightFrame)
-        self.englishTitleLabel.setObjectName(u"englishTitleLabel")
+        self.seriesSynopsisLabel = QLabel(self.rightFrame)
+        self.seriesSynopsisLabel.setObjectName(u"seriesSynopsisLabel")
 
-        self.gridLayout.addWidget(self.englishTitleLabel, 1, 0, 1, 1)
-
-        self.seriesStartDate = QLabel(self.rightFrame)
-        self.seriesStartDate.setObjectName(u"seriesStartDate")
-
-        self.gridLayout.addWidget(self.seriesStartDate, 3, 0, 1, 1)
-
-        self.seriesTypeLe = QLineEdit(self.rightFrame)
-        self.seriesTypeLe.setObjectName(u"seriesTypeLe")
-
-        self.gridLayout.addWidget(self.seriesTypeLe, 5, 1, 1, 1)
-
-        self.seriesGenresLe = QLineEdit(self.rightFrame)
-        self.seriesGenresLe.setObjectName(u"seriesGenresLe")
-
-        self.gridLayout.addWidget(self.seriesGenresLe, 6, 1, 1, 1)
-
-        self.seriesFinishDateLe = QLineEdit(self.rightFrame)
-        self.seriesFinishDateLe.setObjectName(u"seriesFinishDateLe")
-
-        self.gridLayout.addWidget(self.seriesFinishDateLe, 4, 1, 1, 1)
-
-        self.titleLabel = QLabel(self.rightFrame)
-        self.titleLabel.setObjectName(u"titleLabel")
-
-        self.gridLayout.addWidget(self.titleLabel, 0, 0, 1, 1)
-
-        self.seriesStartDateLe = QLineEdit(self.rightFrame)
-        self.seriesStartDateLe.setObjectName(u"seriesStartDateLe")
-
-        self.gridLayout.addWidget(self.seriesStartDateLe, 3, 1, 1, 1)
-
-        self.seriesType = QLabel(self.rightFrame)
-        self.seriesType.setObjectName(u"seriesType")
-
-        self.gridLayout.addWidget(self.seriesType, 5, 0, 1, 1)
-
-        self.seriesTitleLe = QLineEdit(self.rightFrame)
-        self.seriesTitleLe.setObjectName(u"seriesTitleLe")
-
-        self.gridLayout.addWidget(self.seriesTitleLe, 0, 1, 1, 1)
-
-        self.seriesGenres = QLabel(self.rightFrame)
-        self.seriesGenres.setObjectName(u"seriesGenres")
-
-        self.gridLayout.addWidget(self.seriesGenres, 6, 0, 1, 1)
-
-        self.seriesFinishDate = QLabel(self.rightFrame)
-        self.seriesFinishDate.setObjectName(u"seriesFinishDate")
-
-        self.gridLayout.addWidget(self.seriesFinishDate, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.seriesSynopsisLabel, 15, 0, 1, 1)
 
         self.seriesEnglishTitleLe = QLineEdit(self.rightFrame)
         self.seriesEnglishTitleLe.setObjectName(u"seriesEnglishTitleLe")
 
         self.gridLayout.addWidget(self.seriesEnglishTitleLe, 1, 1, 1, 1)
 
-        self.seriesThemes = QLabel(self.rightFrame)
-        self.seriesThemes.setObjectName(u"seriesThemes")
+        self.seriesStartDateLe = QLineEdit(self.rightFrame)
+        self.seriesStartDateLe.setObjectName(u"seriesStartDateLe")
 
-        self.gridLayout.addWidget(self.seriesThemes, 7, 0, 1, 1)
+        self.gridLayout.addWidget(self.seriesStartDateLe, 3, 1, 1, 1)
 
-        self.seriesThemesLe = QLineEdit(self.rightFrame)
-        self.seriesThemesLe.setObjectName(u"seriesThemesLe")
+        self.englishTitleLabel = QLabel(self.rightFrame)
+        self.englishTitleLabel.setObjectName(u"englishTitleLabel")
 
-        self.gridLayout.addWidget(self.seriesThemesLe, 7, 1, 1, 1)
+        self.gridLayout.addWidget(self.englishTitleLabel, 1, 0, 1, 1)
+
+        self.seriesEpisodesLe = QLineEdit(self.rightFrame)
+        self.seriesEpisodesLe.setObjectName(u"seriesEpisodesLe")
+
+        self.gridLayout.addWidget(self.seriesEpisodesLe, 6, 1, 1, 1)
+
+        self.seriesStatusLabel = QLabel(self.rightFrame)
+        self.seriesStatusLabel.setObjectName(u"seriesStatusLabel")
+
+        self.gridLayout.addWidget(self.seriesStatusLabel, 7, 0, 1, 1)
+
+        self.seriesGenresLabel = QLabel(self.rightFrame)
+        self.seriesGenresLabel.setObjectName(u"seriesGenresLabel")
+
+        self.gridLayout.addWidget(self.seriesGenresLabel, 12, 0, 1, 1)
+
+        self.seriesYearLabel = QLabel(self.rightFrame)
+        self.seriesYearLabel.setObjectName(u"seriesYearLabel")
+
+        self.gridLayout.addWidget(self.seriesYearLabel, 17, 0, 1, 1)
+
+        self.seriesThemesLabel = QLabel(self.rightFrame)
+        self.seriesThemesLabel.setObjectName(u"seriesThemesLabel")
+
+        self.gridLayout.addWidget(self.seriesThemesLabel, 13, 0, 1, 1)
+
+        self.seriesEpisodesLabel = QLabel(self.rightFrame)
+        self.seriesEpisodesLabel.setObjectName(u"seriesEpisodesLabel")
+
+        self.gridLayout.addWidget(self.seriesEpisodesLabel, 6, 0, 1, 1)
+
+        self.seriesTypeLabel = QLabel(self.rightFrame)
+        self.seriesTypeLabel.setObjectName(u"seriesTypeLabel")
+
+        self.gridLayout.addWidget(self.seriesTypeLabel, 5, 0, 1, 1)
+
+        self.seriesLicensorsLe = QLineEdit(self.rightFrame)
+        self.seriesLicensorsLe.setObjectName(u"seriesLicensorsLe")
+
+        self.gridLayout.addWidget(self.seriesLicensorsLe, 10, 1, 1, 1)
+
+        self.seriesStatusLe = QLineEdit(self.rightFrame)
+        self.seriesStatusLe.setObjectName(u"seriesStatusLe")
+
+        self.gridLayout.addWidget(self.seriesStatusLe, 7, 1, 1, 1)
+
+        self.seriesFinishDateLe = QLineEdit(self.rightFrame)
+        self.seriesFinishDateLe.setObjectName(u"seriesFinishDateLe")
+
+        self.gridLayout.addWidget(self.seriesFinishDateLe, 4, 1, 1, 1)
+
+        self.seriesSynopsisLe = QLineEdit(self.rightFrame)
+        self.seriesSynopsisLe.setObjectName(u"seriesSynopsisLe")
+
+        self.gridLayout.addWidget(self.seriesSynopsisLe, 15, 1, 1, 1)
+
+        self.seriesGenresLe = QLineEdit(self.rightFrame)
+        self.seriesGenresLe.setObjectName(u"seriesGenresLe")
+
+        self.gridLayout.addWidget(self.seriesGenresLe, 12, 1, 1, 1)
+
+        self.seriesAiredLabel = QLabel(self.rightFrame)
+        self.seriesAiredLabel.setObjectName(u"seriesAiredLabel")
+
+        self.gridLayout.addWidget(self.seriesAiredLabel, 8, 0, 1, 1)
+
+        self.seriesLanguageFormat = QLabel(self.rightFrame)
+        self.seriesLanguageFormat.setObjectName(u"seriesLanguageFormat")
+
+        self.gridLayout.addWidget(self.seriesLanguageFormat, 2, 0, 1, 1)
+
+        self.seriesTitleLe = QLineEdit(self.rightFrame)
+        self.seriesTitleLe.setObjectName(u"seriesTitleLe")
+
+        self.gridLayout.addWidget(self.seriesTitleLe, 0, 1, 1, 1)
+
+        self.seriesProducersLabel = QLabel(self.rightFrame)
+        self.seriesProducersLabel.setObjectName(u"seriesProducersLabel")
+
+        self.gridLayout.addWidget(self.seriesProducersLabel, 9, 0, 1, 1)
 
         self.seriesLangCbox = QComboBox(self.rightFrame)
         self.seriesLangCbox.addItem("")
@@ -131,6 +165,76 @@ class seriesDlg(object):
         self.seriesLangCbox.setObjectName(u"seriesLangCbox")
 
         self.gridLayout.addWidget(self.seriesLangCbox, 2, 1, 1, 1)
+
+        self.seriesTypeLe = QLineEdit(self.rightFrame)
+        self.seriesTypeLe.setObjectName(u"seriesTypeLe")
+
+        self.gridLayout.addWidget(self.seriesTypeLe, 5, 1, 1, 1)
+
+        self.seriesBackgroundLe = QLineEdit(self.rightFrame)
+        self.seriesBackgroundLe.setObjectName(u"seriesBackgroundLe")
+
+        self.gridLayout.addWidget(self.seriesBackgroundLe, 16, 1, 1, 1)
+
+        self.seriesStartDateLabel = QLabel(self.rightFrame)
+        self.seriesStartDateLabel.setObjectName(u"seriesStartDateLabel")
+
+        self.gridLayout.addWidget(self.seriesStartDateLabel, 3, 0, 1, 1)
+
+        self.seriesFinishDateLabel = QLabel(self.rightFrame)
+        self.seriesFinishDateLabel.setObjectName(u"seriesFinishDateLabel")
+
+        self.gridLayout.addWidget(self.seriesFinishDateLabel, 4, 0, 1, 1)
+
+        self.seriesYearLe = QLineEdit(self.rightFrame)
+        self.seriesYearLe.setObjectName(u"seriesYearLe")
+
+        self.gridLayout.addWidget(self.seriesYearLe, 17, 1, 1, 1)
+
+        self.seriesProducersLe = QLineEdit(self.rightFrame)
+        self.seriesProducersLe.setObjectName(u"seriesProducersLe")
+
+        self.gridLayout.addWidget(self.seriesProducersLe, 9, 1, 1, 1)
+
+        self.seriesBackgroundLabel = QLabel(self.rightFrame)
+        self.seriesBackgroundLabel.setObjectName(u"seriesBackgroundLabel")
+
+        self.gridLayout.addWidget(self.seriesBackgroundLabel, 16, 0, 1, 1)
+
+        self.seriesThemesLe = QLineEdit(self.rightFrame)
+        self.seriesThemesLe.setObjectName(u"seriesThemesLe")
+
+        self.gridLayout.addWidget(self.seriesThemesLe, 13, 1, 1, 1)
+
+        self.titleLabel = QLabel(self.rightFrame)
+        self.titleLabel.setObjectName(u"titleLabel")
+
+        self.gridLayout.addWidget(self.titleLabel, 0, 0, 1, 1)
+
+        self.seriesAiredLe = QLineEdit(self.rightFrame)
+        self.seriesAiredLe.setObjectName(u"seriesAiredLe")
+
+        self.gridLayout.addWidget(self.seriesAiredLe, 8, 1, 1, 1)
+
+        self.seriesStudioLabel = QLabel(self.rightFrame)
+        self.seriesStudioLabel.setObjectName(u"seriesStudioLabel")
+
+        self.gridLayout.addWidget(self.seriesStudioLabel, 11, 0, 1, 1)
+
+        self.seriesStudiosLe = QLineEdit(self.rightFrame)
+        self.seriesStudiosLe.setObjectName(u"seriesStudiosLe")
+
+        self.gridLayout.addWidget(self.seriesStudiosLe, 11, 1, 1, 1)
+
+        self.seriesDurationLabel = QLabel(self.rightFrame)
+        self.seriesDurationLabel.setObjectName(u"seriesDurationLabel")
+
+        self.gridLayout.addWidget(self.seriesDurationLabel, 14, 0, 1, 1)
+
+        self.seriesDurationLe = QLineEdit(self.rightFrame)
+        self.seriesDurationLe.setObjectName(u"seriesDurationLe")
+
+        self.gridLayout.addWidget(self.seriesDurationLe, 14, 1, 1, 1)
 
 
         self.gridLayout_2.addWidget(self.rightFrame, 0, 1, 1, 1)
@@ -144,11 +248,8 @@ class seriesDlg(object):
 
 
         self.retranslateUi(Dialog)
-        # self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.entrySubmit)
-        # self.buttonBox.accepted.connect(Dialog.accept)
-        self.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.getFinalResults)
+        self.buttonBox.accepted.connect(Dialog.accept)
         self.buttonBox.rejected.connect(Dialog.reject)
-
 
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
@@ -157,18 +258,31 @@ class seriesDlg(object):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.seriesArtLabel.setText(QCoreApplication.translate("Dialog", u"Series Art", None))
         self.seriesLookupBtn.setText(QCoreApplication.translate("Dialog", u"Lookup Series Info", None))
-        self.seriesLanguageFormat.setText(QCoreApplication.translate("Dialog", u"Sub/Dub", None))
+        self.chooseArtBtn.setText(QCoreApplication.translate("Dialog", u"Choose File", None))
+        self.seriesLicensorsLabel.setText(QCoreApplication.translate("Dialog", u"Licensors", None))
+        self.seriesSynopsisLabel.setText(QCoreApplication.translate("Dialog", u"Synopsis", None))
         self.englishTitleLabel.setText(QCoreApplication.translate("Dialog", u"English Title", None))
-        self.seriesStartDate.setText(QCoreApplication.translate("Dialog", u"Start Date", None))
-        self.titleLabel.setText(QCoreApplication.translate("Dialog", u"Title", None))
-        self.seriesType.setText(QCoreApplication.translate("Dialog", u"Type", None))
-        self.seriesGenres.setText(QCoreApplication.translate("Dialog", u"Genres", None))
-        self.seriesFinishDate.setText(QCoreApplication.translate("Dialog", u"Finish Date", None))
-        self.seriesThemes.setText(QCoreApplication.translate("Dialog", u"Themes", None))
+        self.seriesStatusLabel.setText(QCoreApplication.translate("Dialog", u"Status", None))
+        self.seriesGenresLabel.setText(QCoreApplication.translate("Dialog", u"Genres", None))
+        self.seriesYearLabel.setText(QCoreApplication.translate("Dialog", u"Year", None))
+        self.seriesThemesLabel.setText(QCoreApplication.translate("Dialog", u"Themes", None))
+        self.seriesEpisodesLabel.setText(QCoreApplication.translate("Dialog", u"Episodes", None))
+        self.seriesTypeLabel.setText(QCoreApplication.translate("Dialog", u"Type", None))
+        self.seriesAiredLabel.setText(QCoreApplication.translate("Dialog", u"Aired", None))
+        self.seriesLanguageFormat.setText(QCoreApplication.translate("Dialog", u"Sub/Dub *", None))
+        self.seriesProducersLabel.setText(QCoreApplication.translate("Dialog", u"Producers", None))
         self.seriesLangCbox.setItemText(0, QCoreApplication.translate("Dialog", u"SUB", None))
         self.seriesLangCbox.setItemText(1, QCoreApplication.translate("Dialog", u"DUB", None))
 
+        self.seriesStartDateLabel.setText(QCoreApplication.translate("Dialog", u"Start Date *", None))
+        self.seriesFinishDateLabel.setText(QCoreApplication.translate("Dialog", u"Finish Date *", None))
+        self.seriesBackgroundLabel.setText(QCoreApplication.translate("Dialog", u"Background", None))
+        self.titleLabel.setText(QCoreApplication.translate("Dialog", u"Title *", None))
+        self.seriesStudioLabel.setText(QCoreApplication.translate("Dialog", u"Studios", None))
+        self.seriesDurationLabel.setText(QCoreApplication.translate("Dialog", u"Duration", None))
     # retranslateUi
+
+
 
 
     def fetchInfo(self):
@@ -185,6 +299,8 @@ class seriesDlg(object):
     def autofillJikanData(self):
         d = self.seriesLookup.getSeriesInfo()
         a = self.seriesLookup.getArt()
+
+        # add more labels here and fill them.
 
         self.seriesArtLabel.setPixmap(a)
         self.seriesTitleLe.setText(d[0])

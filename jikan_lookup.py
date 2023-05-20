@@ -129,6 +129,11 @@ class Ui_dialog_lookup(object):
 
 
     def getListResultItems(self):
+        # replace this function with just the current index of the list widget and use that index to get the data from self.resp
+        # this might belong in the seriesDialog...
+        # selected_entry = self.listView_searchresults.currentRow()
+        # return self.resp['data'][selected_entry]
+
         self.allItems = []
 
         for x in range(self.testlist.count()):
@@ -191,6 +196,8 @@ class Ui_dialog_lookup(object):
     def itemChanged(self):
         self.idx = self.listView_searchresults.currentRow()
 
+        print("testhere :", self.resp['data'][self.idx])
+
         self.testlist.clear()
 
         # testarr = [
@@ -223,7 +230,8 @@ class Ui_dialog_lookup(object):
             'themes'
         ]
 
-# maybe append each item to a dictionary? that way I don't have to rely on grabbing text directly from qlistwidgetitem, which might have other separation chars like colons or commas.
+        # just take the self.idx from here and pass that json to the db when its time to commit.
+        
         for d in jikanSeriesKeys:
             try:
                 if d == 'large_image_url':
