@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import *  # type: ignore
 from jikan_lookup import Ui_dialog_lookup
 from dbHandler import dbInfo
 import sqlite3
+import json
 
 class seriesDlg(object):
     def setupUi(self, Dialog):
@@ -302,10 +303,39 @@ class seriesDlg(object):
 
         # add more labels here and fill them.
 
-        self.seriesArtLabel.setPixmap(a)
-        self.seriesTitleLe.setText(d[0])
-        self.seriesTypeLe.setText(d[1])
-        self.seriesGenresLe.setText(d[2])
+        # self.seriesArtLabel.setPixmap(a)
+        # self.seriesTitleLe.setText(d[0])
+        # self.seriesTypeLe.setText(d[1])
+        # self.seriesGenresLe.setText(d[2])
+
+        jikanSeriesKeys = [
+            # 'large_image_url',
+            'title_english',
+            'title_japanese',
+            'aired',
+            'synopsis',
+            'background',
+            'year',
+            'producers',
+            'licensors',
+            'studios',
+            'type',
+            'episodes',
+            'status',
+            'duration',
+            'genres',
+            'themes'
+        ]
+
+        c = {}
+        k = d.keys()
+        for x in jikanSeriesKeys:
+            print("Key :", x,"Value :", d[x])
+            c.update({x: d[x]})
+        # t = json.dumps(c, indent=3)
+        # print("FINAL : ", t)
+        print(c['title_english'])
+            
 
 
 

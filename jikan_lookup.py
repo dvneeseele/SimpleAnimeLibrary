@@ -158,7 +158,10 @@ class Ui_dialog_lookup(object):
 
     def getSeriesInfo(self):
         # dbInfo().entrySubmit(self.getListResultItems())
-        return self.getListResultItems()
+        # return self.getListResultItems()
+        
+        selected_entry = self.listView_searchresults.currentRow()
+        return self.resp['data'][selected_entry]
         self.dialog.accept()
 
 
@@ -247,39 +250,39 @@ class Ui_dialog_lookup(object):
                 elif d == 'title_english':
                     itmtxt = self.resp['data'][self.idx][d]
                     print("English Title :", itmtxt)
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Title English: "+itmtxt, self.testlist)
                 elif d == 'title_japanese':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Title Japanese: "+itmtxt, self.testlist)
                 elif d == 'aired':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]['string']
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Aired"+itmtxt, self.testlist)
                 elif d == 'synopsis':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Synopsis: "+itmtxt, self.testlist)
                 elif d == 'background':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Background: "+itmtxt, self.testlist)
                 elif d == 'year':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Year: "+itmtxt, self.testlist)
                 elif d == 'producers':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Producers: "+itmtxt, self.testlist)
                 elif d == 'licensors':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Licensors: "+itmtxt, self.testlist)
                 elif d == 'studios':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Studios"+itmtxt, self.testlist)
                 elif d == 'genres':
                     print("its a", d)
                     l = self.resp['data'][self.idx][d]
@@ -291,26 +294,26 @@ class Ui_dialog_lookup(object):
                         genresResults = genresResults + str(itmtxt) + ', '
                         print("genres :", itmtxt)
                     print("genresResults : ", genresResults)
-                    itm = QListWidgetItem(genresResults, self.testlist)
+                    itm = QListWidgetItem("Genres: "+genresResults, self.testlist)
                 elif d == 'type':
                     itmtxt = self.resp['data'][self.idx][d]
                     print("Series Type :", itmtxt)
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Type: "+itmtxt, self.testlist)
                 elif d == 'episodes':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Episodes"+itmtxt, self.testlist)
                 elif d == 'status':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Status: "+itmtxt, self.testlist)
                 elif d == 'duration':
                     print("its a", d)
                     itmtxt = self.resp['data'][self.idx][d]
-                    itm = QListWidgetItem(itmtxt, self.testlist)
+                    itm = QListWidgetItem("Duration: "+itmtxt, self.testlist)
                 elif d == 'themes':
                     itmtxt = self.resp['data'][self.idx][d][0]['name']
-                    itm = QListWidgetItem(itmtxt, self.testlist)                    
+                    itm = QListWidgetItem("Themes: "+itmtxt, self.testlist)                    
                 else:
                     itmtxt = self.resp['data'][self.idx][d]
                     itm = QListWidgetItem(itmtxt, self.testlist)
