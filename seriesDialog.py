@@ -284,7 +284,18 @@ class seriesDlg(object):
     # retranslateUi
 
 
+    # jikan api json response sometimes returns a value that is a list of objects.
+    # pass the key of the term as a string to this function to get all dict vales in the array with that key.
+    def concatObjectListValues(self, search_key_arr):
+        print("DEGUG object to Search : ", search_key_arr)
+        values_list = []
 
+        for k in search_key_arr:
+            print(k)
+            values_list.append(str(k['name']))
+        
+        values_list_string = ",".join(values_list)
+        return values_list_string
 
     def fetchInfo(self):
         self.lookupDialog = QDialog()
@@ -327,17 +338,62 @@ class seriesDlg(object):
             'themes'
         ]
 
-        c = {}
+
+        # c = {}
         k = d.keys()
+        print("json keys :", k)
         for x in jikanSeriesKeys:
-            print("Key :", x,"Value :", d[x])
-            c.update({x: d[x]})
-        # t = json.dumps(c, indent=3)
-        # print("FINAL : ", t)
-        print(c['title_english'])
+            if x == 'title_english':
+                print("English Title value", d[x])
+                self.seriesEnglishTitleLe.setText(d[x])
+            elif x == 'title_japanese':
+                print("Japanese Title", d[x])
+                self.seriesTitleLe.setText(d[x])
+            elif x == 'aired':
+                print("aired", d[x])
+                print("DEBUG aired : ", d[x]['string'])
+                self.seriesAiredLe.setText(d[x]['string'])
+            elif x == 'synopsis':
+                print("synopsis", d[x])
+                self.seriesSynopsisLe.setText(d[x])
+            elif x == 'background':
+                print("background", d[x])
+                self.seriesBackgroundLe.setText(d[x])
+            elif x == 'year':
+                print("year", d[x])
+                self.seriesYearLe.setText(str(d[x]))
+            elif x == 'producers':
+                print("producers", d[x])
+                producers_string = self.concatObjectListValues(d[x])
+                self.seriesProducersLe.setText(producers_string)            
+            elif x == 'licensors':
+                print("licensors", d[x])
+                licensors_string = self.concatObjectListValues(d[x])
+                self.seriesLicensorsLe.setText(licensors_string)
+            elif x == 'studios':
+                print("studios", d[x])
+                studios_string = self.concatObjectListValues(d[x])
+                self.seriesStudiosLe.setText(studios_string)
+            elif x == 'type':
+                print("type", d[x])
+                self.seriesTypeLe.setText(d[x])
+            elif x == 'episodes':
+                print("episodes", str(d[x]))
+                self.seriesEpisodesLe.setText(str(d[x]))
+            elif x == 'status':
+                print("status", d[x])
+                self.seriesStatusLe.setText(d[x])
+            elif x == 'duration':
+                print("duration", d[x])
+                self.seriesDurationLe.setText(str(d[x]))
+            elif x == 'genres':
+                print("genres", d[x])
+                genres_string = self.concatObjectListValues(d[x])
+                self.seriesGenresLe.setText(genres_string)
+            elif x == 'theme':
+                print("theme", d[x])
+                self.seriesThemesLe.setText(d[x])
             
-
-
 
 
     def getUserSubmission(self):
