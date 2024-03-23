@@ -284,7 +284,7 @@ class seriesDlg(object):
     # retranslateUi
 
 
-    # jikan api json response sometimes returns a value that is a list of objects.
+    # some jikan api json responses return a value that is a list of objects.
     # pass the key of the term as a string to this function to get all dict vales in the array with that key.
     def concatObjectListValues(self, search_key_arr):
         print("DEGUG object to Search : ", search_key_arr)
@@ -309,15 +309,12 @@ class seriesDlg(object):
 
     
     def autofillJikanData(self):
-        d = self.seriesLookup.getSeriesInfo()
-        a = self.seriesLookup.getArt()
+        seriesinfo = self.seriesLookup.getSeriesInfo()
+        art = self.seriesLookup.getArt()
 
-        # add more labels here and fill them.
 
-        # self.seriesArtLabel.setPixmap(a)
-        # self.seriesTitleLe.setText(d[0])
-        # self.seriesTypeLe.setText(d[1])
-        # self.seriesGenresLe.setText(d[2])
+        self.seriesArtLabel.setPixmap(art)
+
 
         jikanSeriesKeys = [
             # 'large_image_url',
@@ -339,60 +336,61 @@ class seriesDlg(object):
         ]
 
 
-        # c = {}
-        k = d.keys()
-        print("json keys :", k)
-        for x in jikanSeriesKeys:
-            if x == 'title_english':
-                print("English Title value", d[x])
-                self.seriesEnglishTitleLe.setText(d[x])
-            elif x == 'title_japanese':
-                print("Japanese Title", d[x])
-                self.seriesTitleLe.setText(d[x])
-            elif x == 'aired':
-                print("aired", d[x])
-                print("DEBUG aired : ", d[x]['string'])
-                self.seriesAiredLe.setText(d[x]['string'])
-            elif x == 'synopsis':
-                print("synopsis", d[x])
-                self.seriesSynopsisLe.setText(d[x])
-            elif x == 'background':
-                print("background", d[x])
-                self.seriesBackgroundLe.setText(d[x])
-            elif x == 'year':
-                print("year", d[x])
-                self.seriesYearLe.setText(str(d[x]))
-            elif x == 'producers':
-                print("producers", d[x])
-                producers_string = self.concatObjectListValues(d[x])
-                self.seriesProducersLe.setText(producers_string)            
-            elif x == 'licensors':
-                print("licensors", d[x])
-                licensors_string = self.concatObjectListValues(d[x])
+        # For testing
+        # k = seriesinfo.keys()
+        # print("json keys :", k)
+
+        for k in jikanSeriesKeys:
+            if k == 'title_english':
+                print("English Title value", seriesinfo[k])
+                self.seriesEnglishTitleLe.setText(seriesinfo[k])
+            elif k == 'title_japanese':
+                print("Japanese Title", seriesinfo[k])
+                self.seriesTitleLe.setText(seriesinfo[k])
+            elif k == 'aired':
+                print("aired", seriesinfo[k])
+                print("DEBUG aired : ", seriesinfo[k]['string'])
+                self.seriesAiredLe.setText(seriesinfo[k]['string'])
+            elif k == 'synopsis':
+                print("synopsis", seriesinfo[k])
+                self.seriesSynopsisLe.setText(seriesinfo[k])
+            elif k == 'background':
+                print("background", seriesinfo[k])
+                self.seriesBackgroundLe.setText(seriesinfo[k])
+            elif k == 'year':
+                print("year", seriesinfo[k])
+                self.seriesYearLe.setText(str(seriesinfo[k]))
+            elif k == 'producers':
+                print("producers", seriesinfo[k])
+                producers_string = self.concatObjectListValues(seriesinfo[k])
+                self.seriesProducersLe.setText(producers_string)
+            elif k == 'licensors':
+                print("licensors", seriesinfo[k])
+                licensors_string = self.concatObjectListValues(seriesinfo[k])
                 self.seriesLicensorsLe.setText(licensors_string)
-            elif x == 'studios':
-                print("studios", d[x])
-                studios_string = self.concatObjectListValues(d[x])
+            elif k == 'studios':
+                print("studios", seriesinfo[k])
+                studios_string = self.concatObjectListValues(seriesinfo[k])
                 self.seriesStudiosLe.setText(studios_string)
-            elif x == 'type':
-                print("type", d[x])
-                self.seriesTypeLe.setText(d[x])
-            elif x == 'episodes':
-                print("episodes", str(d[x]))
-                self.seriesEpisodesLe.setText(str(d[x]))
-            elif x == 'status':
-                print("status", d[x])
-                self.seriesStatusLe.setText(d[x])
-            elif x == 'duration':
-                print("duration", d[x])
-                self.seriesDurationLe.setText(str(d[x]))
-            elif x == 'genres':
-                print("genres", d[x])
-                genres_string = self.concatObjectListValues(d[x])
+            elif k == 'type':
+                print("type", seriesinfo[k])
+                self.seriesTypeLe.setText(seriesinfo[k])
+            elif k == 'episodes':
+                print("episodes", str(seriesinfo[k]))
+                self.seriesEpisodesLe.setText(str(seriesinfo[k]))
+            elif k == 'status':
+                print("status", seriesinfo[k])
+                self.seriesStatusLe.setText(seriesinfo[k])
+            elif k == 'duration':
+                print("duration", seriesinfo[k])
+                self.seriesDurationLe.setText(str(seriesinfo[k]))
+            elif k == 'genres':
+                print("genres", seriesinfo[k])
+                genres_string = self.concatObjectListValues(seriesinfo[k])
                 self.seriesGenresLe.setText(genres_string)
-            elif x == 'theme':
-                print("theme", d[x])
-                self.seriesThemesLe.setText(d[x])
+            elif k == 'theme':
+                print("theme", seriesinfo[k])
+                self.seriesThemesLe.setText(seriesinfo[k])
             
 
 
