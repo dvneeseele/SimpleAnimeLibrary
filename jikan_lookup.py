@@ -33,7 +33,6 @@ class Ui_dialog_lookup(object):
         self.lineEdit = QLineEdit(self.frame_search)
         self.lineEdit.returnPressed.connect(self.seriesLookup)
         self.lineEdit.setObjectName(u"lineEdit")
-        #self.lineEdit.textChanged.connect(self.seriesLookup)
 
         self.horizontalLayout.addWidget(self.lineEdit)
 
@@ -46,7 +45,6 @@ class Ui_dialog_lookup(object):
         self.verticalLayout_2 = QVBoxLayout(self.frame_searchresults)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.listView_searchresults = QListWidget(self.frame_searchresults)
-        #self.listView_searchresults.returnPressed.connect(self.nullSignal)
         self.listView_searchresults.setObjectName(u"listView_searchresults")
         self.listView_searchresults.clicked.connect(self.itemChanged)
 
@@ -103,34 +101,6 @@ class Ui_dialog_lookup(object):
     def getArt(self):
         print("getting art")
         return self.label_seriesImagePreview.pixmap()
-
-
-    def getListResultItems(self):
-        # replace this function with just the current index of the list widget and use that index to get the data from self.resp
-        # this might belong in the seriesDialog...
-        # selected_entry = self.listView_searchresults.currentRow()
-        # return self.resp['data'][selected_entry]
-
-        self.allItems = []
-
-        for x in range(self.testlist.count()):
-            self.allItems.append(self.testlist.item(x).text())
-        
-        return self.allItems
-
-
-    def testSubmit(self):
-
-        results = self.getListResultItems()
-
-        
-        for i in range(len(self.selectedResults.keys())):
-            k = list(self.selectedResults.keys())[i]
-            self.selectedResults[k] = results[i]
-            # print("Final :", json.dumps(self.selectedResults, indent=4))
-
-        return self.selectedResults
-
 
 
     def getSeriesInfo(self):
