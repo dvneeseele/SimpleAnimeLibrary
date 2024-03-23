@@ -31,6 +31,7 @@ class Ui_dialog_lookup(object):
         self.horizontalLayout = QHBoxLayout(self.frame_search)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lineEdit = QLineEdit(self.frame_search)
+        self.lineEdit.returnPressed.connect(self.seriesLookup)
         self.lineEdit.setObjectName(u"lineEdit")
         #self.lineEdit.textChanged.connect(self.seriesLookup)
 
@@ -45,6 +46,7 @@ class Ui_dialog_lookup(object):
         self.verticalLayout_2 = QVBoxLayout(self.frame_searchresults)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.listView_searchresults = QListWidget(self.frame_searchresults)
+        #self.listView_searchresults.returnPressed.connect(self.nullSignal)
         self.listView_searchresults.setObjectName(u"listView_searchresults")
         self.listView_searchresults.clicked.connect(self.itemChanged)
 
@@ -76,42 +78,17 @@ class Ui_dialog_lookup(object):
 
         self.formLayout.setWidget(1, QFormLayout.FieldRole, self.frame_seriesInfoLabels)
 
-        self.dialog_lookup_buttonBox = QDialogButtonBox(dialog_lookup)
-        self.dialog_lookup_buttonBox.setObjectName(u"dialog_lookup_buttonBox")
-        self.dialog_lookup_buttonBox.setOrientation(Qt.Horizontal)
-        self.dialog_lookup_buttonBox.setStandardButtons(QDialogButtonBox.Cancel|QDialogButtonBox.Ok)
 
-        # Separate submit button for api search.
-        self.submitSearch = QPushButton('Submit Search')
-        self.submitSearch.clicked.connect(self.seriesLookup)
+        self.dialog_cancel_button = QPushButton('OK!')
+        self.dialog_cancel_button.setDefault(False)
+        self.dialog_cancel_button.setAutoDefault(False)
+        self.dialog_cancel_button.clicked.connect(self.dialog.accept)
 
-        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.submitSearch)
-        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.dialog_lookup_buttonBox)
-
+        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.dialog_cancel_button)
 
 
         self.retranslateUi(dialog_lookup)
-        # self.dialog_lookup_buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.testSubmit)
-        self.dialog_lookup_buttonBox.accepted.connect(dialog_lookup.accept)
-        #self.dialog_lookup_buttonBox.accepted.connect(self.commit)
-        self.dialog_lookup_buttonBox.rejected.connect(dialog_lookup.reject)
-
-
         QMetaObject.connectSlotsByName(dialog_lookup)
-
-        # self.selectedResults = {
-        #     'large_image_url' : None,
-        #     'title_english' : None,
-        #     'type' : None,
-        #     'episodes' : None,
-        #     'status' : None,
-        #     'duration' : None,
-        #     'genres' : None,
-        #     'themes' : None
-        # }
-
-
-        #self.dialog.exec()
 
     # setupUi
 
@@ -166,6 +143,7 @@ class Ui_dialog_lookup(object):
 
 
     def seriesLookup(self):
+        print("DEGUG - Series Lookup Called")
         # jikan api v4
         # example search (https://api.jikan.moe/v4/anime?q=Naruto&sfw)
         api_base = 'https://api.jikan.moe/v4'
@@ -185,7 +163,7 @@ class Ui_dialog_lookup(object):
         titles_count = self.resp['pagination']['items']['count']
 
         self.listView_searchresults.clear()
-
+        print("DEBUG - Starting list population")
         for i in range(titles_count):
             try:
                 self.listView_searchresults.addItem(self.resp['data'][i]['title'])
@@ -194,7 +172,7 @@ class Ui_dialog_lookup(object):
             except Exception as err:
                 print('Error Occured :, {err}')
                 continue
-
+        print("DEBUG - Function Finished")
 
     def itemChanged(self):
         self.idx = self.listView_searchresults.currentRow()
@@ -202,17 +180,6 @@ class Ui_dialog_lookup(object):
         print("testhere :", self.resp['data'][self.idx])
 
         self.testlist.clear()
-
-        # testarr = [
-        #     'large_image_url',
-        #     'title_english',
-        #     'type',
-        #     'episodes',
-        #     'status',
-        #     'duration',
-        #     'genres',
-        #     'themes'
-        # ]
 
         jikanSeriesKeys = [
             'large_image_url',
