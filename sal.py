@@ -7,6 +7,7 @@ from sal_ui import salUI
 from jikan_dialog import jikanData
 from jikan_lookup import Ui_dialog_lookup
 from seriesDialog import seriesDlg
+from dbHandler import dbInfo
 import os
 import sys
 import sqlite3
@@ -911,14 +912,14 @@ class SAL_app(salUI):
 
 
 
-    def newDB(self):
-        conn = sqlite3.connect('saldb.sqlite')
+    # def newDB(self):
+    #     conn = sqlite3.connect('saldb.sqlite')
 
-        cursor = conn.cursor()
+    #     cursor = conn.cursor()
 
-        createTable = "CREATE TABLE IF NOT EXISTS watchlist(Art BLOB, Title TEXT PRIMARY KEY, English_Title TEXT, Format TEXT, Start_Date TEXT ,Completion_Date TEXT, Series_Type TEXT)"
+    #     createTable = "CREATE TABLE IF NOT EXISTS watchlist(Art BLOB, Title TEXT PRIMARY KEY, English_Title TEXT, Format TEXT, Start_Date TEXT ,Completion_Date TEXT, Series_Type TEXT)"
 
-        cursor.execute(createTable)
+    #     cursor.execute(createTable)
 
 
 
@@ -931,50 +932,85 @@ class SAL_app(salUI):
         
         # pandas vs just for loop over db??
 
-        if os.path.exists('saldb.sqlite'):
-            conn = sqlite3.connect('saldb.sqlite')
-            cursor = conn.cursor()            
+        # if os.path.exists('saldb.sqlite'):
+        #     conn = sqlite3.connect('saldb.sqlite')
+        #     cursor = conn.cursor()            
 
-        else:
-            # qmessagebox to say there was not a 'saldb.sqlite' db found in the directory so a new one will be created.
-            dbFileErrorMsg = QMessageBox.question(self.mainWindow, 'Error - Database Not Found', 'saldb.sqlite db file was not found in the current directory press ok and a new one will be created.', QMessageBox.Ok, QMessageBox.Cancel)
+        # else:
+        #     # qmessagebox to say there was not a 'saldb.sqlite' db found in the directory so a new one will be created.
+        #     dbFileErrorMsg = QMessageBox.question(self.mainWindow, 'Error - Database Not Found', 'saldb.sqlite db file was not found in the current directory press ok and a new one will be created.', QMessageBox.Ok, QMessageBox.Cancel)
 
-            if dbFileErrorMsg == QMessageBox.Ok:
-                self.newDB()
-                conn = sqlite3.connect('saldb.sqlite')
-                cursor = conn.cursor()
-            else:
-                sys.exit()
-
-
-        sqlGetAll = 'SELECT * FROM watchlist'
+        #     if dbFileErrorMsg == QMessageBox.Ok:
+        #         self.newDB()
+        #         conn = sqlite3.connect('saldb.sqlite')
+        #         cursor = conn.cursor()
+        #     else:
+        #         sys.exit()
 
 
+        # sqlGetAll = 'SELECT * FROM watchlist'
+        # res = cursor.execute(sqlGetAll)
+#############################################################
+#############################################################
+
+        tables_results = dbInfo().dbLoadTables()
+        keylist = tables_results.keys()
+        for table in keylist:
+            print(table)
+            res = tables_results[table]
+            print("DEBUG - RESULTS : ", res)
+
+            for row_num, row_data in enumerate(res):
+                self.watchListTable.insertRow(row_num)
+                for column_number, column_data in enumerate(row_data):
+                    item = str(column_data)
+                    if column_number == 0:
+                        self.tableLabel = QLabel()
+                        self.tableLabel.setScaledContents(True)
+                        pixmap = QPixmap()
+                        pixmap.loadFromData(column_data)
+                        self.tableLabel.setPixmap(pixmap.scaled(85, 110, Qt.IgnoreAspectRatio, Qt.FastTransformation))
+
+                        self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+                    else:
+                        self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
+                self.watchListTable.verticalHeader().setDefaultSectionSize(140)
+                self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
 
 
-        res = cursor.execute(sqlGetAll)
-
-        for row_num, row_data in enumerate(res):
-            self.watchListTable.insertRow(row_num)
-            for column_number, column_data in enumerate(row_data):
-                item = str(column_data)
-                if column_number == 0:
-                    self.tableLabel = QLabel()
-                    self.tableLabel.setScaledContents(True)
-                    pixmap = QPixmap()
-                    pixmap.loadFromData(column_data)
-                    self.tableLabel.setPixmap(pixmap.scaled(85, 110, Qt.IgnoreAspectRatio, Qt.FastTransformation))
-
-                    self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
-                else:
-                    self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
-            self.watchListTable.verticalHeader().setDefaultSectionSize(140)
-            self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
 
 
-        conn.close()
 
 
+
+
+
+
+
+
+
+        # for row_num, row_data in enumerate(res):
+        #     self.watchListTable.insertRow(row_num)
+        #     for column_number, column_data in enumerate(row_data):
+        #         item = str(column_data)
+        #         if column_number == 0:
+        #             self.tableLabel = QLabel()
+        #             self.tableLabel.setScaledContents(True)
+        #             pixmap = QPixmap()
+        #             pixmap.loadFromData(column_data)
+        #             self.tableLabel.setPixmap(pixmap.scaled(85, 110, Qt.IgnoreAspectRatio, Qt.FastTransformation))
+
+        #             self.watchListTable.setCellWidget(row_num, column_number, self.tableLabel)
+        #         else:
+        #             self.watchListTable.setItem(row_num, column_number, QTableWidgetItem(column_data))
+        #     self.watchListTable.verticalHeader().setDefaultSectionSize(140)
+        #     self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
+
+
+        # conn.close()
+
+#################################################
+#################################################
 
 
         if os.path.isfile('settings\salsettings.json'):

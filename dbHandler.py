@@ -3,22 +3,108 @@ import os
 import sqlite3
 import json
 from PyQt5.QtCore import QByteArray, QBuffer, QIODevice
+from PyQt5.QtWidgets import QMessageBox
 
 class dbInfo(object):
     def __init__(self):
         pass
 
+
+    def createDB(self):
+        conn = sqlite3.connect('saldb.sqlite')
+
+        cursor = conn.cursor()
+
+        # Create tables for watchlist, to be watched, etc.
+            # 'large_image_url',
+            # 'title_english',
+            # 'title_japanese',
+            # 'aired',
+            # 'synopsis',
+            # 'background',
+            # 'year',
+            # 'producers',
+            # 'licensors',
+            # 'studios',
+            # 'type',
+            # 'episodes',
+            # 'status',
+            # 'duration',
+            # 'genres',
+            # 'themes'
+
+
+        createTable = """
+            CREATE TABLE IF NOT EXISTS watchlist(
+                art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, format TEXT, date_start TEXT , date_finish TEXT, type TEXT,
+                aired TEXT, synopsis TEXT, background TEXT, year TEXT, producers TEXT, licensors TEXT, studios TEXT, air_status TEXT,
+                episode_duration TEXT, genres TEXT, themes TEXT
+                )
+            """
+
+        cursor.execute(createTable)
+
+        conn.commit()
+        conn.close()
+
+
+    def dbLoadTables(self):
+        # return sql select all query
+        # Something like this maybe...
+        # {
+        #     'watchlist' : "sql select all query for watchlist table",
+        #     'planned' : "sql select all query for planned table"
+        # }
+
+
+        tables = {}
+
+        conn = sqlite3.connect('saldb.sqlite')
+        cursor = conn.cursor()
+
+        if os.path.exists('saldb.sqlite'):
+            # conn = sqlite3.connect('saldb.sqlite')
+            # cursor = conn.cursor()
+            print("Database Exists")
+
+        else:
+            # qmessagebox to say there was not a 'saldb.sqlite' db found in the directory so a new one will be created.
+            # dbFileErrorMsg = QMessageBox.question(self.mainWindow, 'Error - Database Not Found', 'saldb.sqlite db file was not found in the current directory press ok and a new one will be created.', QMessageBox.Ok, QMessageBox.Cancel)
+
+            print("No Database exists...Creating a new database.")
+            self.createDB()
+            # if dbFileErrorMsg == QMessageBox.Ok:
+            #     self.createDB()
+            #     # conn = sqlite3.connect('saldb.sqlite')
+            #     # cursor = conn.cursor()
+            # else:
+            #     sys.exit()
+
+
+        list_tables_query = """SELECT name FROM sqlite_master
+        WHERE type='table';"""
+
+        db_tables = cursor.execute(list_tables_query)
+        
+
+        for table in db_tables:
+            print("DEBUG table variable : ", table)
+            for f in table:
+                print("THIS IS F : ", f)
+                sqlFetchAll = 'SELECT * FROM {}'.format(f)
+                print("DEBUG - Fetch All : ", sqlFetchAll)
+                result = cursor.execute(sqlFetchAll)
+                tables[f] = result.fetchall()
+
+        conn.close()
+        print("RETURN VALUE", tables)
+        return tables
+
+
+
+
     def entrySubmit(self, seriesdata):
 
-        # art
-        # title
-        # english title
-        # sub/dub - manually entered.
-        # start date - manually entered.
-        # end date - manually entered.
-        # type
-        # genres
-        # themes
 
         seriesArt = seriesdata[0]
         seriesTitle = seriesdata[1]
