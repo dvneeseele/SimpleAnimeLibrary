@@ -399,27 +399,63 @@ class seriesDlg(object):
 
 
     def getFinalResults(self):
-        final_results = []
+
+        all_info = {
+            'art': self.seriesArtLabel.pixmap(),
+            'title_japanese': self.seriesTitleLe.text(),
+            'title_english': self.seriesEnglishTitleLe.text(),
+            'language': self.seriesLangCbox.currentText(),
+            'aired': self.seriesAiredLe.text(),
+            'synopsis': self.seriesSynopsisLe.text(),
+            'background': self.seriesBackgroundLe.text(),
+            'year': self.seriesYearLe.text(),
+            'producers': self.seriesProducersLe.text(),
+            'licensors': self.seriesLicensorsLe.text(),
+            'studios': self.seriesStudiosLe.text(),
+            'start_date': self.seriesStartDateLe.text(),
+            'finish_date': self.seriesFinishDateLe.text(),
+            'type': self.seriesTypeLe.text(),
+            'episodes': self.seriesEpisodesLe.text(),
+            'status': self.seriesStatusLe.text(),
+            'duration': self.seriesDurationLe.text(),
+            'genres': self.seriesGenresLe.text(),
+            'themes': self.seriesThemesLe.text()
+        }
+
+
+
+
+
+        # final_results = []
         
-        try:
-            final_results.append(self.seriesArtLabel.pixmap())
-            final_results.append(self.seriesTitleLe.text())
-            final_results.append(self.seriesEnglishTitleLe.text())
-            final_results.append(self.seriesLangCbox.currentText())
-            final_results.append(self.seriesStartDateLe.text())
-            final_results.append(self.seriesFinishDateLe.text())
-            final_results.append(self.seriesTypeLe.text())
-            final_results.append(self.seriesGenresLe.text())
-            final_results.append(self.seriesThemesLe.text())
-            final_results.append(self.seriesThemesLe.text())
-        except:
-            final_results.append('')
+        # try:
+        #     final_results.append(self.seriesArtLabel.pixmap())
+        #     final_results.append(self.seriesTitleLe.text())
+        #     final_results.append(self.seriesEnglishTitleLe.text())
+        #     final_results.append(self.seriesLangCbox.currentText())
+        #     final_results.append(self.seriesAiredLe.currentText())
+        #     final_results.append(self.seriesSynopsisLe.currentText())
+        #     final_results.append(self.seriesBackgroundLe.currentText())
+        #     final_results.append(self.seriesYearLe.currentText())
+        #     final_results.append(self.seriesProducersLe.currentText())
+        #     final_results.append(self.seriesLicensorsLe.currentText())
+        #     final_results.append(self.seriesStudiosLe.currentText())
+        #     final_results.append(self.seriesStartDateLe.text())
+        #     final_results.append(self.seriesFinishDateLe.text())
+        #     final_results.append(self.seriesTypeLe.text())
+        #     final_results.append(self.self.seriesEpisodesLe.currentText())
+        #     final_results.append(self.seriesGenresLe.text())
+        #     final_results.append(self.seriesThemesLe.text())
+        # except:
+        #     final_results.append('')
 
 
+        #print(final_results)
 
-        print(final_results)
+        print(all_info)
 
-        dbInfo().entrySubmit(final_results)
+        # dbInfo().entrySubmit(final_results)
+        dbInfo().entrySubmit(all_info)
         self.dialog.accept()
         #return final_results
         

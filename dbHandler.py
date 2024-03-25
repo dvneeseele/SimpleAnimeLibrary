@@ -34,11 +34,12 @@ class dbInfo(object):
             # 'themes'
 
 
+        # TODO: Not creating the watchlist table correctly.
         createTable = """
             CREATE TABLE IF NOT EXISTS watchlist(
-                art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, format TEXT, date_start TEXT , date_finish TEXT, type TEXT,
-                aired TEXT, synopsis TEXT, background TEXT, year TEXT, producers TEXT, licensors TEXT, studios TEXT, air_status TEXT,
-                episode_duration TEXT, genres TEXT, themes TEXT
+                art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, language TEXT, aired TEXT, synopsis TEXT, background TEXT,
+                year TEXT, producers TEXT, licesnors TEXT, studios TEXT, date_start TEXT, date_finish TEXT, type TEXT, episodes TEXT,
+                status TEXT, duration TEXT, genres TEXT, themes TEXT
                 )
             """
 
@@ -46,6 +47,8 @@ class dbInfo(object):
 
         conn.commit()
         conn.close()
+
+
 
 
     def dbLoadTables(self):
@@ -106,21 +109,68 @@ class dbInfo(object):
     def entrySubmit(self, seriesdata):
 
 
-        seriesArt = seriesdata[0]
-        seriesTitle = seriesdata[1]
-        seriesEnglishTitle = seriesdata[2]
-        seriesFormat = seriesdata[3]
-        seriesStartDate = seriesdata[4]
-        seriesFinishDate = seriesdata[5]
-        seriesType = seriesdata[6]
-        seriesGeneres = seriesdata[7]
-        seriesThemes = seriesdata[8]
+        # seriesArt = seriesdata[0]
+        # seriesTitle = seriesdata[1]
+        # seriesEnglishTitle = seriesdata[2]
+        # seriesFormat = seriesdata[3]
+        # seriesStartDate = seriesdata[4]
+        # seriesFinishDate = seriesdata[5]
+        # seriesType = seriesdata[6]
+        # seriesGeneres = seriesdata[7]
+        # seriesThemes = seriesdata[8]
         
+
+
+        print("DEBUG - Series Data For Submission", seriesdata)
+
         # execute sql insert
 
         conn = sqlite3.connect('saldb.sqlite')
 
         cursor = conn.cursor()
+
+
+        data_keys = seriesdata.keys()
+        for k in data_keys:
+            print(k)
+            if k == 'art':
+                if k != None:
+                    b_array = QByteArray()
+                    buffer = QBuffer(b_array)
+                    buffer.open(QIODevice.WriteOnly)
+                    seriesdata[k].save(buffer, "JPG")
+                    blob = b_array.data()
+                else:
+                    with open('icons/saldb_darkred.png', 'rb') as file:
+                        blob = file.read()
+                    file.close()
+
+
+        info_tuple = (
+            blob,
+            # seriesdata['art'],
+            seriesdata['title_japanese'],
+            seriesdata['title_english'],
+            seriesdata['language'],
+            seriesdata['aired'],
+            seriesdata['synopsis'],
+            seriesdata['background'],
+            seriesdata['year'],
+            seriesdata['producers'],
+            seriesdata['licensors'],
+            seriesdata['studios'],
+            seriesdata['start_date'],
+            seriesdata['finish_date'],
+            seriesdata['type'],
+            seriesdata['episodes'],
+            seriesdata['status'],
+            seriesdata['duration'],
+            seriesdata['genres'],
+            seriesdata['themes'],
+            )
+
+
+
 
 
 
@@ -132,27 +182,48 @@ class dbInfo(object):
         #     buffer.open(QIODevice.WriteOnly)
         #     pix.save(buffer, "JPG")
         #     blob = b_array.data()
-        if seriesArt != None:
-            b_array = QByteArray()
-            buffer = QBuffer(b_array)
-            buffer.open(QIODevice.WriteOnly)
-            seriesArt.save(buffer, "JPG")
-            blob = b_array.data()
+        
+        
+        ###############################################################
+        ###############################################################
+        
+        
+        # if seriesArt != None:
+        #     b_array = QByteArray()
+        #     buffer = QBuffer(b_array)
+        #     buffer.open(QIODevice.WriteOnly)
+        #     seriesArt.save(buffer, "JPG")
+        #     blob = b_array.data()
 
 
-        else:
+        # else:
 
-            with open('icons/saldb_darkred.png', 'rb') as file:
-                blob = file.read()
-            file.close()
+        #     with open('icons/saldb_darkred.png', 'rb') as file:
+        #         blob = file.read()
+        #     file.close()
 
         
         
         # info_tuple = (blob, self.title, self.englishtitle, self.language, self.start, self.fin, self.type)
-        info_tuple = (blob, seriesTitle, seriesEnglishTitle, seriesFormat, seriesStartDate, seriesFinishDate, seriesType, seriesGeneres, seriesThemes)
+        # info_tuple = (blob, seriesTitle, seriesEnglishTitle, seriesFormat, seriesStartDate, seriesFinishDate, seriesType, seriesGeneres, seriesThemes)
 
         # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type) VALUES (?, ?, ?, ?, ?, ?, ?)", info_tuple)
-        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type, Series_Genres, Series_Themes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", info_tuple)
+        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type, Series_Genres, Series_Themes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", info_tuple)
+
+
+
+        cursor.execute(
+            """
+            INSERT INTO watchlist (
+                art, title_japanese, title_english, format, date_start, date_finish, type,
+                aired, synopsis, background, year, producers, licensors, studios, air_status, 
+                episode_duration, genres, themes
+            )
+            VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            )
+            """, info_tuple
+        )
 
         # just an idea...
         tup = (seriesdata['title'], seriesdata['title_english'], seriesdata['aired'])

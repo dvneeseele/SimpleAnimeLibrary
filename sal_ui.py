@@ -158,7 +158,12 @@ class salUI(object):
         self.watchListTable.setColumnCount(9)
         self.watchListTable.setShowGrid(False)
 
-        self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "SUB/DUB", "Start Date" , "Completion Date", "Series Type", "Series Genres", "Series Themes"])
+        # self.watchListTable.setHorizontalHeaderLabels(["Art", "Title", "English Title", "Format", "Start Date" , "Completion Date", "Series Type", "Series Genres", "Series Themes"])
+        self.watchListTable.setHorizontalHeaderLabels([
+                            "Art", "Title", "English Title", "Format", "Start Date", "End Date", "Aired", "Synopsis", "Background",
+                "Year", "Producers", "Licesnors", "Studios", "Episodes", "Status", "Duration", "Genres", "Themes"
+        ])
+        
         #self.watchListTable.verticalHeader().setDefaultSectionSize(140)
         self.watchListTable.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         #self.watchListTable.horizontalHeader().setDefaultSectionSize(120)
