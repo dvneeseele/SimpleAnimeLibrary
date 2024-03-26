@@ -35,13 +35,7 @@ class dbInfo(object):
 
 
         # TODO: Not creating the watchlist table correctly.
-        createTable = """
-            CREATE TABLE IF NOT EXISTS watchlist(
-                art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, language TEXT, aired TEXT, synopsis TEXT, background TEXT,
-                year TEXT, producers TEXT, licesnors TEXT, studios TEXT, date_start TEXT, date_finish TEXT, type TEXT, episodes TEXT,
-                status TEXT, duration TEXT, genres TEXT, themes TEXT
-                )
-            """
+        createTable = "CREATE TABLE IF NOT EXISTS watchlist (art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, spoken_language TEXT, aired TEXT, synopsis TEXT, background TEXT, series_year TEXT, producers TEXT, licesnors TEXT, studios TEXT, date_start TEXT, date_finish TEXT, series_type TEXT, episodes TEXT, series_status TEXT, duration TEXT, genres TEXT, themes TEXT)"
 
         cursor.execute(createTable)
 
@@ -62,12 +56,9 @@ class dbInfo(object):
 
         tables = {}
 
-        conn = sqlite3.connect('saldb.sqlite')
-        cursor = conn.cursor()
 
-        if os.path.exists('saldb.sqlite'):
-            # conn = sqlite3.connect('saldb.sqlite')
-            # cursor = conn.cursor()
+
+        if os.path.exists('saldb.sqlite'):          
             print("Database Exists")
 
         else:
@@ -84,6 +75,9 @@ class dbInfo(object):
             #     sys.exit()
 
 
+        conn = sqlite3.connect('saldb.sqlite')
+        cursor = conn.cursor()  
+        
         list_tables_query = """SELECT name FROM sqlite_master
         WHERE type='table';"""
 
@@ -99,6 +93,7 @@ class dbInfo(object):
                 result = cursor.execute(sqlFetchAll)
                 tables[f] = result.fetchall()
 
+        conn.commit()
         conn.close()
         print("RETURN VALUE", tables)
         return tables
