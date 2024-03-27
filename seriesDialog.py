@@ -404,19 +404,19 @@ class seriesDlg(object):
             'art': self.seriesArtLabel.pixmap(),
             'title_japanese': self.seriesTitleLe.text(),
             'title_english': self.seriesEnglishTitleLe.text(),
-            'language': self.seriesLangCbox.currentText(),
+            'spoken_language': self.seriesLangCbox.currentText(),
             'aired': self.seriesAiredLe.text(),
             'synopsis': self.seriesSynopsisLe.text(),
             'background': self.seriesBackgroundLe.text(),
-            'year': self.seriesYearLe.text(),
+            'series_year': self.seriesYearLe.text(),
             'producers': self.seriesProducersLe.text(),
             'licensors': self.seriesLicensorsLe.text(),
             'studios': self.seriesStudiosLe.text(),
-            'start_date': self.seriesStartDateLe.text(),
-            'finish_date': self.seriesFinishDateLe.text(),
-            'type': self.seriesTypeLe.text(),
+            'date_start': self.seriesStartDateLe.text(),
+            'date_finish': self.seriesFinishDateLe.text(),
+            'series_type': self.seriesTypeLe.text(),
             'episodes': self.seriesEpisodesLe.text(),
-            'status': self.seriesStatusLe.text(),
+            'series_status': self.seriesStatusLe.text(),
             'duration': self.seriesDurationLe.text(),
             'genres': self.seriesGenresLe.text(),
             'themes': self.seriesThemesLe.text()
@@ -456,7 +456,7 @@ class seriesDlg(object):
 
         # dbInfo().entrySubmit(final_results)
         dbInfo().entrySubmit(all_info)
-        self.dialog.accept()
+        # self.dialog.accept()
         #return final_results
         
 

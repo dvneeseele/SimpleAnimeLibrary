@@ -35,7 +35,7 @@ class dbInfo(object):
 
 
         # TODO: Not creating the watchlist table correctly.
-        createTable = "CREATE TABLE IF NOT EXISTS watchlist (art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, spoken_language TEXT, aired TEXT, synopsis TEXT, background TEXT, series_year TEXT, producers TEXT, licesnors TEXT, studios TEXT, date_start TEXT, date_finish TEXT, series_type TEXT, episodes TEXT, series_status TEXT, duration TEXT, genres TEXT, themes TEXT)"
+        createTable = "CREATE TABLE IF NOT EXISTS watchlist (art BLOB, title_japanese TEXT PRIMARY KEY, title_english TEXT, spoken_language TEXT, aired TEXT, synopsis TEXT, background TEXT, series_year TEXT, producers TEXT, licensors TEXT, studios TEXT, date_start TEXT, date_finish TEXT, series_type TEXT, episodes TEXT, series_status TEXT, duration TEXT, genres TEXT, themes TEXT)"
 
         cursor.execute(createTable)
 
@@ -146,19 +146,19 @@ class dbInfo(object):
             # seriesdata['art'],
             seriesdata['title_japanese'],
             seriesdata['title_english'],
-            seriesdata['language'],
+            seriesdata['spoken_language'],
             seriesdata['aired'],
             seriesdata['synopsis'],
             seriesdata['background'],
-            seriesdata['year'],
+            seriesdata['series_year'],
             seriesdata['producers'],
             seriesdata['licensors'],
             seriesdata['studios'],
-            seriesdata['start_date'],
-            seriesdata['finish_date'],
-            seriesdata['type'],
+            seriesdata['date_start'],
+            seriesdata['date_finish'],
+            seriesdata['series_type'],
             seriesdata['episodes'],
-            seriesdata['status'],
+            seriesdata['series_status'],
             seriesdata['duration'],
             seriesdata['genres'],
             seriesdata['themes'],
@@ -210,9 +210,9 @@ class dbInfo(object):
         cursor.execute(
             """
             INSERT INTO watchlist (
-                art, title_japanese, title_english, format, date_start, date_finish, type,
-                aired, synopsis, background, year, producers, licensors, studios, air_status, 
-                episode_duration, genres, themes
+                art, title_japanese, title_english, spoken_language, aired, synopsis, background, series_year,
+                producers, licensors, studios, date_start, date_finish, series_type, episodes, series_status,
+                duration, genres, themes
             )
             VALUES (
                 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
@@ -221,11 +221,10 @@ class dbInfo(object):
         )
 
         # just an idea...
-        tup = (seriesdata['title'], seriesdata['title_english'], seriesdata['aired'])
-        cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type, Series_Genres, Series_Themes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", info_tuple)
+        # tup = (seriesdata['title'], seriesdata['title_english'], seriesdata['aired'])
+        # cursor.execute("INSERT INTO watchlist (Art, Title, English_Title, Format, Start_Date ,Completion_Date, Series_Type, Series_Genres, Series_Themes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", info_tuple)
 
         conn.commit()
-
         conn.close()
 
     def removeEntry(self):
