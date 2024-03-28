@@ -198,13 +198,8 @@ class SAL_app(salUI):
 
         if curr_row >= 0:
 
-
-
-
     #############################################################################################################################################################################
     #############################################################################################################################################################################
-
-
 
 
             # this query is just to get the info to fill in the QDialog
@@ -213,25 +208,39 @@ class SAL_app(salUI):
 
             # column 2 should have the Title of the series which is also the unique primary key for the db
             pk_id = self.watchListTable.item(curr_row, 1).text()
+            print("DEBUG - pk_id : ", pk_id)
+
+            # conn = sqlite3.connect('saldb.sqlite')
+            # conn.row_factory = sqlite3.Row
+            # cursor = conn.cursor()
+
+            # rowdata = cursor.execute("SELECT Art, Title, English_Title, Format, Start_Date, Completion_Date, Series_Type FROM watchlist WHERE Title = ?;", (pk_id,))
 
 
-            conn = sqlite3.connect('saldb.sqlite')
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-
-            rowdata = cursor.execute("SELECT Art, Title, English_Title, Format, Start_Date, Completion_Date, Series_Type FROM watchlist WHERE Title = ?;", (pk_id,))
-
-            
-            for r in rowdata.fetchall():
-                self.vals = dict(r)
-
+            self.vals = dbInfo().editEntry(pk_id)
+            print("DEBUG - vals : ", self.vals)
+            # for r in rowdata.fetchall():
+            #     self.vals = dict(r)
 
             #THIS WORKS
             #print('ROWDATA', rowdata.fetchall()[0][0])
 
-            conn.commit()
+            # conn.commit()
 
-            conn.close()
+            # conn.close()
+
+        # TODO : Maybe add another paramter to the setupUi function in seriesDlg? 
+        # a boolean that if True then run a function to parse the input from self.vals dictionary?
+        editDialog = QDialog()
+        self.seriesLookup.setupUi(editDialog)
+        editDialog.exec()
+        # yep = self.seriesLookup.getFinalResults()
+        # print("Final Results", yep)
+
+        
+
+
+
 
 
 
@@ -244,161 +253,167 @@ class SAL_app(salUI):
 
 
 
+########################################################################################
+########################################################################################
+########################################################################################
+
+            # self.series_edit_dialog = QWidget()
+
+            # self.series_edit_dialog.setAcceptDrops(True)
+
+            # edit_dialog_layout = QGridLayout()
 
 
 
 
-            self.series_edit_dialog = QWidget()
-
-            self.series_edit_dialog.setAcceptDrops(True)
-
-            edit_dialog_layout = QGridLayout()
-
-
-
-
-            # Labels
-            self.artLabelEdit = QLabel()
-            self.artLabelEdit.setScaledContents(True)
-            self.pix = QPixmap()
-            self.pix.loadFromData(self.vals['Art'])
-            self.artLabelEdit.setPixmap(self.pix)
-            #self.artLabel.setText("Drop Image")
-            self.artLabelEdit.setAcceptDrops(True)
-            self.artLabelEdit.setAlignment(Qt.AlignCenter)
+            # # Labels
+            # self.artLabelEdit = QLabel()
+            # self.artLabelEdit.setScaledContents(True)
+            # self.pix = QPixmap()
+            # self.pix.loadFromData(self.vals['Art'])
+            # self.artLabelEdit.setPixmap(self.pix)
+            # #self.artLabel.setText("Drop Image")
+            # self.artLabelEdit.setAcceptDrops(True)
+            # self.artLabelEdit.setAlignment(Qt.AlignCenter)
             
 
-            self.seriesTitleLabel = QLabel("Title :")
-            self.seriesEnglishTitleLabel = QLabel("English Title :")
-            self.seriesFormatLabel = QLabel("SUB/DUB :")
-            self.startDateLabel = QLabel("Start Date :")
-            self.completionDateLabel = QLabel("Completion Date :")
-            self.seriesTypeLabel = QLabel("Series Type :")
+            # self.seriesTitleLabel = QLabel("Title :")
+            # self.seriesEnglishTitleLabel = QLabel("English Title :")
+            # self.seriesFormatLabel = QLabel("SUB/DUB :")
+            # self.startDateLabel = QLabel("Start Date :")
+            # self.completionDateLabel = QLabel("Completion Date :")
+            # self.seriesTypeLabel = QLabel("Series Type :")
 
-            # LineEdits
-            self.artLabel_le = QLineEdit()
-            #self.artLabel_le.setPixmap(QPixmap(the blob data from the db. ))
-            self.editSeriesTitle_le = QLineEdit()
-            self.editSeriesTitle_le.setText(self.vals['Title'])
-            self.editEnglishTitle_le = QLineEdit()
-            self.editEnglishTitle_le.setText(self.vals['English_Title'])
+            # # LineEdits
+            # self.artLabel_le = QLineEdit()
+            # #self.artLabel_le.setPixmap(QPixmap(the blob data from the db. ))
+            # self.editSeriesTitle_le = QLineEdit()
+            # self.editSeriesTitle_le.setText(self.vals['Title'])
+            # self.editEnglishTitle_le = QLineEdit()
+            # self.editEnglishTitle_le.setText(self.vals['English_Title'])
 
-            self.editFormat_cb = QComboBox()
-            self.editFormat_cb.addItem("SUB")
-            self.editFormat_cb.addItem("DUB")
-            self.editFormat_cb.setCurrentText(self.vals['Format'])
+            # self.editFormat_cb = QComboBox()
+            # self.editFormat_cb.addItem("SUB")
+            # self.editFormat_cb.addItem("DUB")
+            # self.editFormat_cb.setCurrentText(self.vals['Format'])
 
-            self.editStartDate_le = QLineEdit()
-            self.editStartDate_le.setText(self.vals['Start_Date'])
-            self.editCompletionDate_le = QLineEdit()
-            self.editCompletionDate_le.setText(self.vals['Completion_Date'])
-            self.editSeriesType_le = QLineEdit()
-            self.editSeriesType_le.setText(self.vals['Series_Type'])
+            # self.editStartDate_le = QLineEdit()
+            # self.editStartDate_le.setText(self.vals['Start_Date'])
+            # self.editCompletionDate_le = QLineEdit()
+            # self.editCompletionDate_le.setText(self.vals['Completion_Date'])
+            # self.editSeriesType_le = QLineEdit()
+            # self.editSeriesType_le.setText(self.vals['Series_Type'])
 
-            # Buttons
-            self.titleArtBtn = QPushButton("Fetch Series Title Art")
-            self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabelEdit, self.vals['Title']))
-            self.submitEntryBtn = QPushButton("Submit")
-            self.submitEntryBtn.clicked.connect(self.editEntrySubmit)
-            self.chooseArtFile = QPushButton("Choose File")
-            self.chooseArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabelEdit))
+            # # Buttons
+            # self.titleArtBtn = QPushButton("Fetch Series Title Art")
+            # self.titleArtBtn.clicked.connect(lambda: self.getSeriesArt(self.artLabelEdit, self.vals['Title']))
+            # self.submitEntryBtn = QPushButton("Submit")
+            # self.submitEntryBtn.clicked.connect(self.editEntrySubmit)
+            # self.chooseArtFile = QPushButton("Choose File")
+            # self.chooseArtFile.clicked.connect(lambda: self.insertArtFile(self.artLabelEdit))
 
-            self.editStartDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
-            self.editStartDateBtn.clicked.connect(self.editStartDate)
+            # self.editStartDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
+            # self.editStartDateBtn.clicked.connect(self.editStartDate)
 
-            self.editEndDateBtn = QPushButton("Select Date")# Will be replaced with an icon, no text, tooltip
-            self.editEndDateBtn.clicked.connect(self.selectEditEndDate)
+            # self.editEndDateBtn = QPushButton("Select Date")# Will be replaced with an icon, no text, tooltip
+            # self.editEndDateBtn.clicked.connect(self.selectEditEndDate)
 
-            self.editFinishCurrentDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
-            self.editFinishCurrentDateBtn.clicked.connect(self.editFinishDate)
+            # self.editFinishCurrentDateBtn = QPushButton("Insert Current Date")# Will be replaced with an icon, no text, tooltip
+            # self.editFinishCurrentDateBtn.clicked.connect(self.editFinishDate)
 
-            self.editFinishSelectionDateBtn = QPushButton("Select Date")# Will be replaced with an icon, no text, tooltip
-            self.editFinishSelectionDateBtn.clicked.connect(self.editFinishSelectionDate)
+            # self.editFinishSelectionDateBtn = QPushButton("Select Date")# Will be replaced with an icon, no text, tooltip
+            # self.editFinishSelectionDateBtn.clicked.connect(self.editFinishSelectionDate)
 
 
-            # QFrames
-            self.editButtonsFrame = QFrame()
+            # # QFrames
+            # self.editButtonsFrame = QFrame()
             
-            frameLayout = QHBoxLayout()
-            self.editButtonsFrame.setLayout(frameLayout)
+            # frameLayout = QHBoxLayout()
+            # self.editButtonsFrame.setLayout(frameLayout)
 
-            frameLayout.addWidget(self.editStartDateBtn)
-            frameLayout.addWidget(self.editEndDateBtn)
-
-
-
-
-            self.editDateFinBtnsFrame = QFrame()
-            finFrameLayout = QHBoxLayout()
-            self.editDateFinBtnsFrame.setLayout(finFrameLayout)
-
-            finFrameLayout.addWidget(self.editFinishCurrentDateBtn)
-            finFrameLayout.addWidget(self.editFinishSelectionDateBtn)
+            # frameLayout.addWidget(self.editStartDateBtn)
+            # frameLayout.addWidget(self.editEndDateBtn)
 
 
 
 
-            # drag event sequence functions
+            # self.editDateFinBtnsFrame = QFrame()
+            # finFrameLayout = QHBoxLayout()
+            # self.editDateFinBtnsFrame.setLayout(finFrameLayout)
 
-            def dragEnterEvent(self, event):
-                if event.mimeData().hasImage:
-                    event.accept()
-                else:
-                    event.ignore()
-                    print('event ignored')
+            # finFrameLayout.addWidget(self.editFinishCurrentDateBtn)
+            # finFrameLayout.addWidget(self.editFinishSelectionDateBtn)
 
-            def dragMoveEvent(self, event):
-                if event.mimeData().hasImage:
-                    event.accept()
-                else:
-                    event.ignore()
-                    print('event ignored')      
 
-            def dropEvent(self, event):
-                if event.mimeData().hasImage:
-                    event.setDropAction(Qt.CopyAction)
-                    img_fp = event.mimeData().urls()[0].toLocalFile()
-                    print(img_fp)
-                    self.artLabel.setPixmap(QPixmap(img_fp))
+
+
+            # # drag event sequence functions
+
+            # def dragEnterEvent(self, event):
+            #     if event.mimeData().hasImage:
+            #         event.accept()
+            #     else:
+            #         event.ignore()
+            #         print('event ignored')
+
+            # def dragMoveEvent(self, event):
+            #     if event.mimeData().hasImage:
+            #         event.accept()
+            #     else:
+            #         event.ignore()
+            #         print('event ignored')      
+
+            # def dropEvent(self, event):
+            #     if event.mimeData().hasImage:
+            #         event.setDropAction(Qt.CopyAction)
+            #         img_fp = event.mimeData().urls()[0].toLocalFile()
+            #         print(img_fp)
+            #         self.artLabel.setPixmap(QPixmap(img_fp))
                     
 
-                    event.accept()
-                else:
-                    event.ignore()
-                    print('drop event ignored')
+            #         event.accept()
+            #     else:
+            #         event.ignore()
+            #         print('drop event ignored')
 
 
 
 
             
 
-            # Set Dialog Layout
-            self.series_edit_dialog.setLayout(edit_dialog_layout)
-            # column 1
-            edit_dialog_layout.addWidget(self.artLabelEdit, 1, 1)
-            edit_dialog_layout.addWidget(self.titleArtBtn, 2, 1)
-            edit_dialog_layout.addWidget(self.chooseArtFile, 3, 1)
-            edit_dialog_layout.addWidget(self.submitEntryBtn, 4, 1)
-            # column 2
-            edit_dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
-            edit_dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
-            edit_dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
-            edit_dialog_layout.addWidget(self.startDateLabel, 4, 2)
-            edit_dialog_layout.addWidget(self.completionDateLabel, 6, 2)
-            edit_dialog_layout.addWidget(self.seriesTypeLabel, 8, 2)
-            # column 3
-            edit_dialog_layout.addWidget(self.editSeriesTitle_le, 1, 3)
-            edit_dialog_layout.addWidget(self.editEnglishTitle_le, 2, 3)
-            edit_dialog_layout.addWidget(self.editFormat_cb, 3, 3)        
-            edit_dialog_layout.addWidget(self.editStartDate_le, 4, 3) 
-            edit_dialog_layout.addWidget(self.editButtonsFrame, 5, 3) #
-            edit_dialog_layout.addWidget(self.editCompletionDate_le, 6, 3)
-            edit_dialog_layout.addWidget(self.editDateFinBtnsFrame, 7, 3)
-            edit_dialog_layout.addWidget(self.editSeriesType_le, 8, 3) #
+            # # Set Dialog Layout
+            # self.series_edit_dialog.setLayout(edit_dialog_layout)
+            # # column 1
+            # edit_dialog_layout.addWidget(self.artLabelEdit, 1, 1)
+            # edit_dialog_layout.addWidget(self.titleArtBtn, 2, 1)
+            # edit_dialog_layout.addWidget(self.chooseArtFile, 3, 1)
+            # edit_dialog_layout.addWidget(self.submitEntryBtn, 4, 1)
+            # # column 2
+            # edit_dialog_layout.addWidget(self.seriesTitleLabel, 1, 2)
+            # edit_dialog_layout.addWidget(self.seriesEnglishTitleLabel, 2, 2)
+            # edit_dialog_layout.addWidget(self.seriesFormatLabel, 3, 2)        
+            # edit_dialog_layout.addWidget(self.startDateLabel, 4, 2)
+            # edit_dialog_layout.addWidget(self.completionDateLabel, 6, 2)
+            # edit_dialog_layout.addWidget(self.seriesTypeLabel, 8, 2)
+            # # column 3
+            # edit_dialog_layout.addWidget(self.editSeriesTitle_le, 1, 3)
+            # edit_dialog_layout.addWidget(self.editEnglishTitle_le, 2, 3)
+            # edit_dialog_layout.addWidget(self.editFormat_cb, 3, 3)        
+            # edit_dialog_layout.addWidget(self.editStartDate_le, 4, 3) 
+            # edit_dialog_layout.addWidget(self.editButtonsFrame, 5, 3) #
+            # edit_dialog_layout.addWidget(self.editCompletionDate_le, 6, 3)
+            # edit_dialog_layout.addWidget(self.editDateFinBtnsFrame, 7, 3)
+            # edit_dialog_layout.addWidget(self.editSeriesType_le, 8, 3) #
 
 
 
-            self.series_edit_dialog.show()
+            # self.series_edit_dialog.show()
+
+########################################################################################
+########################################################################################
+########################################################################################
+
+
 
 
 

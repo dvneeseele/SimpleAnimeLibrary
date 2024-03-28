@@ -230,8 +230,26 @@ class dbInfo(object):
     def removeEntry(self):
         pass
 
-    def editEntry(self):
-        pass
+
+    def editEntry(self, pk):
+        conn = sqlite3.connect('saldb.sqlite')
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        query = cursor.execute(
+            """SELECT art, title_japanese, title_english, spoken_language, aired, synopsis, background, series_year, 
+            producers, licensors, studios, date_start, date_finish, series_type, episodes, series_status,
+                duration, genres, themes FROM watchlist WHERE title_japanese = ?;""", (pk,))
+
+        for r in query.fetchall():
+            results = dict(r)
+
+        print("DEBUG - Results Dictionary : ", results)
+
+        conn.commit()
+        conn.close()
+        return results
+
 
     def queryDB(self):
         pass
